@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derafu: Spreadsheet - Unified Spreadsheet Processing for PHP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/command-line/prism-command-line.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/match-braces/prism-match-braces.min.css" rel="stylesheet" />
+    <link href="https://derafu.org/css/styles.min.css" rel="stylesheet" />
+    </head>
+<body>
+                <div id="header-container" class="sticky-top"></div>
+    
+            <div class="container">
+            <div class="row">
+                <main class="col-md-9">
+                    <div class="container py-4">
+    <div class="markdown-body"><h1><a id="content-derafu-spreadsheet---unified-spreadsheet-processing-for-php" href="index.html#content-derafu-spreadsheet---unified-spreadsheet-processing-for-php" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Derafu: Spreadsheet - Unified Spreadsheet Processing for PHP</h1>
+<p><img src="https://img.shields.io/github/last-commit/derafu/spreadsheet/main" alt="GitHub last commit" />
+<img src="https://github.com/derafu/spreadsheet/actions/workflows/ci.yml/badge.svg?branch=main&amp;event=push" alt="CI Workflow" />
+<img src="https://img.shields.io/github/languages/code-size/derafu/spreadsheet" alt="GitHub code size in bytes" />
+<img src="https://img.shields.io/github/issues-raw/derafu/spreadsheet" alt="GitHub Issues" />
+<img src="https://poser.pugx.org/derafu/spreadsheet/downloads" alt="Total Downloads" />
+<img src="https://poser.pugx.org/derafu/spreadsheet/d/monthly" alt="Monthly Downloads" /></p>
+<p>Derafu Spreadsheet is a modern PHP library that provides a <strong>single, consistent API</strong> for working with spreadsheet files in multiple formats (XLSX, CSV, ODS, JSON, XML, YAML, and more).</p>
+<h2><a id="content--features" href="index.html#content--features" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>🌟 Features</h2>
+<ul>
+<li><strong>Unified API</strong> across all file formats.</li>
+<li><strong>Multiple format support</strong>: XLSX, XLS, CSV, ODS, JSON, XML, YAML, HTML, PDF.</li>
+<li><strong>Smart type casting</strong>: Automatically detects and converts data types (dates, numbers, booleans, JSON).</li>
+<li><strong>Format-agnostic data manipulation</strong>: Work with your data consistently regardless of source format.</li>
+<li><strong>Minimal dependencies</strong>: Use only what you need.</li>
+<li><strong>PSR-7 compatible</strong>: Generate HTTP responses with downloadable spreadsheets.</li>
+<li><strong>Modern PHP</strong>: Written for PHP 8 with strict typing.</li>
+</ul>
+<h2><a id="content--why-derafu-spreadsheet" href="index.html#content--why-derafu-spreadsheet" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>🚀 Why Derafu Spreadsheet?</h2>
+<p>While powerful libraries like PhpSpreadsheet exist, and this library use it under de hood, they often require different approaches for different formats and have complex APIs. Derafu Spreadsheet offers several key advantages:</p>
+<ul>
+<li><strong>Simplified API</strong>: Work with all spreadsheet formats through a consistent interface.</li>
+<li><strong>Intelligent type handling</strong>: Focus on your data, not type conversion.</li>
+<li><strong>Format abstraction</strong>: Write your code once, and it works with any format.</li>
+<li><strong>Flexible format handlers</strong>: Easily switch between formats or implement custom handlers.</li>
+<li><strong>Minimal learning curve</strong>: Clean, intuitive API with sensible defaults.</li>
+</ul>
+<h2><a id="content--installation" href="index.html#content--installation" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>📦 Installation</h2>
+<pre><code class="line-numbers match-braces language-bash">composer require derafu/spreadsheet
+</code></pre>
+<p>For specific format support, you may need additional dependencies:</p>
+<pre><code class="line-numbers match-braces language-bash"># For CSV support with League CSV (recommended).
+composer require league/csv
+
+# For XLSX, XLS, ODS, HTML support.
+composer require phpoffice/phpspreadsheet
+
+# For YAML support.
+composer require symfony/yaml
+
+# For HTTP response generation.
+composer require nyholm/psr7
+</code></pre>
+<h2><a id="content--basic-usage" href="index.html#content--basic-usage" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>📝 Basic Usage</h2>
+<pre><code class="line-numbers match-braces language-php">&lt;?php
+
+use Derafu\Spreadsheet\Loader;
+use Derafu\Spreadsheet\Dumper;
+
+// Load a spreadsheet (format auto-detected from extension).
+// Under the hood it will create default Factory and Caster instances. If you
+// don't want that, inject your implementation.
+$loader = new Loader();
+$spreadsheet = $loader-&gt;loadFromFile('data.xlsx');
+
+// Access data from sheets.
+$sheet = $spreadsheet-&gt;getSheet('Sheet1');
+$rows = $sheet-&gt;getRows();
+
+// Modify data.
+$sheet-&gt;setCell(0, 0, 'Updated value');
+$spreadsheet-&gt;createSheet('NewSheet', [['Header1', 'Header2'], [1, 2]]);
+
+// Save in different format.
+// Under the hood it will create default Factory and Caster instances. If you
+// don't want that, inject your implementation.
+$dumper = new Dumper();
+$dumper-&gt;dumpToFile($spreadsheet, 'output.csv');
+
+// Or convert to string
+$jsonString = $dumper-&gt;dumpToString($spreadsheet, 'json');
+</code></pre>
+<h2><a id="content--working-with-different-formats" href="index.html#content--working-with-different-formats" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>🔄 Working with Different Formats</h2>
+<p>Derafu Spreadsheet handles format conversion automatically:</p>
+<pre><code class="line-numbers match-braces language-php">// Load Excel file.
+$spreadsheet = $loader-&gt;loadFromFile('data.xlsx');
+
+// Save as CSV.
+$dumper-&gt;dumpToFile($spreadsheet, 'data.csv');
+
+// Save as JSON.
+$dumper-&gt;dumpToFile($spreadsheet, 'data.json');
+
+// Save as YAML.
+$dumper-&gt;dumpToFile($spreadsheet, 'data.yaml');
+</code></pre>
+<h2><a id="content--intelligent-type-casting" href="index.html#content--intelligent-type-casting" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>📋 Intelligent Type Casting</h2>
+<p>One of Derafu Spreadsheet’s key features is automatic type casting for both reading and writing:</p>
+<pre><code class="line-numbers match-braces language-php">$spreadsheet = $loader-&gt;loadFromFile('data.csv');
+
+// String '123' is automatically cast to integer 123.
+// 'true' is cast to boolean true.
+// '2025-03-12' is cast to DateTimeImmutable object.
+// JSON strings are parsed to indexed arrays or associative arrays (&quot;objects&quot;).
+
+$cell = $sheet-&gt;getCell(0, 0); // Typed data, not just strings.
+
+// When writing, types are automatically converted to appropriate formats.
+$dumper-&gt;dumpToFile($spreadsheet, 'output.xlsx');
+</code></pre>
+<h2><a id="content-contributing" href="index.html#content-contributing" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Contributing</h2>
+<p>Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.</p>
+<h2><a id="content-license" href="index.html#content-license" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>License</h2>
+<p>This package is open-sourced software licensed under the <a rel="nofollow noopener noreferrer" target="_blank" class="external-link" href="https://opensource.org/licenses/MIT">MIT license</a>.</p>
+</div>
+</div>
+                </main>
+                <div class="col-md-3 py-4">
+                    <div class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Package Info</div>
+                                <span class="smal text-muted">
+                                    <a href="https://github.com/derafu/spreadsheet" target="_blank" class="link-secondary text-decoration-none">
+                                        <i class="fa-brands fa-github"></i>
+                                        derafu/spreadsheet
+                                    </a>
+                                </span>
+                                <div class="my-2">
+                                    <img src="https://img.shields.io/github/stars/derafu/spreadsheet" alt="GitHub Repo stars">
+                                    <img src="https://img.shields.io/github/forks/derafu/spreadsheet" alt="GitHub forks">
+                                </div>
+                            </div>
+                        </li>
+                        <a href="index.html" class="list-group-item list-group-item-action active">
+                            README
+                        </a>
+                    </div>
+                    <div class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Docs</div>
+                            <span class="smal text-muted">Guides & Examples</span>
+                            </div>
+                        </li>
+                        <a href="architecture.html" class="list-group-item list-group-item-action ">
+                            Architecture
+                        </a>
+                        <a href="install.html" class="list-group-item list-group-item-action ">
+                            Install the library
+                        </a>
+                        <a href="basic-usage.html" class="list-group-item list-group-item-action ">
+                            Basic Usage
+                        </a>
+                        <a href="format-handlers.html" class="list-group-item list-group-item-action ">
+                            Format Handlers
+                        </a>
+                        <a href="type-casting.html" class="list-group-item list-group-item-action ">
+                            Type Casting
+                        </a>
+                        <a href="http-responses.html" class="list-group-item list-group-item-action ">
+                            HTTP Responses
+                        </a>
+                        <a href="comparison.html" class="list-group-item list-group-item-action ">
+                            Comparison
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+            <div id="footer-container"></div>
+        <script src="https://derafu.org/js/derafu.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/show-language/prism-show-language.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/command-line/prism-command-line.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/match-braces/prism-match-braces.min.js"></script>
+    </body>
+</html>

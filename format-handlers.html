@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derafu: Spreadsheet - Unified Spreadsheet Processing for PHP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/command-line/prism-command-line.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/match-braces/prism-match-braces.min.css" rel="stylesheet" />
+    <link href="https://derafu.org/css/styles.min.css" rel="stylesheet" />
+    </head>
+<body>
+                <div id="header-container" class="sticky-top"></div>
+    
+            <div class="container">
+            <div class="row">
+                <main class="col-md-9">
+                    <div class="container py-4">
+    <div class="markdown-body"><h1><a id="content-format-handlers" href="format-handlers.html#content-format-handlers" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Format Handlers</h1>
+<p>Format handlers are a key component of Derafu Spreadsheet that enable the library to work with different file formats. Each format handler implements the <code>FormatHandlerInterface</code> and knows how to read and write a specific format.</p>
+<ul class="table-of-contents">
+<li><a href="format-handlers.html#content-supported-formats">Supported Formats</a></li>
+<li><a href="format-handlers.html#content-how-format-handlers-work">How Format Handlers Work</a></li>
+<li><a href="format-handlers.html#content-using-format-handlers">Using Format Handlers</a></li>
+<li><a href="format-handlers.html#content-format-specific-options">Format-Specific Options</a>
+<ul>
+<li><a href="format-handlers.html#content-csv-options-csvleaguehandler">CSV Options (CsvLeagueHandler)</a></li>
+<li><a href="format-handlers.html#content-opendocumentexcel-options-odshandler-xlshandler-xlsxhandler">OpenDocument/Excel Options (OdsHandler, XlsHandler, XlsxHandler)</a></li>
+<li><a href="format-handlers.html#content-pdf-options-pdfhandler">PDF Options (PdfHandler)</a></li>
+<li><a href="format-handlers.html#content-json-options-jsonhandler">JSON Options (JsonHandler)</a></li>
+<li><a href="format-handlers.html#content-yaml-options-yamlhandler">YAML Options (YamlHandler)</a></li>
+</ul>
+</li>
+<li><a href="format-handlers.html#content-custom-format-handlers">Custom Format Handlers</a></li>
+<li><a href="format-handlers.html#content-format-detection">Format Detection</a></li>
+<li><a href="format-handlers.html#content-alternative-format-handlers">Alternative Format Handlers</a></li>
+<li><a href="format-handlers.html#content-format-handling-and-type-casting">Format Handling and Type Casting</a></li>
+</ul>
+<h2><a id="content-supported-formats" href="format-handlers.html#content-supported-formats" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Supported Formats</h2>
+<p class="w-50"><img src="http://127.0.0.1:9000/img/derafu-spreadsheet-format-conversion-diagram.svg" alt="Format conversion diagram" /></p>
+<p>Derafu Spreadsheet supports the following formats in the core package:</p>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Extension</th>
+<th>Handler Class</th>
+<th>Dependencies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Excel XLSX</td>
+<td>.xlsx</td>
+<td><code>XlsxHandler</code></td>
+<td>PhpSpreadsheet</td>
+</tr>
+<tr>
+<td>Excel XLS</td>
+<td>.xls</td>
+<td><code>XlsHandler</code></td>
+<td>PhpSpreadsheet</td>
+</tr>
+<tr>
+<td>OpenDocument</td>
+<td>.ods</td>
+<td><code>OdsHandler</code></td>
+<td>PhpSpreadsheet</td>
+</tr>
+<tr>
+<td>CSV (League)</td>
+<td>.csv</td>
+<td><code>CsvLeagueHandler</code></td>
+<td>League/CSV</td>
+</tr>
+<tr>
+<td>CSV (PhpSpreadsheet)</td>
+<td>.csv</td>
+<td><code>CsvPhpSpreadsheetHandler</code></td>
+<td>PhpSpreadsheet</td>
+</tr>
+<tr>
+<td>JSON</td>
+<td>.json</td>
+<td><code>JsonHandler</code></td>
+<td>PHP built-in</td>
+</tr>
+<tr>
+<td>XML</td>
+<td>.xml</td>
+<td><code>XmlHandler</code></td>
+<td>PHP built-in</td>
+</tr>
+<tr>
+<td>YAML</td>
+<td>.yaml</td>
+<td><code>YamlHandler</code></td>
+<td>Symfony/Yaml</td>
+</tr>
+<tr>
+<td>HTML</td>
+<td>.html</td>
+<td><code>HtmlHandler</code></td>
+<td>PhpSpreadsheet</td>
+</tr>
+<tr>
+<td>PDF</td>
+<td>.pdf</td>
+<td><code>PdfHandler</code></td>
+<td>PhpSpreadsheet + PDF renderer</td>
+</tr>
+</tbody>
+</table>
+<h2><a id="content-how-format-handlers-work" href="format-handlers.html#content-how-format-handlers-work" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>How Format Handlers Work</h2>
+<p>Each format handler is responsible for:</p>
+<ol>
+<li>Loading data from a file into a <code>SpreadsheetInterface</code> object.</li>
+<li>Dumping data from a <code>SpreadsheetInterface</code> object to a file or string (memory).</li>
+<li>Providing metadata like the file extension and MIME type.</li>
+</ol>
+<p>The <code>Factory</code> class manages the format handlers and automatically selects the appropriate handler based on the file extension.</p>
+<h2><a id="content-using-format-handlers" href="format-handlers.html#content-using-format-handlers" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Using Format Handlers</h2>
+<p>Most of the time, you don’t need to interact with format handlers directly. The <code>Loader</code> and <code>Dumper</code> classes handle this for you:</p>
+<pre><code class="line-numbers match-braces language-php">$loader = new Loader();
+$spreadsheet = $loader-&gt;loadFromFile('data.xlsx');
+
+$dumper = new Dumper();
+$dumper-&gt;dumpToFile($spreadsheet, 'output.csv');
+</code></pre>
+<p>However, if needed, you can access format handlers directly through the <code>Factory</code>:</p>
+<pre><code class="line-numbers match-braces language-php">$factory = new Factory();
+$xlsxHandler = $factory-&gt;createFormatHandler('filepath.xlsx');
+
+// or with explicit format
+$csvHandler = $factory-&gt;createFormatHandler('filepath.file', 'csv');
+</code></pre>
+<h2><a id="content-format-specific-options" href="format-handlers.html#content-format-specific-options" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Format-Specific Options</h2>
+<p>Some format handlers support additional options in the constructor.</p>
+<h3><a id="content-csv-options-csvleaguehandler" href="format-handlers.html#content-csv-options-csvleaguehandler" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>CSV Options (CsvLeagueHandler)</h3>
+<pre><code class="line-numbers match-braces language-php">$csvHandler = new CsvLeagueHandler(
+    delimiter: ',',      // Column delimiter.
+    enclosure: '&quot;',      // Field enclosure character.
+    escape: '\\',        // Escape character.
+    sheetName: 'Sheet'   // Default sheet name when loading CSV.
+);
+</code></pre>
+<h3><a id="content-opendocumentexcel-options-odshandler-xlshandler-xlsxhandler" href="format-handlers.html#content-opendocumentexcel-options-odshandler-xlshandler-xlsxhandler" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>OpenDocument/Excel Options (OdsHandler, XlsHandler, XlsxHandler)</h3>
+<pre><code class="line-numbers match-braces language-php">$xlsxHandler = new XlsxHandler(
+    readDataOnly: true   // Read values only, ignore formatting.
+);
+</code></pre>
+<h3><a id="content-pdf-options-pdfhandler" href="format-handlers.html#content-pdf-options-pdfhandler" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>PDF Options (PdfHandler)</h3>
+<pre><code class="line-numbers match-braces language-php">$pdfHandler = new PdfHandler(
+    writerType: 'Mpdf'   // Can be 'Mpdf', 'Dompdf', or 'Tcpdf'.
+);
+</code></pre>
+<h3><a id="content-json-options-jsonhandler" href="format-handlers.html#content-json-options-jsonhandler" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>JSON Options (JsonHandler)</h3>
+<pre><code class="line-numbers match-braces language-php">$jsonHandler = new JsonHandler(
+    encodeOptions: JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE,
+    decodeOptions: JSON_OBJECT_AS_ARRAY,
+    depth: 512,
+    sheetName: 'Sheet'
+);
+</code></pre>
+<h3><a id="content-yaml-options-yamlhandler" href="format-handlers.html#content-yaml-options-yamlhandler" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>YAML Options (YamlHandler)</h3>
+<pre><code class="line-numbers match-braces language-php">use Symfony\Component\Yaml\Yaml;
+
+$yamlHandler = new YamlHandler(
+    parseFlags: Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE,
+    dumpFlags: Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK,
+    sheetName: 'Sheet'
+);
+</code></pre>
+<h2><a id="content-custom-format-handlers" href="format-handlers.html#content-custom-format-handlers" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Custom Format Handlers</h2>
+<p>You can create your own format handlers by implementing the <code>FormatHandlerInterface</code>:</p>
+<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
+
+class MyCustomHandler implements FormatHandlerInterface
+{
+    // Implement required methods.
+}
+
+// Register with the factory.
+$factory = new Factory();
+$factory-&gt;registerFormatHandler('custom', MyCustomHandler::class);
+
+// Now you can use it.
+$loader = new Loader($factory);
+$spreadsheet = $loader-&gt;loadFromFile('filepath.custom');
+</code></pre>
+<h2><a id="content-format-detection" href="format-handlers.html#content-format-detection" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Format Detection</h2>
+<p>The <code>Factory</code> class detects the format based on the file extension. If the file doesn’t have an extension or if you want to override it, you can explicitly specify the format:</p>
+<pre><code class="line-numbers match-braces language-php">$loader = new Loader();
+$spreadsheet = $loader-&gt;loadFromFile('filepath', 'xlsx'); // Treat as XLSX.
+</code></pre>
+<p>You can also check which formats are supported:</p>
+<pre><code class="line-numbers match-braces language-php">$factory = new Factory();
+$supportedFormats = $factory-&gt;getSupportedFormats();
+// ['csv', 'xlsx', 'xls', 'ods', 'xml', 'json', 'yaml', 'html', 'pdf']
+</code></pre>
+<h2><a id="content-alternative-format-handlers" href="format-handlers.html#content-alternative-format-handlers" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Alternative Format Handlers</h2>
+<p>For some formats like CSV, Derafu Spreadsheet provides multiple handlers. For example:</p>
+<ul>
+<li><code>CsvLeagueHandler</code> - Uses League/CSV (recommended for most cases).</li>
+<li><code>CsvPhpSpreadsheetHandler</code> - Uses PhpSpreadsheet.</li>
+</ul>
+<p>You can choose which handler to use by registering it for the format:</p>
+<pre><code class="line-numbers match-braces language-php">$factory = new Factory();
+$factory-&gt;registerFormatHandler('csv', CsvPhpSpreadsheetHandler::class);
+
+$loader = new Loader($factory);
+// Now CSV files will use PhpSpreadsheet handler.
+</code></pre>
+<h2><a id="content-format-handling-and-type-casting" href="format-handlers.html#content-format-handling-and-type-casting" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Format Handling and Type Casting</h2>
+<p>When loading a file, the process works like this:</p>
+<ol>
+<li>Format handler reads the raw data from the file.</li>
+<li>Data is converted to a <code>SpreadsheetInterface</code> object.</li>
+<li><code>Caster</code> processes all values to convert them to the appropriate PHP types.</li>
+</ol>
+<p>When saving a file:</p>
+<ol>
+<li><code>Caster</code> converts PHP types to appropriate string representations.</li>
+<li>Format handler writes the data to the file in the correct format.</li>
+</ol>
+</div>
+</div>
+                </main>
+                <div class="col-md-3 py-4">
+                    <div class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Package Info</div>
+                                <span class="smal text-muted">
+                                    <a href="https://github.com/derafu/spreadsheet" target="_blank" class="link-secondary text-decoration-none">
+                                        <i class="fa-brands fa-github"></i>
+                                        derafu/spreadsheet
+                                    </a>
+                                </span>
+                                <div class="my-2">
+                                    <img src="https://img.shields.io/github/stars/derafu/spreadsheet" alt="GitHub Repo stars">
+                                    <img src="https://img.shields.io/github/forks/derafu/spreadsheet" alt="GitHub forks">
+                                </div>
+                            </div>
+                        </li>
+                        <a href="index.html" class="list-group-item list-group-item-action ">
+                            README
+                        </a>
+                    </div>
+                    <div class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Docs</div>
+                            <span class="smal text-muted">Guides & Examples</span>
+                            </div>
+                        </li>
+                        <a href="architecture.html" class="list-group-item list-group-item-action ">
+                            Architecture
+                        </a>
+                        <a href="install.html" class="list-group-item list-group-item-action ">
+                            Install the library
+                        </a>
+                        <a href="basic-usage.html" class="list-group-item list-group-item-action ">
+                            Basic Usage
+                        </a>
+                        <a href="format-handlers.html" class="list-group-item list-group-item-action active">
+                            Format Handlers
+                        </a>
+                        <a href="type-casting.html" class="list-group-item list-group-item-action ">
+                            Type Casting
+                        </a>
+                        <a href="http-responses.html" class="list-group-item list-group-item-action ">
+                            HTTP Responses
+                        </a>
+                        <a href="comparison.html" class="list-group-item list-group-item-action ">
+                            Comparison
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+            <div id="footer-container"></div>
+        <script src="https://derafu.org/js/derafu.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/show-language/prism-show-language.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/command-line/prism-command-line.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/match-braces/prism-match-braces.min.js"></script>
+    </body>
+</html>

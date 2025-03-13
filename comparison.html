@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derafu: Spreadsheet - Unified Spreadsheet Processing for PHP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/command-line/prism-command-line.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/match-braces/prism-match-braces.min.css" rel="stylesheet" />
+    <link href="https://derafu.org/css/styles.min.css" rel="stylesheet" />
+    </head>
+<body>
+                <div id="header-container" class="sticky-top"></div>
+    
+            <div class="container">
+            <div class="row">
+                <main class="col-md-9">
+                    <div class="container py-4">
+    <div class="markdown-body"><h1><a id="content-comparison-with-alternative-libraries" href="comparison.html#content-comparison-with-alternative-libraries" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Comparison with Alternative Libraries</h1>
+<p>When choosing a spreadsheet library for PHP, it’s important to understand the differences between available options. This guide compares Derafu Spreadsheet with some popular alternatives.</p>
+<ul class="table-of-contents">
+<li><a href="comparison.html#content-derafu-spreadsheet-vs-phpspreadsheet">Derafu Spreadsheet vs PhpSpreadsheet</a>
+<ul>
+<li><a href="comparison.html#content-advantages-of-derafu-spreadsheet">Advantages of Derafu Spreadsheet</a></li>
+<li><a href="comparison.html#content-when-to-use-phpspreadsheet-instead">When to use PhpSpreadsheet instead</a></li>
+</ul>
+</li>
+<li><a href="comparison.html#content-derafu-spreadsheet-vs-leaguecsv">Derafu Spreadsheet vs league/csv</a>
+<ul>
+<li><a href="comparison.html#content-advantages-of-derafu-spreadsheet-1">Advantages of Derafu Spreadsheet</a></li>
+<li><a href="comparison.html#content-when-to-use-leaguecsv-instead">When to use league/csv instead</a></li>
+</ul>
+</li>
+<li><a href="comparison.html#content-code-comparison-examples">Code Comparison Examples</a>
+<ul>
+<li><a href="comparison.html#content-basic-reading-example">Basic Reading Example</a></li>
+<li><a href="comparison.html#content-format-conversion-example">Format Conversion Example</a></li>
+</ul>
+</li>
+<li><a href="comparison.html#content-feature-comparison-table">Feature Comparison Table</a></li>
+<li><a href="comparison.html#content-conclusion">Conclusion</a></li>
+</ul>
+<h2><a id="content-derafu-spreadsheet-vs-phpspreadsheet" href="comparison.html#content-derafu-spreadsheet-vs-phpspreadsheet" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Derafu Spreadsheet vs PhpSpreadsheet</h2>
+<p><a rel="nofollow noopener noreferrer" target="_blank" class="external-link" href="https://github.com/PHPOffice/PhpSpreadsheet">PhpSpreadsheet</a> is the most widely used PHP spreadsheet library and is actually used internally by Derafu Spreadsheet for some format handlers.</p>
+<h3><a id="content-advantages-of-derafu-spreadsheet" href="comparison.html#content-advantages-of-derafu-spreadsheet" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Advantages of Derafu Spreadsheet</h3>
+<ul>
+<li><strong>Simplified API</strong>: The API is more streamlined and consistent across formats.</li>
+<li><strong>Customizable type casting</strong>: Has a custom and flexible type casting system.</li>
+<li><strong>Format-agnostic code</strong>: Write code once that works with any spreadsheet format.</li>
+<li><strong>Easier data access</strong>: Direct methods for working with rows and cells.</li>
+<li><strong>Native handling of JSON/YAML</strong>: Built-in support for these data exchange formats.</li>
+<li><strong>JSON inside</strong>: Allows you to easily store and retrieve JSON data inside spreadsheets.</li>
+<li><strong>Modular approach</strong>: Use only the format handlers you need.</li>
+<li><strong>Less overhead</strong>: Simpler in-memory structure for data representation.</li>
+</ul>
+<h3><a id="content-when-to-use-phpspreadsheet-instead" href="comparison.html#content-when-to-use-phpspreadsheet-instead" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>When to use PhpSpreadsheet instead</h3>
+<ul>
+<li><strong>Advanced Excel features</strong>: If you need complex Excel features like conditional formatting, charts, etc.</li>
+<li><strong>Cell styling</strong>: If you need detailed control over cell appearance.</li>
+<li><strong>Formula calculation</strong>: If you need to evaluate Excel formulas.</li>
+<li><strong>Mature ecosystem</strong>: PhpSpreadsheet has been around longer and has more examples and community code.</li>
+</ul>
+<h2><a id="content-derafu-spreadsheet-vs-leaguecsv" href="comparison.html#content-derafu-spreadsheet-vs-leaguecsv" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Derafu Spreadsheet vs league/csv</h2>
+<p><a rel="nofollow noopener noreferrer" target="_blank" class="external-link" href="https://csv.thephpleague.com/">league/csv</a> is a focused library for working with CSV files. Internally, Derafu Spreadsheet uses it, as default, for CSV format handling.</p>
+<h3><a id="content-advantages-of-derafu-spreadsheet-1" href="comparison.html#content-advantages-of-derafu-spreadsheet-1" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Advantages of Derafu Spreadsheet</h3>
+<ul>
+<li><strong>Multiple format support</strong>: Work with many formats using the same code.</li>
+<li><strong>Automatic type casting</strong>: league/csv returns everything as strings.</li>
+<li><strong>Higher-level abstractions</strong>: Work with the concepts of sheets, rows, and cells.</li>
+<li><strong>Easy format conversion</strong>: Convert between CSV and other formats seamlessly.</li>
+</ul>
+<h3><a id="content-when-to-use-leaguecsv-instead" href="comparison.html#content-when-to-use-leaguecsv-instead" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>When to use league/csv instead</h3>
+<ul>
+<li><strong>CSV-only projects</strong>: If you only need to work with CSV files.</li>
+<li><strong>Memory efficiency for large files</strong>: league/csv has specialized streaming capabilities.</li>
+<li><strong>CSV-specific features</strong>: If you need advanced CSV features like RFC compliance options.</li>
+<li><strong>Simplicity</strong>: If you want a more focused, single-purpose library.</li>
+</ul>
+<h2><a id="content-code-comparison-examples" href="comparison.html#content-code-comparison-examples" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Code Comparison Examples</h2>
+<h3><a id="content-basic-reading-example" href="comparison.html#content-basic-reading-example" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Basic Reading Example</h3>
+<p><strong>Derafu Spreadsheet:</strong></p>
+<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Loader;
+
+$loader = new Loader();
+$sheet = $loader-&gt;loadFromFile('data.xlsx')-&gt;getActiveSheet();
+
+foreach ($sheet-&gt;getDataRows() as $row) {
+    $id = $row[0]; // Already cast to proper type (int).
+    $date = $row[1]; // Already a DateTimeImmutable.
+    // Process...
+}
+</code></pre>
+<p><strong>PhpSpreadsheet:</strong></p>
+<pre><code class="line-numbers match-braces language-php">use DateTimeImmutable;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+$spreadsheet = IOFactory::load('data.xlsx');
+$sheet = $spreadsheet-&gt;getActiveSheet();
+
+foreach ($sheet-&gt;getRowIterator(2) as $row) {
+    $cellIterator = $row-&gt;getCellIterator();
+    $rowData = [];
+    foreach ($cellIterator as $cell) {
+        $rowData[] = $cell-&gt;getValue();
+    }
+    $id = (int)$rowData[0]; // Depending on your app and code, manual casting needed.
+    $date = new DateTimeImmutable($rowData[1]); // Manual conversion.
+    // Process...
+}
+</code></pre>
+<p><strong>league/csv:</strong></p>
+<pre><code class="line-numbers match-braces language-php">use DateTimeImmutable;
+use League\Csv\Reader;
+
+$reader = Reader::createFromPath('data.csv');
+$reader-&gt;setHeaderOffset(0);
+
+foreach ($reader-&gt;getRecords() as $record) {
+    $id = (int)$record['id']; // Depending on your app and code, manual casting needed.
+    $date = new DateTimeImmutable($record['date']); // Manual conversion.
+    // Process...
+}
+</code></pre>
+<h3><a id="content-format-conversion-example" href="comparison.html#content-format-conversion-example" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Format Conversion Example</h3>
+<p><strong>Derafu Spreadsheet:</strong></p>
+<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Loader;
+use Derafu\Spreadsheet\Dumper;
+
+$loader = new Loader();
+$dumper = new Dumper();
+
+// Load XLSX and save as CSV.
+$spreadsheet = $loader-&gt;loadFromFile('data.xlsx');
+$dumper-&gt;dumpToFile($spreadsheet, 'data.csv');
+
+// Load CSV and save as JSON.
+$spreadsheet = $loader-&gt;loadFromFile('data.csv');
+$dumper-&gt;dumpToFile($spreadsheet, 'data.json');
+</code></pre>
+<p><strong>With alternative libraries:</strong></p>
+<pre><code class="line-numbers match-braces language-php">use League\Csv\Reader as CsvReader;
+use PhpOffice\PhpSpreadsheet\IOFactory as PhpSpreadsheetIOFactory;
+use PhpOffice\PhpSpreadsheet\Writer\Csv as PhpSpreadsheetCsvWriter;
+
+// Load with PhpSpreadsheet, save as CSV.
+$spreadsheet = PhpSpreadsheetIOFactory::load('data.xlsx');
+$writer = new PhpSpreadsheetCsvWriter($spreadsheet);
+$writer-&gt;save('data.csv');
+
+// To convert CSV to JSON, would require:
+$csv = CsvReader::createFromPath('data.csv');
+$csv-&gt;setHeaderOffset(0);
+$records = iterator_to_array($csv-&gt;getRecords());
+file_put_contents('data.json', json_encode($records, JSON_PRETTY_PRINT));
+</code></pre>
+<h2><a id="content-feature-comparison-table" href="comparison.html#content-feature-comparison-table" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Feature Comparison Table</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Derafu Spreadsheet</th>
+<th>PhpSpreadsheet</th>
+<th>league/csv</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Formats Supported</strong></td>
+<td>XLSX, XLS, CSV, ODS, JSON, XML, YAML, HTML, PDF</td>
+<td>XLSX, XLS, CSV, ODS, HTML, PDF</td>
+<td>CSV only</td>
+</tr>
+<tr>
+<td><strong>API Consistency</strong></td>
+<td>Excellent</td>
+<td>Complex</td>
+<td>Simple</td>
+</tr>
+<tr>
+<td><strong>Memory Efficiency</strong></td>
+<td>Can be better with streaming support</td>
+<td>Poor for large files</td>
+<td>Excellent</td>
+</tr>
+<tr>
+<td><strong>Streaming Support</strong></td>
+<td>Soon</td>
+<td>Yes</td>
+<td>Excellent</td>
+</tr>
+<tr>
+<td><strong>Customizable Casting</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>PSR-7 Integration</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>JSON/YAML Support</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Formula Support</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Cell Styling</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<h2><a id="content-conclusion" href="comparison.html#content-conclusion" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Conclusion</h2>
+<p>Derafu Spreadsheet is focused on simplicity and ease of use for handling the data inside spreadsheets, not the styling. It excels when you need:</p>
+<ol>
+<li><strong>Unified handling</strong> of multiple file formats.</li>
+<li><strong>Clean, intuitive API</strong> for spreadsheet operations.</li>
+<li><strong>Automatic type handling</strong> to reduce boilerplate code.</li>
+<li><strong>Format conversion</strong> capabilities.</li>
+<li><strong>Modern PHP architecture</strong> with a focus on developer experience.</li>
+</ol>
+<p>Other libraries may be better suited for specific use cases:</p>
+<ul>
+<li><strong>PhpSpreadsheet</strong>: For complex Excel features and formatting.</li>
+<li><strong>league/csv</strong>: For CSV-specific operations and streaming large files.</li>
+</ul>
+<p>Choose the tool that best matches your specific requirements and constraints.</p>
+</div>
+</div>
+                </main>
+                <div class="col-md-3 py-4">
+                    <div class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Package Info</div>
+                                <span class="smal text-muted">
+                                    <a href="https://github.com/derafu/spreadsheet" target="_blank" class="link-secondary text-decoration-none">
+                                        <i class="fa-brands fa-github"></i>
+                                        derafu/spreadsheet
+                                    </a>
+                                </span>
+                                <div class="my-2">
+                                    <img src="https://img.shields.io/github/stars/derafu/spreadsheet" alt="GitHub Repo stars">
+                                    <img src="https://img.shields.io/github/forks/derafu/spreadsheet" alt="GitHub forks">
+                                </div>
+                            </div>
+                        </li>
+                        <a href="index.html" class="list-group-item list-group-item-action ">
+                            README
+                        </a>
+                    </div>
+                    <div class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Docs</div>
+                            <span class="smal text-muted">Guides & Examples</span>
+                            </div>
+                        </li>
+                        <a href="architecture.html" class="list-group-item list-group-item-action ">
+                            Architecture
+                        </a>
+                        <a href="install.html" class="list-group-item list-group-item-action ">
+                            Install the library
+                        </a>
+                        <a href="basic-usage.html" class="list-group-item list-group-item-action ">
+                            Basic Usage
+                        </a>
+                        <a href="format-handlers.html" class="list-group-item list-group-item-action ">
+                            Format Handlers
+                        </a>
+                        <a href="type-casting.html" class="list-group-item list-group-item-action ">
+                            Type Casting
+                        </a>
+                        <a href="http-responses.html" class="list-group-item list-group-item-action ">
+                            HTTP Responses
+                        </a>
+                        <a href="comparison.html" class="list-group-item list-group-item-action active">
+                            Comparison
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+            <div id="footer-container"></div>
+        <script src="https://derafu.org/js/derafu.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/show-language/prism-show-language.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/command-line/prism-command-line.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/match-braces/prism-match-braces.min.js"></script>
+    </body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derafu: Spreadsheet - Unified Spreadsheet Processing for PHP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/command-line/prism-command-line.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/match-braces/prism-match-braces.min.css" rel="stylesheet" />
+    <link href="https://derafu.org/css/styles.min.css" rel="stylesheet" />
+    </head>
+<body>
+                <div id="header-container" class="sticky-top"></div>
+    
+            <div class="container">
+            <div class="row">
+                <main class="col-md-9">
+                    <div class="container py-4">
+    <div class="markdown-body"><h1><a id="content-type-casting-in-derafu-spreadsheet" href="type-casting.html#content-type-casting-in-derafu-spreadsheet" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Type Casting in Derafu Spreadsheet</h1>
+<p>One of the most powerful features of Derafu Spreadsheet is its intelligent type casting system. This enables seamless conversion between spreadsheet file data and native PHP data types.</p>
+<ul class="table-of-contents">
+<li><a href="type-casting.html#content-the-type-casting-problem">The Type Casting Problem</a></li>
+<li><a href="type-casting.html#content-automatic-type-casting-with-derafu-spreadsheet">Automatic Type Casting with Derafu Spreadsheet</a></li>
+<li><a href="type-casting.html#content-supported-type-conversions">Supported Type Conversions</a>
+<ul>
+<li><a href="type-casting.html#content-after-doing-a-load-reading-from-filedata-to-php">After doing a load (reading from file/data to PHP)</a></li>
+<li><a href="type-casting.html#content-before-doing-a-dump-writing-from-php-to-filedata">Before doing a dump (writing from PHP to file/data)</a></li>
+</ul>
+</li>
+<li><a href="type-casting.html#content-date-format-detection">Date Format Detection</a></li>
+<li><a href="type-casting.html#content-json-detection-and-parsing">JSON Detection and Parsing</a></li>
+<li><a href="type-casting.html#content-custom-type-casting">Custom Type Casting</a></li>
+<li><a href="type-casting.html#content-how-type-casting-works-internally">How Type Casting Works Internally</a></li>
+<li><a href="type-casting.html#content-performance-considerations">Performance Considerations</a></li>
+</ul>
+<h2><a id="content-the-type-casting-problem" href="type-casting.html#content-the-type-casting-problem" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>The Type Casting Problem</h2>
+<p>Spreadsheet files typically store everything as text, but your application needs properly typed data to work effectively. Other libraries often leave the type conversion to you, resulting in code like:</p>
+<pre><code class="line-numbers match-braces language-php">// Without automatic type casting.
+$value = $spreadsheet-&gt;getCell(0, 0);
+if (is_numeric($value)) {
+    $value = (int)$value;
+} elseif ($value === 'true' || $value === 'false') {
+    $value = $value === 'true';
+} elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+    $value = new \DateTime($value);
+}
+// ... and so on for every cell.
+</code></pre>
+<h2><a id="content-automatic-type-casting-with-derafu-spreadsheet" href="type-casting.html#content-automatic-type-casting-with-derafu-spreadsheet" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Automatic Type Casting with Derafu Spreadsheet</h2>
+<p>Under the hood, the <code>Caster</code> class automatically handles all of these conversions for you:</p>
+<pre><code class="line-numbers match-braces language-php">// With Derafu Spreadsheet - all values are properly typed.
+$spreadsheet = $loader-&gt;loadFromFile('data.csv');
+$value = $spreadsheet-&gt;getSheet('Sheet1')-&gt;getCell(0, 0); // Already properly typed!
+</code></pre>
+<p class="w-25 mx-auto"><img src="http://127.0.0.1:9000/img/derafu-spreadsheet-type-casting-flow-diagram.svg" alt="Type casting flow diagram" /></p>
+<h2><a id="content-supported-type-conversions" href="type-casting.html#content-supported-type-conversions" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Supported Type Conversions</h2>
+<h3><a id="content-after-doing-a-load-reading-from-filedata-to-php" href="type-casting.html#content-after-doing-a-load-reading-from-filedata-to-php" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>After doing a load (reading from file/data to PHP)</h3>
+<table>
+<thead>
+<tr>
+<th>File Value</th>
+<th>PHP Type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Empty string</td>
+<td><code>null</code></td>
+<td><code>&quot;&quot;</code> → <code>null</code></td>
+</tr>
+<tr>
+<td>Integer</td>
+<td><code>int</code></td>
+<td><code>&quot;123&quot;</code> → <code>123</code></td>
+</tr>
+<tr>
+<td>Decimal</td>
+<td><code>float</code></td>
+<td><code>&quot;123.45&quot;</code> → <code>123.45</code></td>
+</tr>
+<tr>
+<td>Boolean text</td>
+<td><code>bool</code></td>
+<td><code>&quot;true&quot;</code> → <code>true</code></td>
+</tr>
+<tr>
+<td>Date string</td>
+<td><code>DateTimeImmutable</code></td>
+<td><code>&quot;2025-03-12&quot;</code> → <code>DateTimeImmutable</code></td>
+</tr>
+<tr>
+<td>ISO 8601 date</td>
+<td><code>DateTimeImmutable</code></td>
+<td><code>&quot;2025-03-12T14:30:00&quot;</code> → <code>DateTimeImmutable</code></td>
+</tr>
+<tr>
+<td>JSON array</td>
+<td><code>array</code></td>
+<td><code>&quot;[1,2,3]&quot;</code> → <code>[1, 2, 3]</code></td>
+</tr>
+<tr>
+<td>JSON object</td>
+<td><code>array</code> (associative)</td>
+<td><code>&quot;{&quot;key&quot;:&quot;value&quot;}&quot;</code> → <code>[&quot;key&quot; =&gt; &quot;value&quot;]</code></td>
+</tr>
+</tbody>
+</table>
+<h3><a id="content-before-doing-a-dump-writing-from-php-to-filedata" href="type-casting.html#content-before-doing-a-dump-writing-from-php-to-filedata" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Before doing a dump (writing from PHP to file/data)</h3>
+<table>
+<thead>
+<tr>
+<th>PHP Type</th>
+<th>File Value</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>null</code></td>
+<td>Empty string</td>
+<td><code>null</code> → <code>&quot;&quot;</code></td>
+</tr>
+<tr>
+<td><code>int</code>/<code>float</code></td>
+<td>Preserved as is</td>
+<td><code>123.45</code> → <code>123.45</code></td>
+</tr>
+<tr>
+<td><code>bool</code></td>
+<td>String “true”/“false”</td>
+<td><code>true</code> → <code>&quot;true&quot;</code></td>
+</tr>
+<tr>
+<td><code>DateTimeInterface</code></td>
+<td>ISO 8601 / Date</td>
+<td><code>new DateTime()</code> → <code>&quot;2025-03-12T14:30:00&quot;</code></td>
+</tr>
+<tr>
+<td><code>array</code>/<code>object</code></td>
+<td>JSON string</td>
+<td><code>[&quot;a&quot;, &quot;b&quot;]</code> → <code>&quot;[&quot;a&quot;,&quot;b&quot;]&quot;</code></td>
+</tr>
+<tr>
+<td><code>Stringable</code> objects</td>
+<td>String representation</td>
+<td><code>$stringable</code> → <code>(string)$stringable</code></td>
+</tr>
+</tbody>
+</table>
+<h2><a id="content-date-format-detection" href="type-casting.html#content-date-format-detection" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Date Format Detection</h2>
+<p>The library automatically detects various date formats:</p>
+<ul>
+<li><code>Y-m-d</code> (2025-03-12).</li>
+<li><code>d/m/Y</code> (12/03/2025).</li>
+<li><code>Y-m-d H:i:s</code> (2025-03-12 14:30:45).</li>
+<li><code>d/m/Y H:i:s</code> (12/03/2025 14:30:45).</li>
+<li><code>Y-m-d\TH:i:s</code> (2025-03-12T14:30:45).</li>
+<li><code>Y-m-d\TH:i:sP</code> (2025-03-12T14:30:45+00:00).</li>
+</ul>
+<p>All dates are automatically converted to UTC for consistency.</p>
+<h2><a id="content-json-detection-and-parsing" href="type-casting.html#content-json-detection-and-parsing" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>JSON Detection and Parsing</h2>
+<p>With strings that appear to be JSON (starting with <code>{</code> or <code>[</code>), the caster automatically will try to parse them into PHP arrays or objects:</p>
+<pre><code class="line-numbers match-braces language-php">// Cell contains: {&quot;name&quot;:&quot;John&quot;,&quot;age&quot;:30}
+$person = $sheet-&gt;getCell(0, 0);
+// Returns associative array: [&quot;name&quot; =&gt; &quot;John&quot;, &quot;age&quot; =&gt; 30]
+</code></pre>
+<h2><a id="content-custom-type-casting" href="type-casting.html#content-custom-type-casting" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Custom Type Casting</h2>
+<p>If you need different casting behavior, you can implement your own <code>CasterInterface</code>:</p>
+<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Contract\CasterInterface;
+
+class MyCaster implements CasterInterface
+{
+    // Your custom implementation.
+}
+
+// Then use it with your loader/dumper.
+$loader = new Loader(new Factory(), new MyCaster());
+</code></pre>
+<h2><a id="content-how-type-casting-works-internally" href="type-casting.html#content-how-type-casting-works-internally" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>How Type Casting Works Internally</h2>
+<ol>
+<li>When loading a file with <code>Loader</code>, after the raw data is read, <code>Caster::castAfterLoad()</code> is called.</li>
+<li>When saving a file with <code>Dumper</code>, before writing data, <code>Caster::castBeforeDump()</code> is called.</li>
+<li>The type casting is performed on every cell in every sheet, ensuring consistent typing.</li>
+</ol>
+<h2><a id="content-performance-considerations" href="type-casting.html#content-performance-considerations" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Performance Considerations</h2>
+<p>Type casting is performed in-memory and typically adds minimal overhead. However, for extremely large spreadsheets with millions of cells, you might consider implementing a more selective casting strategy through a custom <code>CasterInterface</code> implementation.</p>
+<p>If you don’t want to use the Caster, you can use the Factory with the Format Handlers directly. If you bypass the Loader and Dumper, no type casting will be done.</p>
+</div>
+</div>
+                </main>
+                <div class="col-md-3 py-4">
+                    <div class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Package Info</div>
+                                <span class="smal text-muted">
+                                    <a href="https://github.com/derafu/spreadsheet" target="_blank" class="link-secondary text-decoration-none">
+                                        <i class="fa-brands fa-github"></i>
+                                        derafu/spreadsheet
+                                    </a>
+                                </span>
+                                <div class="my-2">
+                                    <img src="https://img.shields.io/github/stars/derafu/spreadsheet" alt="GitHub Repo stars">
+                                    <img src="https://img.shields.io/github/forks/derafu/spreadsheet" alt="GitHub forks">
+                                </div>
+                            </div>
+                        </li>
+                        <a href="index.html" class="list-group-item list-group-item-action ">
+                            README
+                        </a>
+                    </div>
+                    <div class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Docs</div>
+                            <span class="smal text-muted">Guides & Examples</span>
+                            </div>
+                        </li>
+                        <a href="architecture.html" class="list-group-item list-group-item-action ">
+                            Architecture
+                        </a>
+                        <a href="install.html" class="list-group-item list-group-item-action ">
+                            Install the library
+                        </a>
+                        <a href="basic-usage.html" class="list-group-item list-group-item-action ">
+                            Basic Usage
+                        </a>
+                        <a href="format-handlers.html" class="list-group-item list-group-item-action ">
+                            Format Handlers
+                        </a>
+                        <a href="type-casting.html" class="list-group-item list-group-item-action active">
+                            Type Casting
+                        </a>
+                        <a href="http-responses.html" class="list-group-item list-group-item-action ">
+                            HTTP Responses
+                        </a>
+                        <a href="comparison.html" class="list-group-item list-group-item-action ">
+                            Comparison
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+            <div id="footer-container"></div>
+        <script src="https://derafu.org/js/derafu.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/show-language/prism-show-language.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/command-line/prism-command-line.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/match-braces/prism-match-braces.min.js"></script>
+    </body>
+</html>
