@@ -1,0 +1,4 @@
+type,value,expected_read,expected_write
+json_string,"{""key"":""value"",""nested"":{""id"":123}}","{""key"":""value"",""nested"":{""id"":123}}","{""key"":""value"",""nested"":{""id"":123}}"
+array,"[1,2,3]","[1,2,3]","[1,2,3]"
+nested_object,"{""name"":""Test"",""details"":{""id"":42,""active"":true}}","{""name"":""Test"",""details"":{""id"":42,""active"":true}}","{""name"":""Test"",""details"":{""id"":42,""active"":true}}"

@@ -1,0 +1,95 @@
+empty_sheet_with_structure:
+  -
+    - id
+    - name
+    - description
+  - {  }
+datetime_advanced:
+  -
+    id: 1
+    description: 'ISO 8601 with timezone'
+    timestamp: '2025-03-15T08:30:00'
+    notes: 'Europe/Paris timezone'
+  -
+    id: 2
+    description: 'ISO 8601 with UTC timezone'
+    timestamp: '2025-03-15T06:30:00'
+    notes: 'Same time as above but in UTC'
+  -
+    id: 3
+    description: 'ISO 8601 with microseconds'
+    timestamp: '2025-03-15T06:30:00'
+    notes: 'With microsecond precision'
+  -
+    id: 4
+    description: 'Date with time in 12-hour format'
+    timestamp: '2025-03-15T13:30:00'
+    notes: 'Alternate format with AM/PM'
+  -
+    id: 5
+    description: 'Regional date format (DD/MM/YYYY)'
+    timestamp: '2025-03-15T06:30:00'
+    notes: 'European format'
+  -
+    id: 6
+    description: 'Regional date format (MM/DD/YYYY)'
+    timestamp: '2025-03-15T06:30:00'
+    notes: 'US format'
+  -
+    id: 7
+    description: 'Date with month name'
+    timestamp: '2025-03-15T06:30:00'
+    notes: 'Date with full month name'
+  -
+    id: 8
+    description: 'Date with abbreviated month'
+    timestamp: '2025-03-15T06:30:00'
+    notes: 'Date with abbreviated month name'
+special_characters:
+  -
+    id: 1
+    name: 'Product with "quotes"'
+    description: 'Description with "double quotes" and ''single quotes'''
+    category: 'Category with / slash and \ backslash'
+  -
+    id: 2
+    name: 'Product with commas, and semicolons;'
+    description: |-
+      Description with line
+      break
+    category: 'Mixed; Category, with: various; punctuation.'
+  -
+    id: 3
+    name: "Product with tabs\tand spaces"
+    description: 'Description with    multiple    spaces'
+    category: "Category\twith\ttabs"
+  -
+    id: 4
+    name: 'Café Français'
+    description: 'Café au lait • Express • Rösterei © Prix: 5€'
+    category: 'Produits Français'
+  -
+    id: 5
+    name: 'Русский продукт'
+    description: 'Описание на русском языке'
+    category: 'Еда и напитки'
+  -
+    id: 6
+    name: 日本製品
+    description: 日本語の説明
+    category: 食べ物と飲み物
+  -
+    id: 7
+    name: 'Product with emojis 🚀'
+    description: 'Exciting new product! 🎉 Must try! ⭐⭐⭐⭐⭐'
+    category: 'Trending Products 🔥'
+  -
+    id: 8
+    name: 'Product with HTML entities'
+    description: 'Features: &lt;strong&gt;Bold text&lt;/strong&gt; and &lt;em&gt;emphasis&lt;/em&gt;'
+    category: 'Tech & Electronics'
+  -
+    id: 9
+    name: 'Product with control characters'
+    description: 'Description with ASCII control chars: \u0001\u0002\u0003'
+    category: 'Debug Category'

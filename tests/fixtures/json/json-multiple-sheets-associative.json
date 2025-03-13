@@ -1,0 +1,145 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "Product A",
+            "price": 29.99,
+            "active": "true",
+            "stock": 150,
+            "category": "Electronics",
+            "created_date": "2025-03-10T14:30:00"
+        },
+        {
+            "id": 2,
+            "name": "Product B",
+            "price": 49.5,
+            "active": "false",
+            "stock": 75,
+            "category": "Home & Kitchen",
+            "created_date": "2025-03-09T09:15:00"
+        },
+        {
+            "id": 3,
+            "name": "Product C",
+            "price": 15.25,
+            "active": "true",
+            "stock": 200,
+            "category": "Clothing",
+            "created_date": "2025-03-11T11:45:00"
+        },
+        {
+            "id": 4,
+            "name": "Product D",
+            "price": 99.99,
+            "active": "true",
+            "stock": 50,
+            "category": "Electronics",
+            "created_date": "2025-03-12T16:20:00"
+        },
+        {
+            "id": 5,
+            "name": "Product E",
+            "price": 8.75,
+            "active": "false",
+            "stock": 0,
+            "category": "Office",
+            "created_date": ""
+        }
+    ],
+    "customers": [
+        {
+            "id": 101,
+            "name": "John Smith",
+            "email": "john@example.com",
+            "registered_date": "2024-01-15T17:48:19",
+            "orders_count": 5,
+            "vip": "true",
+            "address": "{\"street\":\"123 Main St\",\"city\":\"Anytown\",\"zip\":\"12345\",\"country\":\"USA\"}"
+        },
+        {
+            "id": 102,
+            "name": "Jane Doe",
+            "email": "jane@example.com",
+            "registered_date": "2024-02-20T17:48:19",
+            "orders_count": 3,
+            "vip": "false",
+            "address": "{\"street\":\"456 Oak Ave\",\"city\":\"Somewhere\",\"zip\":\"67890\",\"country\":\"USA\"}"
+        },
+        {
+            "id": 103,
+            "name": "Bob Johnson",
+            "email": "bob@example.com",
+            "registered_date": "2024-03-10T17:48:19",
+            "orders_count": 8,
+            "vip": "true",
+            "address": "{\"street\":\"789 Pine Rd\",\"city\":\"Elsewhere\",\"zip\":\"54321\",\"country\":\"USA\"}"
+        }
+    ],
+    "orders": [
+        {
+            "id": 1001,
+            "customer_id": 101,
+            "date": "2025-03-01T10:00:00",
+            "total": 75.23,
+            "status": "completed",
+            "payment_method": "credit_card",
+            "shipping_address": "123 Main St, Anytown, 12345"
+        },
+        {
+            "id": 1002,
+            "customer_id": 102,
+            "date": "2025-03-02T14:30:00",
+            "total": 49.5,
+            "status": "processing",
+            "payment_method": "paypal",
+            "shipping_address": "456 Oak Ave, Somewhere, 67890"
+        },
+        {
+            "id": 1003,
+            "customer_id": 103,
+            "date": "2025-03-03T09:15:00",
+            "total": 109.99,
+            "status": "completed",
+            "payment_method": "bank_transfer",
+            "shipping_address": "789 Pine Rd, Elsewhere, 54321"
+        }
+    ],
+    "settings": [
+        {
+            "key": "currency",
+            "value": "USD",
+            "type": "string",
+            "editable": "true"
+        },
+        {
+            "key": "tax_rate",
+            "value": 0.07,
+            "type": "float",
+            "editable": "true"
+        },
+        {
+            "key": "company_name",
+            "value": "Example Store Inc.",
+            "type": "string",
+            "editable": "true"
+        },
+        {
+            "key": "shipping_methods",
+            "value": "[{\"id\":1,\"name\":\"Standard\",\"price\":5.99},{\"id\":2,\"name\":\"Express\",\"price\":15.99},{\"id\":3,\"name\":\"Free\",\"price\":0}]",
+            "type": "json",
+            "editable": "true"
+        },
+        {
+            "key": "payment_methods",
+            "value": "[\"credit_card\",\"paypal\",\"bank_transfer\"]",
+            "type": "json",
+            "editable": "true"
+        },
+        {
+            "key": "maintenance_mode",
+            "value": "false",
+            "type": "boolean",
+            "editable": "true"
+        }
+    ]
+}

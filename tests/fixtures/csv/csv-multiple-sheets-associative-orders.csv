@@ -1,0 +1,4 @@
+id,customer_id,date,total,status,payment_method,shipping_address
+1001,101,2025-03-01T10:00:00,75.23,completed,credit_card,"123 Main St, Anytown, 12345"
+1002,102,2025-03-02T14:30:00,49.5,processing,paypal,"456 Oak Ave, Somewhere, 67890"
+1003,103,2025-03-03T09:15:00,109.99,completed,bank_transfer,"789 Pine Rd, Elsewhere, 54321"

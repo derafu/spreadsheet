@@ -1,0 +1,6 @@
+id,name,price,active,created_date,notes
+1,"Product A",29.99,true,2025-03-10T14:30:00,"High demand item"
+2,"Product B",49.5,false,2025-03-09T09:15:00,"Seasonal item"
+3,"Product C",15.25,true,2025-03-11T11:45:00,"Standard stock"
+4,"Product D",99.99,true,2025-03-12T16:20:00,"Premium product"
+5,"Product E",,false,,Discontinued

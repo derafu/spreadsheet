@@ -1,0 +1,5 @@
+id,name,email,registered_date,orders_count,vip
+101,"John Smith",john@example.com,2024-01-15T17:48:19,5,true
+102,"Jane Doe",jane@example.com,2024-02-20T17:48:19,3,false
+103,"Bob Johnson",bob@example.com,2024-03-10T17:48:19,8,true
+104,"Alice Williams",alice@example.com,2024-04-05T17:48:19,2,false

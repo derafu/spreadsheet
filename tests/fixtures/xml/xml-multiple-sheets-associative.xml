@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spreadsheet>
+  <sheet name="products">
+    <row>
+      <id type="integer">1</id>
+      <name>Product A</name>
+      <price type="float">29.99</price>
+      <active>true</active>
+      <stock type="integer">150</stock>
+      <category>Electronics</category>
+      <created_date>2025-03-10T14:30:00</created_date>
+    </row>
+    <row>
+      <id type="integer">2</id>
+      <name>Product B</name>
+      <price type="float">49.5</price>
+      <active>false</active>
+      <stock type="integer">75</stock>
+      <category><![CDATA[Home & Kitchen]]></category>
+      <created_date>2025-03-09T09:15:00</created_date>
+    </row>
+    <row>
+      <id type="integer">3</id>
+      <name>Product C</name>
+      <price type="float">15.25</price>
+      <active>true</active>
+      <stock type="integer">200</stock>
+      <category>Clothing</category>
+      <created_date>2025-03-11T11:45:00</created_date>
+    </row>
+    <row>
+      <id type="integer">4</id>
+      <name>Product D</name>
+      <price type="float">99.99</price>
+      <active>true</active>
+      <stock type="integer">50</stock>
+      <category>Electronics</category>
+      <created_date>2025-03-12T16:20:00</created_date>
+    </row>
+    <row>
+      <id type="integer">5</id>
+      <name>Product E</name>
+      <price type="float">8.75</price>
+      <active>false</active>
+      <stock type="integer">0</stock>
+      <category>Office</category>
+      <created_date></created_date>
+    </row>
+  </sheet>
+  <sheet name="customers">
+    <row>
+      <id type="integer">101</id>
+      <name>John Smith</name>
+      <email>john@example.com</email>
+      <registered_date>2024-01-15T17:48:20</registered_date>
+      <orders_count type="integer">5</orders_count>
+      <vip>true</vip>
+      <address>{"street":"123 Main St","city":"Anytown","zip":"12345","country":"USA"}</address>
+    </row>
+    <row>
+      <id type="integer">102</id>
+      <name>Jane Doe</name>
+      <email>jane@example.com</email>
+      <registered_date>2024-02-20T17:48:20</registered_date>
+      <orders_count type="integer">3</orders_count>
+      <vip>false</vip>
+      <address>{"street":"456 Oak Ave","city":"Somewhere","zip":"67890","country":"USA"}</address>
+    </row>
+    <row>
+      <id type="integer">103</id>
+      <name>Bob Johnson</name>
+      <email>bob@example.com</email>
+      <registered_date>2024-03-10T17:48:20</registered_date>
+      <orders_count type="integer">8</orders_count>
+      <vip>true</vip>
+      <address>{"street":"789 Pine Rd","city":"Elsewhere","zip":"54321","country":"USA"}</address>
+    </row>
+  </sheet>
+  <sheet name="orders">
+    <row>
+      <id type="integer">1001</id>
+      <customer_id type="integer">101</customer_id>
+      <date>2025-03-01T10:00:00</date>
+      <total type="float">75.23</total>
+      <status>completed</status>
+      <payment_method>credit_card</payment_method>
+      <shipping_address>123 Main St, Anytown, 12345</shipping_address>
+    </row>
+    <row>
+      <id type="integer">1002</id>
+      <customer_id type="integer">102</customer_id>
+      <date>2025-03-02T14:30:00</date>
+      <total type="float">49.5</total>
+      <status>processing</status>
+      <payment_method>paypal</payment_method>
+      <shipping_address>456 Oak Ave, Somewhere, 67890</shipping_address>
+    </row>
+    <row>
+      <id type="integer">1003</id>
+      <customer_id type="integer">103</customer_id>
+      <date>2025-03-03T09:15:00</date>
+      <total type="float">109.99</total>
+      <status>completed</status>
+      <payment_method>bank_transfer</payment_method>
+      <shipping_address>789 Pine Rd, Elsewhere, 54321</shipping_address>
+    </row>
+  </sheet>
+  <sheet name="settings">
+    <row>
+      <key>currency</key>
+      <value>USD</value>
+      <type>string</type>
+      <editable>true</editable>
+    </row>
+    <row>
+      <key>tax_rate</key>
+      <value type="float">0.07</value>
+      <type>float</type>
+      <editable>true</editable>
+    </row>
+    <row>
+      <key>company_name</key>
+      <value>Example Store Inc.</value>
+      <type>string</type>
+      <editable>true</editable>
+    </row>
+    <row>
+      <key>shipping_methods</key>
+      <value>[{"id":1,"name":"Standard","price":5.99},{"id":2,"name":"Express","price":15.99},{"id":3,"name":"Free","price":0}]</value>
+      <type>json</type>
+      <editable>true</editable>
+    </row>
+    <row>
+      <key>payment_methods</key>
+      <value>["credit_card","paypal","bank_transfer"]</value>
+      <type>json</type>
+      <editable>true</editable>
+    </row>
+    <row>
+      <key>maintenance_mode</key>
+      <value>false</value>
+      <type>boolean</type>
+      <editable>true</editable>
+    </row>
+  </sheet>
+</spreadsheet>

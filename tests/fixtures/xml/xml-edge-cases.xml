@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spreadsheet>
+  <sheet name="empty_sheet_with_structure">
+    <row>
+      <col>id</col>
+      <col>name</col>
+      <col>description</col>
+    </row>
+  </sheet>
+  <sheet name="datetime_advanced">
+    <row>
+      <id type="integer">1</id>
+      <description>ISO 8601 with timezone</description>
+      <timestamp>2025-03-15T08:30:00</timestamp>
+      <notes>Europe/Paris timezone</notes>
+    </row>
+    <row>
+      <id type="integer">2</id>
+      <description>ISO 8601 with UTC timezone</description>
+      <timestamp>2025-03-15T06:30:00</timestamp>
+      <notes>Same time as above but in UTC</notes>
+    </row>
+    <row>
+      <id type="integer">3</id>
+      <description>ISO 8601 with microseconds</description>
+      <timestamp>2025-03-15T06:30:00</timestamp>
+      <notes>With microsecond precision</notes>
+    </row>
+    <row>
+      <id type="integer">4</id>
+      <description>Date with time in 12-hour format</description>
+      <timestamp>2025-03-15T13:30:00</timestamp>
+      <notes>Alternate format with AM/PM</notes>
+    </row>
+    <row>
+      <id type="integer">5</id>
+      <description>Regional date format (DD/MM/YYYY)</description>
+      <timestamp>2025-03-15T06:30:00</timestamp>
+      <notes>European format</notes>
+    </row>
+    <row>
+      <id type="integer">6</id>
+      <description>Regional date format (MM/DD/YYYY)</description>
+      <timestamp>2025-03-15T06:30:00</timestamp>
+      <notes>US format</notes>
+    </row>
+    <row>
+      <id type="integer">7</id>
+      <description>Date with month name</description>
+      <timestamp>2025-03-15T06:30:00</timestamp>
+      <notes>Date with full month name</notes>
+    </row>
+    <row>
+      <id type="integer">8</id>
+      <description>Date with abbreviated month</description>
+      <timestamp>2025-03-15T06:30:00</timestamp>
+      <notes>Date with abbreviated month name</notes>
+    </row>
+  </sheet>
+  <sheet name="special_characters">
+    <row>
+      <id type="integer">1</id>
+      <name>Product with "quotes"</name>
+      <description>Description with "double quotes" and 'single quotes'</description>
+      <category>Category with / slash and \ backslash</category>
+    </row>
+    <row>
+      <id type="integer">2</id>
+      <name>Product with commas, and semicolons;</name>
+      <description>Description with line
+break</description>
+      <category>Mixed; Category, with: various; punctuation.</category>
+    </row>
+    <row>
+      <id type="integer">3</id>
+      <name>Product with tabs	and spaces</name>
+      <description>Description with    multiple    spaces</description>
+      <category>Category	with	tabs</category>
+    </row>
+    <row>
+      <id type="integer">4</id>
+      <name>Café Français</name>
+      <description>Café au lait • Express • Rösterei © Prix: 5€</description>
+      <category>Produits Français</category>
+    </row>
+    <row>
+      <id type="integer">5</id>
+      <name>Русский продукт</name>
+      <description>Описание на русском языке</description>
+      <category>Еда и напитки</category>
+    </row>
+    <row>
+      <id type="integer">6</id>
+      <name>日本製品</name>
+      <description>日本語の説明</description>
+      <category>食べ物と飲み物</category>
+    </row>
+    <row>
+      <id type="integer">7</id>
+      <name>Product with emojis 🚀</name>
+      <description>Exciting new product! 🎉 Must try! ⭐⭐⭐⭐⭐</description>
+      <category>Trending Products 🔥</category>
+    </row>
+    <row>
+      <id type="integer">8</id>
+      <name>Product with HTML entities</name>
+      <description><![CDATA[Features: <strong>Bold text</strong> and <em>emphasis</em>]]></description>
+      <category><![CDATA[Tech & Electronics]]></category>
+    </row>
+    <row>
+      <id type="integer">9</id>
+      <name>Product with control characters</name>
+      <description>Description with ASCII control chars: \u0001\u0002\u0003</description>
+      <category>Debug Category</category>
+    </row>
+  </sheet>
+</spreadsheet>

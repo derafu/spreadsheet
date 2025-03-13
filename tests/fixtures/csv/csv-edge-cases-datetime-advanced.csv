@@ -1,0 +1,9 @@
+id,description,timestamp,notes
+1,"ISO 8601 with timezone",2025-03-15T08:30:00,"Europe/Paris timezone"
+2,"ISO 8601 with UTC timezone",2025-03-15T06:30:00,"Same time as above but in UTC"
+3,"ISO 8601 with microseconds",2025-03-15T06:30:00,"With microsecond precision"
+4,"Date with time in 12-hour format",2025-03-15T13:30:00,"Alternate format with AM/PM"
+5,"Regional date format (DD/MM/YYYY)",2025-03-15T06:30:00,"European format"
+6,"Regional date format (MM/DD/YYYY)",2025-03-15T06:30:00,"US format"
+7,"Date with month name",2025-03-15T06:30:00,"Date with full month name"
+8,"Date with abbreviated month",2025-03-15T06:30:00,"Date with abbreviated month name"

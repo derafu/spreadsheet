@@ -1,0 +1,11 @@
+id,name,description,category
+1,"Product with ""quotes""","Description with ""double quotes"" and 'single quotes'","Category with / slash and \ backslash"
+2,"Product with commas, and semicolons;","Description with line
+break","Mixed; Category, with: various; punctuation."
+3,"Product with tabs	and spaces","Description with    multiple    spaces","Category	with	tabs"
+4,"Café Français","Café au lait • Express • Rösterei © Prix: 5€","Produits Français"
+5,"Русский продукт","Описание на русском языке","Еда и напитки"
+6,日本製品,日本語の説明,食べ物と飲み物
+7,"Product with emojis 🚀","Exciting new product! 🎉 Must try! ⭐⭐⭐⭐⭐","Trending Products 🔥"
+8,"Product with HTML entities","Features: <strong>Bold text</strong> and <em>emphasis</em>","Tech & Electronics"
+9,"Product with control characters","Description with ASCII control chars: ","Debug Category"

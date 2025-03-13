@@ -1,0 +1,4 @@
+id,name,price,active,created_date,tags,metadata
+1,"Product A",29.99,true,2025-03-10T14:30:00,"[""electronics"",""sale""]","{""sku"":""P001"",""supplier"":""Supplier X"",""stock"":150}"
+2,"Product B",49.5,false,2025-03-09T09:15:00,"[""home"",""kitchen""]","{""sku"":""P002"",""supplier"":""Supplier Y"",""stock"":75}"
+3,"Product C",15.25,true,2025-03-11T11:45:00,"[""clothing""]","{""sku"":""P003"",""supplier"":""Supplier Z"",""stock"":200}"

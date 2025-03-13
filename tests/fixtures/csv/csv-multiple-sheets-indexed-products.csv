@@ -1,0 +1,6 @@
+id,name,price,active,stock,category
+1,"Product A",29.99,true,150,Electronics
+2,"Product B",49.5,false,75,"Home & Kitchen"
+3,"Product C",15.25,true,200,Clothing
+4,"Product D",99.99,true,50,Electronics
+5,"Product E",8.75,false,0,Office

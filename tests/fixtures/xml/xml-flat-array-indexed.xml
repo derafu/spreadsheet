@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spreadsheet>
+  <sheet name="products">
+    <row>
+      <col>id</col>
+      <col>name</col>
+      <col>price</col>
+      <col>active</col>
+      <col>created_date</col>
+      <col>notes</col>
+    </row>
+    <row>
+      <col type="integer">1</col>
+      <col>Product A</col>
+      <col type="float">29.99</col>
+      <col>true</col>
+      <col>2025-03-10T14:30:00</col>
+      <col>High demand item</col>
+    </row>
+    <row>
+      <col type="integer">2</col>
+      <col>Product B</col>
+      <col type="float">49.5</col>
+      <col>false</col>
+      <col>2025-03-09T09:15:00</col>
+      <col>Seasonal item</col>
+    </row>
+    <row>
+      <col type="integer">3</col>
+      <col>Product C</col>
+      <col type="float">15.25</col>
+      <col>true</col>
+      <col>2025-03-11T11:45:00</col>
+      <col>Standard stock</col>
+    </row>
+    <row>
+      <col type="integer">4</col>
+      <col>Product D</col>
+      <col type="float">99.99</col>
+      <col>true</col>
+      <col>2025-03-12T16:20:00</col>
+      <col>Premium product</col>
+    </row>
+    <row>
+      <col type="integer">5</col>
+      <col>Product E</col>
+      <col></col>
+      <col>false</col>
+      <col></col>
+      <col>Discontinued</col>
+    </row>
+  </sheet>
+</spreadsheet>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spreadsheet>
+  <sheet name="strings">
+    <row>
+      <type>empty_string</type>
+      <value></value>
+      <expected_read></expected_read>
+      <expected_write></expected_write>
+    </row>
+    <row>
+      <type>text</type>
+      <value>Simple text</value>
+      <expected_read>Simple text</expected_read>
+      <expected_write>Simple text</expected_write>
+    </row>
+    <row>
+      <type>looks_like_number</type>
+      <value type="integer">123</value>
+      <expected_read type="integer">123</expected_read>
+      <expected_write type="integer">123</expected_write>
+    </row>
+    <row>
+      <type>looks_like_decimal</type>
+      <value type="float">123.45</value>
+      <expected_read type="float">123.45</expected_read>
+      <expected_write type="float">123.45</expected_write>
+    </row>
+  </sheet>
+  <sheet name="numbers">
+    <row>
+      <type>integer</type>
+      <value type="integer">42</value>
+      <expected_read type="integer">42</expected_read>
+      <expected_write type="integer">42</expected_write>
+    </row>
+    <row>
+      <type>float</type>
+      <value type="float">3.14159</value>
+      <expected_read type="float">3.14159</expected_read>
+      <expected_write type="float">3.14159</expected_write>
+    </row>
+    <row>
+      <type>zero</type>
+      <value type="integer">0</value>
+      <expected_read type="integer">0</expected_read>
+      <expected_write type="integer">0</expected_write>
+    </row>
+  </sheet>
+  <sheet name="booleans">
+    <row>
+      <type>true</type>
+      <value>true</value>
+      <expected_read>true</expected_read>
+      <expected_write>true</expected_write>
+    </row>
+    <row>
+      <type>false</type>
+      <value>false</value>
+      <expected_read>false</expected_read>
+      <expected_write>false</expected_write>
+    </row>
+    <row>
+      <type>string_true</type>
+      <value>true</value>
+      <expected_read>true</expected_read>
+      <expected_write>true</expected_write>
+    </row>
+    <row>
+      <type>string_false</type>
+      <value>false</value>
+      <expected_read>false</expected_read>
+      <expected_write>false</expected_write>
+    </row>
+  </sheet>
+  <sheet name="null_values">
+    <row>
+      <type>null</type>
+      <value></value>
+      <expected_read></expected_read>
+      <expected_write></expected_write>
+    </row>
+  </sheet>
+  <sheet name="dates">
+    <row>
+      <type>iso8601</type>
+      <value>2025-03-10T14:30:00</value>
+      <expected_read>{"__class__":"DateTimeImmutable","date":"2025-03-10T14:30:00+00:00"}</expected_read>
+      <expected_write>2025-03-10T14:30:00</expected_write>
+    </row>
+    <row>
+      <type>date_only</type>
+      <value>2025-03-10T17:48:20</value>
+      <expected_read>{"__class__":"DateTimeImmutable","date":"2025-03-10T00:00:00+00:00"}</expected_read>
+      <expected_write>2025-03-10T17:48:20</expected_write>
+    </row>
+    <row>
+      <type>european_format</type>
+      <value>2025-12-31T17:48:20</value>
+      <expected_read>{"__class__":"DateTimeImmutable","date":"2025-12-31T00:00:00+00:00"}</expected_read>
+      <expected_write>2025-12-31T17:48:20</expected_write>
+    </row>
+  </sheet>
+  <sheet name="complex_types">
+    <row>
+      <type>json_string</type>
+      <value>{"key":"value","nested":{"id":123}}</value>
+      <expected_read>{"key":"value","nested":{"id":123}}</expected_read>
+      <expected_write>{"key":"value","nested":{"id":123}}</expected_write>
+    </row>
+    <row>
+      <type>array</type>
+      <value>[1,2,3]</value>
+      <expected_read>[1,2,3]</expected_read>
+      <expected_write>[1,2,3]</expected_write>
+    </row>
+    <row>
+      <type>nested_object</type>
+      <value>{"name":"Test","details":{"id":42,"active":true}}</value>
+      <expected_read>{"name":"Test","details":{"id":42,"active":true}}</expected_read>
+      <expected_write>{"name":"Test","details":{"id":42,"active":true}}</expected_write>
+    </row>
+  </sheet>
+</spreadsheet>

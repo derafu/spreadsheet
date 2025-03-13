@@ -1,0 +1,5 @@
+type,value,expected_read,expected_write
+empty_string,,null,
+text,"Simple text","Simple text","Simple text"
+looks_like_number,123,123,123
+looks_like_decimal,123.45,123.45,123.45

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spreadsheet>
+  <sheet name="products">
+    <row>
+      <id type="integer">1</id>
+      <name>Product A</name>
+      <price type="float">29.99</price>
+      <active>true</active>
+      <created_date>2025-03-10T14:30:00</created_date>
+      <tags>["electronics","sale"]</tags>
+      <metadata>{"sku":"P001","supplier":"Supplier X","stock":150}</metadata>
+    </row>
+    <row>
+      <id type="integer">2</id>
+      <name>Product B</name>
+      <price type="float">49.5</price>
+      <active>false</active>
+      <created_date>2025-03-09T09:15:00</created_date>
+      <tags>["home","kitchen"]</tags>
+      <metadata>{"sku":"P002","supplier":"Supplier Y","stock":75}</metadata>
+    </row>
+    <row>
+      <id type="integer">3</id>
+      <name>Product C</name>
+      <price type="float">15.25</price>
+      <active>true</active>
+      <created_date>2025-03-11T11:45:00</created_date>
+      <tags>["clothing"]</tags>
+      <metadata>{"sku":"P003","supplier":"Supplier Z","stock":200}</metadata>
+    </row>
+  </sheet>
+  <sheet name="customers">
+    <row>
+      <col>id</col>
+      <col>name</col>
+      <col>email</col>
+      <col>registered_date</col>
+      <col>orders_count</col>
+      <col>vip</col>
+    </row>
+    <row>
+      <col type="integer">101</col>
+      <col>John Smith</col>
+      <col>john@example.com</col>
+      <col>2024-01-15T17:48:20</col>
+      <col type="integer">5</col>
+      <col>true</col>
+    </row>
+    <row>
+      <col type="integer">102</col>
+      <col>Jane Doe</col>
+      <col>jane@example.com</col>
+      <col>2024-02-20T17:48:20</col>
+      <col type="integer">3</col>
+      <col>false</col>
+    </row>
+    <row>
+      <col type="integer">103</col>
+      <col>Bob Johnson</col>
+      <col>bob@example.com</col>
+      <col>2024-03-10T17:48:20</col>
+      <col type="integer">8</col>
+      <col>true</col>
+    </row>
+    <row>
+      <col type="integer">104</col>
+      <col>Alice Williams</col>
+      <col>alice@example.com</col>
+      <col>2024-04-05T17:48:20</col>
+      <col type="integer">2</col>
+      <col>false</col>
+    </row>
+  </sheet>
+  <sheet name="orders">
+    <row>
+      <id type="integer">1001</id>
+      <customer_id type="integer">101</customer_id>
+      <date>2025-03-01T10:00:00</date>
+      <items>[{"product_id":1,"quantity":2,"price":29.99},{"product_id":3,"quantity":1,"price":15.25}]</items>
+      <total type="float">75.23</total>
+      <status>completed</status>
+    </row>
+    <row>
+      <id type="integer">1002</id>
+      <customer_id type="integer">102</customer_id>
+      <date>2025-03-02T14:30:00</date>
+      <items>[{"product_id":2,"quantity":1,"price":49.5}]</items>
+      <total type="float">49.5</total>
+      <status>processing</status>
+    </row>
+    <row>
+      <id type="integer">1003</id>
+      <customer_id type="integer">103</customer_id>
+      <date>2025-03-03T09:15:00</date>
+      <items>[{"product_id":1,"quantity":1,"price":29.99},{"product_id":2,"quantity":1,"price":49.5},{"product_id":3,"quantity":2,"price":15.25}]</items>
+      <total type="float">109.99</total>
+      <status>completed</status>
+    </row>
+  </sheet>
+  <sheet name="settings">
+    <row>
+      <currency>USD</currency>
+      <tax_rate type="float">0.07</tax_rate>
+      <shipping_methods>[{"id":1,"name":"Standard","price":5.99,"days":"3-5"},{"id":2,"name":"Express","price":15.99,"days":"1-2"},{"id":3,"name":"Free","price":0,"days":"5-7"}]</shipping_methods>
+      <payment_methods>["credit_card","paypal","bank_transfer"]</payment_methods>
+      <company_details>{"name":"Example Store Inc.","address":"123 Main St, Anytown","phone":"+1-555-123-4567","email":"info@example.com"}</company_details>
+    </row>
+  </sheet>
+</spreadsheet>

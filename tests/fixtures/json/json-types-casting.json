@@ -1,0 +1,122 @@
+{
+    "strings": [
+        {
+            "type": "empty_string",
+            "value": "",
+            "expected_read": "",
+            "expected_write": ""
+        },
+        {
+            "type": "text",
+            "value": "Simple text",
+            "expected_read": "Simple text",
+            "expected_write": "Simple text"
+        },
+        {
+            "type": "looks_like_number",
+            "value": 123,
+            "expected_read": 123,
+            "expected_write": 123
+        },
+        {
+            "type": "looks_like_decimal",
+            "value": 123.45,
+            "expected_read": 123.45,
+            "expected_write": 123.45
+        }
+    ],
+    "numbers": [
+        {
+            "type": "integer",
+            "value": 42,
+            "expected_read": 42,
+            "expected_write": 42
+        },
+        {
+            "type": "float",
+            "value": 3.14159,
+            "expected_read": 3.14159,
+            "expected_write": 3.14159
+        },
+        {
+            "type": "zero",
+            "value": 0,
+            "expected_read": 0,
+            "expected_write": 0
+        }
+    ],
+    "booleans": [
+        {
+            "type": "true",
+            "value": "true",
+            "expected_read": "true",
+            "expected_write": "true"
+        },
+        {
+            "type": "false",
+            "value": "false",
+            "expected_read": "false",
+            "expected_write": "false"
+        },
+        {
+            "type": "string_true",
+            "value": "true",
+            "expected_read": "true",
+            "expected_write": "true"
+        },
+        {
+            "type": "string_false",
+            "value": "false",
+            "expected_read": "false",
+            "expected_write": "false"
+        }
+    ],
+    "null_values": [
+        {
+            "type": "null",
+            "value": "",
+            "expected_read": "",
+            "expected_write": ""
+        }
+    ],
+    "dates": [
+        {
+            "type": "iso8601",
+            "value": "2025-03-10T14:30:00",
+            "expected_read": "{\"__class__\":\"DateTimeImmutable\",\"date\":\"2025-03-10T14:30:00+00:00\"}",
+            "expected_write": "2025-03-10T14:30:00"
+        },
+        {
+            "type": "date_only",
+            "value": "2025-03-10T17:48:19",
+            "expected_read": "{\"__class__\":\"DateTimeImmutable\",\"date\":\"2025-03-10T00:00:00+00:00\"}",
+            "expected_write": "2025-03-10T17:48:19"
+        },
+        {
+            "type": "european_format",
+            "value": "2025-12-31T17:48:19",
+            "expected_read": "{\"__class__\":\"DateTimeImmutable\",\"date\":\"2025-12-31T00:00:00+00:00\"}",
+            "expected_write": "2025-12-31T17:48:19"
+        }
+    ],
+    "complex_types": [
+        {
+            "type": "json_string",
+            "value": "{\"key\":\"value\",\"nested\":{\"id\":123}}",
+            "expected_read": "{\"key\":\"value\",\"nested\":{\"id\":123}}",
+            "expected_write": "{\"key\":\"value\",\"nested\":{\"id\":123}}"
+        },
+        {
+            "type": "array",
+            "value": "[1,2,3]",
+            "expected_read": "[1,2,3]",
+            "expected_write": "[1,2,3]"
+        },
+        {
+            "type": "nested_object",
+            "value": "{\"name\":\"Test\",\"details\":{\"id\":42,\"active\":true}}",
+            "expected_read": "{\"name\":\"Test\",\"details\":{\"id\":42,\"active\":true}}",
+            "expected_write": "{\"name\":\"Test\",\"details\":{\"id\":42,\"active\":true}}"
+        }
+    ]
+}

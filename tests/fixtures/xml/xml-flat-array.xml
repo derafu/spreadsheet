@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spreadsheet>
+  <sheet name="products">
+    <row>
+      <id type="integer">1</id>
+      <name>Product A</name>
+      <price type="float">29.99</price>
+      <active>true</active>
+      <created_date>2025-03-10T14:30:00</created_date>
+      <tags>["electronics","sale"]</tags>
+      <metadata>{"sku":"P001","supplier":"Supplier X","stock":150}</metadata>
+    </row>
+    <row>
+      <id type="integer">2</id>
+      <name>Product B</name>
+      <price type="float">49.5</price>
+      <active>false</active>
+      <created_date>2025-03-09T09:15:00</created_date>
+      <tags>["home","kitchen"]</tags>
+      <metadata>{"sku":"P002","supplier":"Supplier Y","stock":75}</metadata>
+    </row>
+    <row>
+      <id type="integer">3</id>
+      <name>Product C</name>
+      <price type="float">15.25</price>
+      <active>true</active>
+      <created_date>2025-03-11T11:45:00</created_date>
+      <tags>["clothing"]</tags>
+      <metadata>{"sku":"P003","supplier":"Supplier Z","stock":200}</metadata>
+    </row>
+    <row>
+      <id type="integer">4</id>
+      <name>Product D</name>
+      <price type="float">99.99</price>
+      <active>true</active>
+      <created_date>2025-03-12T16:20:00</created_date>
+      <tags>["electronics","premium"]</tags>
+      <metadata>{"sku":"P004","supplier":"Supplier X","stock":50}</metadata>
+    </row>
+    <row>
+      <id type="integer">5</id>
+      <name>Product E</name>
+      <price></price>
+      <active>false</active>
+      <created_date></created_date>
+      <tags>[]</tags>
+      <metadata></metadata>
+    </row>
+  </sheet>
+</spreadsheet>

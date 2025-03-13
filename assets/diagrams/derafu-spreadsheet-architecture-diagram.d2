@@ -1,0 +1,85 @@
+direction: down
+
+# Main Components
+loader: Loader {
+  shape: rectangle
+  style: {
+    fill: "#E0F7FA"
+    stroke: "#0097A7"
+    bold: true
+  }
+}
+
+dumper: Dumper {
+  shape: rectangle
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#7B1FA2"
+    bold: true
+  }
+}
+
+factory: Factory {
+  shape: rectangle
+  style: {
+    fill: "#FFF9C4"
+    stroke: "#FBC02D"
+  }
+}
+
+caster: Caster {
+  shape: rectangle
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#388E3C"
+  }
+}
+
+# Format Handlers
+handlers: {
+  label: Format Handlers
+  style: {
+    fill: "#FFEBEE"
+    stroke: "#C62828"
+  }
+
+  xlsx: XlsxHandler
+  csv: CsvLeagueHandler
+  json: JsonHandler
+  yaml: YamlHandler
+  xml: XmlHandler
+  ods: OdsHandler
+  # etc
+}
+
+# Data Model
+model: {
+  label: Data Model
+
+  spreadsheet: Spreadsheet {
+    style: {
+      fill: "#E3F2FD"
+      stroke: "#1976D2"
+      bold: true
+    }
+  }
+
+  sheet: Sheet {
+    style: {
+      fill: "#E3F2FD"
+      stroke: "#1976D2"
+    }
+  }
+}
+
+# Connections
+loader -> factory: uses
+loader -> caster: uses
+dumper -> factory: uses
+dumper -> caster: uses
+
+factory -> handlers: creates
+loader -> model.spreadsheet: returns
+dumper -> model.spreadsheet: accepts
+
+model.spreadsheet -> model.sheet: contains

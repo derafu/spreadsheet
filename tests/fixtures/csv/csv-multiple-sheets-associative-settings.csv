@@ -1,0 +1,7 @@
+key,value,type,editable
+currency,USD,string,true
+tax_rate,0.07,float,true
+company_name,"Example Store Inc.",string,true
+shipping_methods,"[{""id"":1,""name"":""Standard"",""price"":5.99},{""id"":2,""name"":""Express"",""price"":15.99},{""id"":3,""name"":""Free"",""price"":0}]",json,true
+payment_methods,"[""credit_card"",""paypal"",""bank_transfer""]",json,true
+maintenance_mode,false,boolean,true

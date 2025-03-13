@@ -1,0 +1,4 @@
+id,name,email,registered_date,orders_count,vip,address
+101,"John Smith",john@example.com,2024-01-15T17:48:19,5,true,"{""street"":""123 Main St"",""city"":""Anytown"",""zip"":""12345"",""country"":""USA""}"
+102,"Jane Doe",jane@example.com,2024-02-20T17:48:19,3,false,"{""street"":""456 Oak Ave"",""city"":""Somewhere"",""zip"":""67890"",""country"":""USA""}"
+103,"Bob Johnson",bob@example.com,2024-03-10T17:48:19,8,true,"{""street"":""789 Pine Rd"",""city"":""Elsewhere"",""zip"":""54321"",""country"":""USA""}"

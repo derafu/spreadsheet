@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spreadsheet>
+  <sheet name="products">
+    <row>
+      <col>id</col>
+      <col>name</col>
+      <col>price</col>
+      <col>active</col>
+      <col>stock</col>
+      <col>category</col>
+    </row>
+    <row>
+      <col type="integer">1</col>
+      <col>Product A</col>
+      <col type="float">29.99</col>
+      <col>true</col>
+      <col type="integer">150</col>
+      <col>Electronics</col>
+    </row>
+    <row>
+      <col type="integer">2</col>
+      <col>Product B</col>
+      <col type="float">49.5</col>
+      <col>false</col>
+      <col type="integer">75</col>
+      <col><![CDATA[Home & Kitchen]]></col>
+    </row>
+    <row>
+      <col type="integer">3</col>
+      <col>Product C</col>
+      <col type="float">15.25</col>
+      <col>true</col>
+      <col type="integer">200</col>
+      <col>Clothing</col>
+    </row>
+    <row>
+      <col type="integer">4</col>
+      <col>Product D</col>
+      <col type="float">99.99</col>
+      <col>true</col>
+      <col type="integer">50</col>
+      <col>Electronics</col>
+    </row>
+    <row>
+      <col type="integer">5</col>
+      <col>Product E</col>
+      <col type="float">8.75</col>
+      <col>false</col>
+      <col type="integer">0</col>
+      <col>Office</col>
+    </row>
+  </sheet>
+  <sheet name="customers">
+    <row>
+      <col>id</col>
+      <col>name</col>
+      <col>email</col>
+      <col>registered_date</col>
+      <col>orders_count</col>
+      <col>vip</col>
+    </row>
+    <row>
+      <col type="integer">101</col>
+      <col>John Smith</col>
+      <col>john@example.com</col>
+      <col>2024-01-15T17:48:20</col>
+      <col type="integer">5</col>
+      <col>true</col>
+    </row>
+    <row>
+      <col type="integer">102</col>
+      <col>Jane Doe</col>
+      <col>jane@example.com</col>
+      <col>2024-02-20T17:48:20</col>
+      <col type="integer">3</col>
+      <col>false</col>
+    </row>
+    <row>
+      <col type="integer">103</col>
+      <col>Bob Johnson</col>
+      <col>bob@example.com</col>
+      <col>2024-03-10T17:48:20</col>
+      <col type="integer">8</col>
+      <col>true</col>
+    </row>
+    <row>
+      <col type="integer">104</col>
+      <col>Alice Williams</col>
+      <col>alice@example.com</col>
+      <col>2024-04-05T17:48:20</col>
+      <col type="integer">2</col>
+      <col>false</col>
+    </row>
+  </sheet>
+  <sheet name="orders">
+    <row>
+      <col>id</col>
+      <col>customer_id</col>
+      <col>date</col>
+      <col>total</col>
+      <col>status</col>
+    </row>
+    <row>
+      <col type="integer">1001</col>
+      <col type="integer">101</col>
+      <col>2025-03-01T17:48:20</col>
+      <col type="float">75.23</col>
+      <col>completed</col>
+    </row>
+    <row>
+      <col type="integer">1002</col>
+      <col type="integer">102</col>
+      <col>2025-03-02T17:48:20</col>
+      <col type="float">49.5</col>
+      <col>processing</col>
+    </row>
+    <row>
+      <col type="integer">1003</col>
+      <col type="integer">103</col>
+      <col>2025-03-03T17:48:20</col>
+      <col type="float">109.99</col>
+      <col>completed</col>
+    </row>
+    <row>
+      <col type="integer">1004</col>
+      <col type="integer">104</col>
+      <col>2025-03-05T17:48:20</col>
+      <col type="float">8.75</col>
+      <col>pending</col>
+    </row>
+    <row>
+      <col type="integer">1005</col>
+      <col type="integer">101</col>
+      <col>2025-03-07T17:48:20</col>
+      <col type="float">129.98</col>
+      <col>shipped</col>
+    </row>
+  </sheet>
+  <sheet name="order_items">
+    <row>
+      <col>order_id</col>
+      <col>product_id</col>
+      <col>quantity</col>
+      <col>price</col>
+      <col>subtotal</col>
+    </row>
+    <row>
+      <col type="integer">1001</col>
+      <col type="integer">1</col>
+      <col type="integer">2</col>
+      <col type="float">29.99</col>
+      <col type="float">59.98</col>
+    </row>
+    <row>
+      <col type="integer">1001</col>
+      <col type="integer">3</col>
+      <col type="integer">1</col>
+      <col type="float">15.25</col>
+      <col type="float">15.25</col>
+    </row>
+    <row>
+      <col type="integer">1002</col>
+      <col type="integer">2</col>
+      <col type="integer">1</col>
+      <col type="float">49.5</col>
+      <col type="float">49.5</col>
+    </row>
+    <row>
+      <col type="integer">1003</col>
+      <col type="integer">1</col>
+      <col type="integer">1</col>
+      <col type="float">29.99</col>
+      <col type="float">29.99</col>
+    </row>
+    <row>
+      <col type="integer">1003</col>
+      <col type="integer">2</col>
+      <col type="integer">1</col>
+      <col type="float">49.5</col>
+      <col type="float">49.5</col>
+    </row>
+    <row>
+      <col type="integer">1003</col>
+      <col type="integer">3</col>
+      <col type="integer">2</col>
+      <col type="float">15.25</col>
+      <col type="float">30.5</col>
+    </row>
+    <row>
+      <col type="integer">1004</col>
+      <col type="integer">5</col>
+      <col type="integer">1</col>
+      <col type="float">8.75</col>
+      <col type="float">8.75</col>
+    </row>
+    <row>
+      <col type="integer">1005</col>
+      <col type="integer">4</col>
+      <col type="integer">1</col>
+      <col type="float">99.99</col>
+      <col type="float">99.99</col>
+    </row>
+    <row>
+      <col type="integer">1005</col>
+      <col type="integer">5</col>
+      <col type="integer">1</col>
+      <col type="float">29.99</col>
+      <col type="float">29.99</col>
+    </row>
+  </sheet>
+</spreadsheet>

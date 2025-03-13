@@ -1,0 +1,90 @@
+products:
+  -
+    id: 1
+    name: 'Product A'
+    price: 29.99
+    active: 'true'
+    created_date: '2025-03-10T14:30:00'
+    tags: '["electronics","sale"]'
+    metadata: '{"sku":"P001","supplier":"Supplier X","stock":150}'
+  -
+    id: 2
+    name: 'Product B'
+    price: 49.5
+    active: 'false'
+    created_date: '2025-03-09T09:15:00'
+    tags: '["home","kitchen"]'
+    metadata: '{"sku":"P002","supplier":"Supplier Y","stock":75}'
+  -
+    id: 3
+    name: 'Product C'
+    price: 15.25
+    active: 'true'
+    created_date: '2025-03-11T11:45:00'
+    tags: '["clothing"]'
+    metadata: '{"sku":"P003","supplier":"Supplier Z","stock":200}'
+customers:
+  -
+    - id
+    - name
+    - email
+    - registered_date
+    - orders_count
+    - vip
+  -
+    - 101
+    - 'John Smith'
+    - john@example.com
+    - '2024-01-15T17:48:20'
+    - 5
+    - 'true'
+  -
+    - 102
+    - 'Jane Doe'
+    - jane@example.com
+    - '2024-02-20T17:48:20'
+    - 3
+    - 'false'
+  -
+    - 103
+    - 'Bob Johnson'
+    - bob@example.com
+    - '2024-03-10T17:48:20'
+    - 8
+    - 'true'
+  -
+    - 104
+    - 'Alice Williams'
+    - alice@example.com
+    - '2024-04-05T17:48:20'
+    - 2
+    - 'false'
+orders:
+  -
+    id: 1001
+    customer_id: 101
+    date: '2025-03-01T10:00:00'
+    items: '[{"product_id":1,"quantity":2,"price":29.99},{"product_id":3,"quantity":1,"price":15.25}]'
+    total: 75.23
+    status: completed
+  -
+    id: 1002
+    customer_id: 102
+    date: '2025-03-02T14:30:00'
+    items: '[{"product_id":2,"quantity":1,"price":49.5}]'
+    total: 49.5
+    status: processing
+  -
+    id: 1003
+    customer_id: 103
+    date: '2025-03-03T09:15:00'
+    items: '[{"product_id":1,"quantity":1,"price":29.99},{"product_id":2,"quantity":1,"price":49.5},{"product_id":3,"quantity":2,"price":15.25}]'
+    total: 109.99
+    status: completed
+settings:
+  -
+    currency: USD
+    tax_rate: 0.07
+    shipping_methods: '[{"id":1,"name":"Standard","price":5.99,"days":"3-5"},{"id":2,"name":"Express","price":15.99,"days":"1-2"},{"id":3,"name":"Free","price":0,"days":"5-7"}]'
+    payment_methods: '["credit_card","paypal","bank_transfer"]'
+    company_details: '{"name":"Example Store Inc.","address":"123 Main St, Anytown","phone":"+1-555-123-4567","email":"info@example.com"}'

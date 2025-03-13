@@ -1,0 +1,4 @@
+type,value,expected_read,expected_write
+iso8601,2025-03-10T14:30:00,"{""__class__"":""DateTimeImmutable"",""date"":""2025-03-10T14:30:00+00:00""}",2025-03-10T14:30:00
+date_only,2025-03-10T17:48:19,"{""__class__"":""DateTimeImmutable"",""date"":""2025-03-10T00:00:00+00:00""}",2025-03-10T17:48:19
+european_format,2025-12-31T17:48:19,"{""__class__"":""DateTimeImmutable"",""date"":""2025-12-31T00:00:00+00:00""}",2025-12-31T17:48:19

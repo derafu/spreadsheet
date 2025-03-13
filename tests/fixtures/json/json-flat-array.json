@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "name": "Product A",
+        "price": 29.99,
+        "active": "true",
+        "created_date": "2025-03-10T14:30:00",
+        "tags": "[\"electronics\",\"sale\"]",
+        "metadata": "{\"sku\":\"P001\",\"supplier\":\"Supplier X\",\"stock\":150}"
+    },
+    {
+        "id": 2,
+        "name": "Product B",
+        "price": 49.5,
+        "active": "false",
+        "created_date": "2025-03-09T09:15:00",
+        "tags": "[\"home\",\"kitchen\"]",
+        "metadata": "{\"sku\":\"P002\",\"supplier\":\"Supplier Y\",\"stock\":75}"
+    },
+    {
+        "id": 3,
+        "name": "Product C",
+        "price": 15.25,
+        "active": "true",
+        "created_date": "2025-03-11T11:45:00",
+        "tags": "[\"clothing\"]",
+        "metadata": "{\"sku\":\"P003\",\"supplier\":\"Supplier Z\",\"stock\":200}"
+    },
+    {
+        "id": 4,
+        "name": "Product D",
+        "price": 99.99,
+        "active": "true",
+        "created_date": "2025-03-12T16:20:00",
+        "tags": "[\"electronics\",\"premium\"]",
+        "metadata": "{\"sku\":\"P004\",\"supplier\":\"Supplier X\",\"stock\":50}"
+    },
+    {
+        "id": 5,
+        "name": "Product E",
+        "price": "",
+        "active": "false",
+        "created_date": "",
+        "tags": "[]",
+        "metadata": ""
+    }
+]

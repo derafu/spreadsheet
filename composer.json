@@ -1,0 +1,66 @@
+{
+    "name": "derafu/spreadsheet",
+    "description": "Derafu: Spreadsheet - Unified Spreadsheet Processing for PHP",
+    "type": "library",
+    "homepage": "https://derafu.org/spreadsheet",
+    "license": "MIT",
+    "keywords": ["spreadsheet", "excel", "csv", "ods", "xlsx", "xls", "xml", "json"],
+    "authors": [
+        {
+            "name": "Esteban De La Fuente Rubio / Derafu",
+            "homepage": "https://www.derafu.org"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/derafu/spreadsheet/issues",
+        "source": "https://github.com/derafu/spreadsheet"
+    },
+    "autoload": {
+        "psr-4": {
+            "Derafu\\Spreadsheet\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Derafu\\TestsSpreadsheet\\": "tests/src/"
+        }
+    },
+    "require": {
+        "php": "^8.3",
+        "derafu/translation": "dev-main"
+    },
+    "require-dev": {
+        "ext-xdebug": "*",
+        "friendsofphp/php-cs-fixer": "^3.63",
+        "phpstan/phpstan": "^1.12",
+        "phpunit/phpunit": "^11.4",
+        "derafu/foundation": "dev-main",
+        "psr/http-message": "^2.0",
+        "nyholm/psr7": "^1.8",
+        "league/csv": "^9.22",
+        "symfony/yaml": "^7.2",
+        "phpoffice/phpspreadsheet": "^4.1"
+    },
+    "scripts": {
+        "docs": "php tools/phpdocumentor run --config=phpdoc.xml",
+        "tests": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration=phpunit.xml",
+        "phpcs-fix": "vendor/bin/php-cs-fixer fix -v --config=php-cs-fixer.php",
+        "phpcs": "vendor/bin/php-cs-fixer fix -v --dry-run --diff --config=php-cs-fixer.php",
+        "phpstan": "vendor/bin/phpstan analyse --configuration=phpstan.neon --memory-limit=1G",
+        "phpstan-export": "vendor/bin/phpstan analyse --configuration=phpstan.neon --level 9 --generate-baseline",
+        "build": "npm run build",
+        "post-install-cmd": [
+            "Derafu\\Foundation\\Installer::copyFiles"
+        ],
+        "post-update-cmd": [
+            "Derafu\\Foundation\\Installer::copyFiles"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}

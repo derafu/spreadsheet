@@ -1,0 +1,73 @@
+direction: right
+
+# Central Model
+model: Spreadsheet {
+  shape: rectangle
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1976D2"
+    bold: true
+    3d: true
+  }
+}
+
+# Input Formats
+input: {
+  xlsx: Excel {
+    icon: https://cdn-icons-png.flaticon.com/512/888/888850.png
+    shape: image
+  }
+
+  csv: CSV {
+    icon: https://cdn-icons-png.flaticon.com/512/6133/6133884.png
+    shape: image
+  }
+
+  json: JSON {
+    icon: https://cdn-icons-png.flaticon.com/512/136/136525.png
+    shape: image
+  }
+
+  ods: ODS {
+    icon: https://cdn-icons-png.flaticon.com/512/888/888931.png
+    shape: image
+  }
+
+  # etc.
+}
+
+# Output Formats
+output: {
+  xlsx: Excel {
+    icon: https://cdn-icons-png.flaticon.com/512/888/888850.png
+    shape: image
+  }
+
+  csv: CSV {
+    icon: https://cdn-icons-png.flaticon.com/512/6133/6133884.png
+    shape: image
+  }
+
+  json: JSON {
+    icon: https://cdn-icons-png.flaticon.com/512/136/136525.png
+    shape: image
+  }
+
+  pdf: PDF {
+    icon: https://cdn-icons-png.flaticon.com/512/337/337946.png
+    shape: image
+  }
+
+  # etc.
+}
+
+# Connections
+input.xlsx -> model
+input.csv -> model
+input.json -> model
+input.ods -> model
+
+model -> output.xlsx
+model -> output.csv
+model -> output.json
+model -> output.pdf

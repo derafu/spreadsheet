@@ -1,0 +1,6 @@
+id,name,price,active,stock,category,created_date
+1,"Product A",29.99,true,150,Electronics,2025-03-10T14:30:00
+2,"Product B",49.5,false,75,"Home & Kitchen",2025-03-09T09:15:00
+3,"Product C",15.25,true,200,Clothing,2025-03-11T11:45:00
+4,"Product D",99.99,true,50,Electronics,2025-03-12T16:20:00
+5,"Product E",8.75,false,0,Office,
