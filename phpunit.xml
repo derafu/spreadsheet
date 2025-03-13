@@ -2,7 +2,7 @@
 <phpunit
     backupGlobals="true"
     cacheDirectory="var/cache/phpunit"
-    processIsolation="false"
+    processIsolation="true"
     executionOrder="depends,defects"
     colors="true"
     testdox="true"

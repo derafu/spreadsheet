@@ -18,6 +18,7 @@ use Derafu\Spreadsheet\Sheet;
 use Derafu\Spreadsheet\Spreadsheet;
 use Derafu\TestsSpreadsheet\Abstract\AbstractSpreadsheetFormatHandler;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 
 #[CoversClass(XlsHandler::class)]
 #[CoversClass(Spreadsheet::class)]
@@ -44,6 +45,12 @@ final class XlsHandlerTest extends AbstractSpreadsheetFormatHandler
         }
 
         parent::tearDown();
+    }
+
+    #[RunInSeparateProcess]
+    public function testLoadFromFileFlatArray(): void
+    {
+        parent::testLoadFromFileFlatArray();
     }
 
     protected function getFileExtension(): string
