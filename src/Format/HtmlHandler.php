@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace Derafu\Spreadsheet\Format;
 
 use Derafu\Spreadsheet\Abstract\AbstractPhpSpreadsheetFormatHandler;
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
 
 /**
  * HTML format handler
  *
  * Handles reading and writing HTML files.
  */
-final class HtmlHandler extends AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInterface
+final class HtmlHandler extends AbstractPhpSpreadsheetFormatHandler implements SpreadsheetFormatHandlerInterface
 {
     /**
      * Create a new HTML handler.

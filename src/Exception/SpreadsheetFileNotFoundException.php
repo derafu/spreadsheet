@@ -17,6 +17,6 @@ use Derafu\Translation\Exception\Core\TranslatableRuntimeException;
 /**
  * Exception thrown when a requested file cannot be found.
  */
-final class FileNotFoundException extends TranslatableRuntimeException
+final class SpreadsheetFileNotFoundException extends TranslatableRuntimeException
 {
 }

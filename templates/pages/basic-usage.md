@@ -11,7 +11,7 @@ You can load a spreadsheet from a file or from a string:
 ```php
 <?php
 
-use Derafu\Spreadsheet\Loader;
+use Derafu\Spreadsheet\SpreadsheetLoader;
 
 // Create a loader.
 $loader = new Loader();
@@ -133,7 +133,7 @@ $indexedSheet = $sheet->toIndexed(); // Keys become first row.
 Once you're done modifying the data, you can save it to a file or get it as a string:
 
 ```php
-use Derafu\Spreadsheet\Dumper;
+use Derafu\Spreadsheet\SpreadsheetDumper;
 
 // Create a dumper.
 $dumper = new Dumper();

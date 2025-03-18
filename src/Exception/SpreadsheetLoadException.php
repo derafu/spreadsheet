@@ -15,8 +15,8 @@ namespace Derafu\Spreadsheet\Exception;
 use Derafu\Translation\Exception\Core\TranslatableRuntimeException;
 
 /**
- * Exception thrown when a file cannot be written.
+ * Exception thrown when a file cannot be read.
  */
-final class DumpException extends TranslatableRuntimeException
+final class SpreadsheetLoadException extends TranslatableRuntimeException
 {
 }

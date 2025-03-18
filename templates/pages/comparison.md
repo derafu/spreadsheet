@@ -50,7 +50,7 @@ When choosing a spreadsheet library for PHP, it's important to understand the di
 
 **Derafu Spreadsheet:**
 ```php
-use Derafu\Spreadsheet\Loader;
+use Derafu\Spreadsheet\SpreadsheetLoader;
 
 $loader = new Loader();
 $sheet = $loader->loadFromFile('data.xlsx')->getActiveSheet();
@@ -101,8 +101,8 @@ foreach ($reader->getRecords() as $record) {
 
 **Derafu Spreadsheet:**
 ```php
-use Derafu\Spreadsheet\Loader;
-use Derafu\Spreadsheet\Dumper;
+use Derafu\Spreadsheet\SpreadsheetLoader;
+use Derafu\Spreadsheet\SpreadsheetDumper;
 
 $loader = new Loader();
 $dumper = new Dumper();

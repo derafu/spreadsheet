@@ -101,20 +101,20 @@ src/
 ├── Abstract/
 │   └── AbstractPhpSpreadsheetFormatHandler.php
 ├── Contract/
-│   ├── CasterInterface.php
-│   ├── DumperInterface.php
+│   ├── SpreadsheetCasterInterface.php
+│   ├── SpreadsheetDumperInterface.php
 │   ├── FactoryInterface.php
 │   ├── FormatHandlerInterface.php
-│   ├── LoaderInterface.php
+│   ├── SpreadsheetLoaderInterface.php
 │   ├── SheetInterface.php
 │   ├── SpreadsheetInterface.php
 │   └── Http/
-│       └── ResponseGeneratorInterface.php
+│       └── SpreadsheetHttpResponseGeneratorInterface.php
 ├── Exception/
-│   ├── DumpException.php
-│   ├── FileNotFoundException.php
-│   ├── FormatNotSupportedException.php
-│   └── LoadException.php
+│   ├── SpreadsheetDumpException.php
+│   ├── SpreadsheetFileNotFoundException.php
+│   ├── SpreadsheetFormatNotSupportedException.php
+│   └── SpreadsheetLoadException.php
 ├── Format/
 │   ├── CsvLeagueHandler.php
 │   ├── CsvPhpSpreadsheetHandler.php
@@ -127,7 +127,7 @@ src/
 │   ├── XmlHandler.php
 │   └── YamlHandler.php
 ├── Http/
-│   └── NyholmResponseGenerator.php
+│   └── NyholmSpreadsheetHttpResponseGenerator.php
 ├── Caster.php
 ├── Dumper.php
 ├── Factory.php

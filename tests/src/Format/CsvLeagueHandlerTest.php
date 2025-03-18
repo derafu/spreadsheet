@@ -12,17 +12,17 @@ declare(strict_types=1);
 
 namespace Derafu\TestsSpreadsheet\Format;
 
-use Derafu\Spreadsheet\Caster;
 use Derafu\Spreadsheet\Format\CsvLeagueHandler;
 use Derafu\Spreadsheet\Sheet;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Spreadsheet\SpreadsheetCaster;
 use Derafu\TestsSpreadsheet\Abstract\AbstractCsvFormatHandler;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(CsvLeagueHandler::class)]
 #[CoversClass(Spreadsheet::class)]
 #[CoversClass(Sheet::class)]
-#[CoversClass(Caster::class)]
+#[CoversClass(SpreadsheetCaster::class)]
 final class CsvLeagueHandlerTest extends AbstractCsvFormatHandler
 {
     protected function setUp(): void

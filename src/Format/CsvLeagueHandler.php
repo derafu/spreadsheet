@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet\Format;
 
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\DumpException;
-use Derafu\Spreadsheet\Exception\FileNotFoundException;
-use Derafu\Spreadsheet\Exception\LoadException;
+use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
+use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
 use Exception;
 use League\Csv\Reader;
@@ -27,7 +27,7 @@ use League\Csv\Writer;
  *
  * Handles reading and writing CSV files.
  */
-final class CsvLeagueHandler implements FormatHandlerInterface
+final class CsvLeagueHandler implements SpreadsheetFormatHandlerInterface
 {
     /**
      * Create a new CSV handler.
@@ -58,7 +58,7 @@ final class CsvLeagueHandler implements FormatHandlerInterface
     public function loadFromFile(string $filepath): SpreadsheetInterface
     {
         if (!file_exists($filepath)) {
-            throw new FileNotFoundException([
+            throw new SpreadsheetFileNotFoundException([
                 'File "{filepath}" not found.',
                 'filepath' => $filepath,
             ]);
@@ -68,7 +68,7 @@ final class CsvLeagueHandler implements FormatHandlerInterface
             // Read the file content.
             $content = file_get_contents($filepath);
             if ($content === false) {
-                throw new LoadException([
+                throw new SpreadsheetLoadException([
                     'Could not read file: "{filepath}".',
                     'filepath' => $filepath,
                 ]);
@@ -80,11 +80,14 @@ final class CsvLeagueHandler implements FormatHandlerInterface
                 pathinfo($filepath, PATHINFO_FILENAME)
             );
         } catch (Exception $e) {
-            if ($e instanceof LoadException || $e instanceof FileNotFoundException) {
+            if (
+                $e instanceof SpreadsheetLoadException
+                || $e instanceof SpreadsheetFileNotFoundException
+            ) {
                 throw $e;
             }
 
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Error reading CSV file: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -128,7 +131,7 @@ final class CsvLeagueHandler implements FormatHandlerInterface
 
             return $spreadsheet;
         } catch (Exception $e) {
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Error processing CSV data: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -157,7 +160,7 @@ final class CsvLeagueHandler implements FormatHandlerInterface
                 && !mkdir($directory, 0755, true)
                 && !is_dir($directory)
             ) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Directory "{directory}" could not be created.',
                     'directory' => $directory,
                 ]);
@@ -170,7 +173,7 @@ final class CsvLeagueHandler implements FormatHandlerInterface
             $result = file_put_contents($filepath, $csvContent);
 
             if ($result === false) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Could not write to file: "{filepath}".',
                     'filepath' => $filepath,
                 ]);
@@ -178,11 +181,11 @@ final class CsvLeagueHandler implements FormatHandlerInterface
 
             return $filepath;
         } catch (Exception $e) {
-            if ($e instanceof DumpException) {
+            if ($e instanceof SpreadsheetDumpException) {
                 throw $e;
             }
 
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Error writing CSV file: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -239,7 +242,7 @@ final class CsvLeagueHandler implements FormatHandlerInterface
 
             return $csv->toString();
         } catch (Exception $e) {
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Error creating CSV string: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);

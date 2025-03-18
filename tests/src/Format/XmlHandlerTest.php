@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace Derafu\TestsSpreadsheet\Format;
 
-use Derafu\Spreadsheet\Caster;
-use Derafu\Spreadsheet\Contract\CasterInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\FileNotFoundException;
-use Derafu\Spreadsheet\Exception\LoadException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
+use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Format\XmlHandler;
 use Derafu\Spreadsheet\Sheet;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Spreadsheet\SpreadsheetCaster;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -28,14 +28,14 @@ use SimpleXMLElement;
 #[CoversClass(XmlHandler::class)]
 #[CoversClass(Spreadsheet::class)]
 #[CoversClass(Sheet::class)]
-#[CoversClass(Caster::class)]
+#[CoversClass(SpreadsheetCaster::class)]
 final class XmlHandlerTest extends TestCase
 {
     private string $fixturesDir;
 
     private string $tempDir;
 
-    private CasterInterface $caster;
+    private SpreadsheetCasterInterface $caster;
 
     protected function setUp(): void
     {
@@ -48,7 +48,7 @@ final class XmlHandlerTest extends TestCase
             mkdir($this->tempDir, 0777, true);
         }
 
-        $this->caster = new Caster();
+        $this->caster = new SpreadsheetCaster();
     }
 
     protected function tearDown(): void
@@ -79,7 +79,7 @@ final class XmlHandlerTest extends TestCase
     public function testLoadFromFileThrowsExceptionWhenFileNotFound(): void
     {
         $xml = new XmlHandler();
-        $this->expectException(FileNotFoundException::class);
+        $this->expectException(SpreadsheetFileNotFoundException::class);
         $xml->loadFromFile('non_existent_file.xml');
     }
 
@@ -143,7 +143,7 @@ final class XmlHandlerTest extends TestCase
         $invalidXml = '<root><unclosed>';
 
         $xml = new XmlHandler();
-        $this->expectException(LoadException::class);
+        $this->expectException(SpreadsheetLoadException::class);
         $xml->loadFromString($invalidXml);
     }
 

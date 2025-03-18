@@ -13,13 +13,13 @@ declare(strict_types=1);
 namespace Derafu\TestsSpreadsheet\Abstract;
 
 use DateTimeImmutable;
-use Derafu\Spreadsheet\Caster;
-use Derafu\Spreadsheet\Contract\CasterInterface;
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
 use Derafu\Spreadsheet\Contract\SheetInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\FileNotFoundException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Spreadsheet\SpreadsheetCaster;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,9 +31,9 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
     private string $tempDir;
 
-    private CasterInterface $caster;
+    private SpreadsheetCasterInterface $caster;
 
-    protected FormatHandlerInterface $formatHandler;
+    protected SpreadsheetFormatHandlerInterface $formatHandler;
 
     abstract protected function getFileExtension(): string;
 
@@ -50,7 +50,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
             mkdir($this->tempDir, 0777, true);
         }
 
-        $this->caster = new Caster();
+        $this->caster = new SpreadsheetCaster();
     }
 
     protected function tearDown(): void
@@ -81,7 +81,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
     public function testLoadFromFileThrowsExceptionWhenFileNotFound(): void
     {
-        $this->expectException(FileNotFoundException::class);
+        $this->expectException(SpreadsheetFileNotFoundException::class);
         $this->formatHandler->loadFromFile('non_existent_file.' . $this->getFileExtension());
     }
 

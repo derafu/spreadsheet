@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet\Format;
 
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\DumpException;
-use Derafu\Spreadsheet\Exception\FileNotFoundException;
-use Derafu\Spreadsheet\Exception\LoadException;
+use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
+use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
 use DOMDocument;
 use DOMElement;
@@ -30,7 +30,7 @@ use SimpleXMLElement;
  *
  * Handles reading and writing spreadsheet data in XML format.
  */
-final class XmlHandler implements FormatHandlerInterface
+final class XmlHandler implements SpreadsheetFormatHandlerInterface
 {
     /**
      * Create a new XML handler.
@@ -56,7 +56,7 @@ final class XmlHandler implements FormatHandlerInterface
     public function loadFromFile(string $filepath): SpreadsheetInterface
     {
         if (!file_exists($filepath)) {
-            throw new FileNotFoundException([
+            throw new SpreadsheetFileNotFoundException([
                 'File "{filepath}" not found.',
                 'filepath' => $filepath,
             ]);
@@ -66,7 +66,7 @@ final class XmlHandler implements FormatHandlerInterface
             // Read file content.
             $content = file_get_contents($filepath);
             if ($content === false) {
-                throw new LoadException([
+                throw new SpreadsheetLoadException([
                     'Could not read file: "{filepath}".',
                     'filepath' => $filepath,
                 ]);
@@ -74,11 +74,11 @@ final class XmlHandler implements FormatHandlerInterface
 
             return $this->loadFromString($content);
         } catch (Exception $e) {
-            if ($e instanceof LoadException || $e instanceof FileNotFoundException) {
+            if ($e instanceof SpreadsheetLoadException || $e instanceof SpreadsheetFileNotFoundException) {
                 throw $e;
             }
 
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Error reading XML file: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -109,7 +109,7 @@ final class XmlHandler implements FormatHandlerInterface
                 }
                 libxml_clear_errors();
 
-                throw new LoadException([
+                throw new SpreadsheetLoadException([
                     'Invalid XML data. Error: {error}',
                     'error' => implode('; ', $errorMessages),
                 ]);
@@ -257,11 +257,11 @@ final class XmlHandler implements FormatHandlerInterface
 
             return $spreadsheet;
         } catch (Exception $e) {
-            if ($e instanceof LoadException) {
+            if ($e instanceof SpreadsheetLoadException) {
                 throw $e;
             }
 
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Error processing XML data: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -340,7 +340,7 @@ final class XmlHandler implements FormatHandlerInterface
                 && !mkdir($directory, 0755, true)
                 && !is_dir($directory)
             ) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Directory "{directory}" could not be created.',
                     'directory' => $directory,
                 ]);
@@ -353,7 +353,7 @@ final class XmlHandler implements FormatHandlerInterface
             $result = file_put_contents($filepath, $xmlContent);
 
             if ($result === false) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Could not write to file: "{filepath}".',
                     'filepath' => $filepath,
                 ]);
@@ -361,11 +361,11 @@ final class XmlHandler implements FormatHandlerInterface
 
             return $filepath;
         } catch (Exception $e) {
-            if ($e instanceof DumpException) {
+            if ($e instanceof SpreadsheetDumpException) {
                 throw $e;
             }
 
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Error writing XML file: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -427,7 +427,7 @@ final class XmlHandler implements FormatHandlerInterface
             // Convert DOM to string.
             return $dom->saveXML();
         } catch (Exception $e) {
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Error creating XML string: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);

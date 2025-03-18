@@ -56,8 +56,8 @@ composer require nyholm/psr7
 ```php
 <?php
 
-use Derafu\Spreadsheet\Loader;
-use Derafu\Spreadsheet\Dumper;
+use Derafu\Spreadsheet\SpreadsheetLoader;
+use Derafu\Spreadsheet\SpreadsheetDumper;
 
 // Load a spreadsheet (format auto-detected from extension).
 // Under the hood it will create default Factory and Caster instances. If you

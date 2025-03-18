@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Derafu\TestsSpreadsheet\Format;
 
-use Derafu\Spreadsheet\Caster;
 use Derafu\Spreadsheet\Format\XlsHandler;
 use Derafu\Spreadsheet\Sheet;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Spreadsheet\SpreadsheetCaster;
 use Derafu\TestsSpreadsheet\Abstract\AbstractSpreadsheetFormatHandler;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
@@ -23,7 +23,7 @@ use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 #[CoversClass(XlsHandler::class)]
 #[CoversClass(Spreadsheet::class)]
 #[CoversClass(Sheet::class)]
-#[CoversClass(Caster::class)]
+#[CoversClass(SpreadsheetCaster::class)]
 final class XlsHandlerTest extends AbstractSpreadsheetFormatHandler
 {
     protected function setUp(): void

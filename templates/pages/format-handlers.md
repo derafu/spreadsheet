@@ -115,7 +115,7 @@ $yamlHandler = new YamlHandler(
 You can create your own format handlers by implementing the `FormatHandlerInterface`:
 
 ```php
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
 
 class MyCustomHandler implements FormatHandlerInterface
 {

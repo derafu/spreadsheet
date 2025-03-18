@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet\Contract;
 
-use Derafu\Spreadsheet\Exception\FileNotFoundException;
-use Derafu\Spreadsheet\Exception\FormatNotSupportedException;
-use Derafu\Spreadsheet\Exception\LoadException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFormatNotSupportedException;
+use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 
 /**
  * Interface for reading spreadsheet files.
  */
-interface LoaderInterface
+interface SpreadsheetLoaderInterface
 {
     /**
      * Read a spreadsheet file and return its data.
@@ -32,9 +32,9 @@ interface LoaderInterface
      * @param string|null $format Optional format override (e.g., 'xlsx', 'ods').
      * @return SpreadsheetInterface A spreadsheet object containing the data.
      *
-     * @throws FileNotFoundException If the file doesn't exist.
-     * @throws FormatNotSupportedException If the file format is not supported.
-     * @throws LoadException If there's an error reading the file.
+     * @throws SpreadsheetFileNotFoundException If the file doesn't exist.
+     * @throws SpreadsheetFormatNotSupportedException If the file format is not supported.
+     * @throws SpreadsheetLoadException If there's an error reading the file.
      */
     public function loadFromFile(
         string $filepath,
@@ -48,9 +48,9 @@ interface LoaderInterface
      * @param string $format The format of the spreadsheet data.
      * @return SpreadsheetInterface A spreadsheet object containing the data.
      *
-     * @throws FormatNotSupportedException If the requested format is not
+     * @throws SpreadsheetFormatNotSupportedException If the requested format is not
      * supported.
-     * @throws LoadException If there's an error creating the spreadsheet.
+     * @throws SpreadsheetLoadException If there's an error creating the spreadsheet.
      */
     public function loadFromString(
         string $data,

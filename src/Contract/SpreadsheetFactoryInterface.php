@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet\Contract;
 
-use Derafu\Spreadsheet\Exception\FormatNotSupportedException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFormatNotSupportedException;
 
 /**
  * Interface for the factory class that creates format-specific handlers.
  */
-interface FactoryInterface
+interface SpreadsheetFactoryInterface
 {
     /**
      * Create a spreadsheet from an array.
@@ -32,14 +32,14 @@ interface FactoryInterface
      *
      * @param string $filepath Path to the file.
      * @param string|null $formatOverride Optional format override.
-     * @return FormatHandlerInterface The appropriate format handler.
+     * @return SpreadsheetFormatHandlerInterface The appropriate format handler.
      *
-     * @throws FormatNotSupportedException If the format is not supported.
+     * @throws SpreadsheetFormatNotSupportedException If the format is not supported.
      */
     public function createFormatHandler(
         string $filepath,
         ?string $formatOverride = null
-    ): FormatHandlerInterface;
+    ): SpreadsheetFormatHandlerInterface;
 
     /**
      * Detect the format of a file based on its extension.
@@ -47,7 +47,7 @@ interface FactoryInterface
      * @param string $filepath Path to the file.
      * @return string The detected format (lowercase extension without dot).
      *
-     * @throws FormatNotSupportedException If the format could not be detected
+     * @throws SpreadsheetFormatNotSupportedException If the format could not be detected
      * or is not supported.
      */
     public function detectFormat(string $filepath): string;
@@ -56,7 +56,7 @@ interface FactoryInterface
      * Register a custom format handler.
      *
      * @param string $extension File extension (without dot).
-     * @param class-string<FormatHandlerInterface> $handlerClass Format handler class.
+     * @param class-string<SpreadsheetFormatHandlerInterface> $handlerClass Format handler class.
      * @return static
      */
     public function registerFormatHandler(

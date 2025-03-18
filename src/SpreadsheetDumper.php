@@ -12,29 +12,29 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet;
 
-use Derafu\Spreadsheet\Contract\CasterInterface;
-use Derafu\Spreadsheet\Contract\DumperInterface;
-use Derafu\Spreadsheet\Contract\FactoryInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetDumperInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFactoryInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\DumpException;
+use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
 
 /**
  * Main dumper class for spreadsheet files
  *
  * Handles dumping data to spreadsheet files in various formats.
  */
-final class Dumper implements DumperInterface
+final class SpreadsheetDumper implements SpreadsheetDumperInterface
 {
     /**
      * Create a new Dumper instance.
      *
-     * @param FactoryInterface $factory Factory for creating format-specific handlers.
-     * @param CasterInterface $caster Caster for casting values to the correct type.
+     * @param SpreadsheetFactoryInterface $factory Factory for creating format-specific handlers.
+     * @param SpreadsheetCasterInterface $caster Caster for casting values to the correct type.
      * @param string $format Default format to use.
      */
     public function __construct(
-        private readonly FactoryInterface $factory = new Factory(),
-        private readonly CasterInterface $caster = new Caster(),
+        private readonly SpreadsheetFactoryInterface $factory = new SpreadsheetFactory(),
+        private readonly SpreadsheetCasterInterface $caster = new SpreadsheetCaster(),
         private readonly string $format = 'xlsx'
     ) {
     }
@@ -59,7 +59,7 @@ final class Dumper implements DumperInterface
             && !mkdir($directory, 0755, true)
             && !is_dir($directory)
         ) {
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Directory "{directory}" could not be created.',
                 'directory' => $directory,
             ]);

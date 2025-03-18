@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet\Abstract;
 
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\DumpException;
-use Derafu\Spreadsheet\Exception\FileNotFoundException;
-use Derafu\Spreadsheet\Exception\LoadException;
+use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
+use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -34,9 +34,9 @@ use PhpOffice\PhpSpreadsheet\Writer\IWriter;
  * that this library wants to be a simple and easy to use library for
  * spreadsheet processing, not a full featured one. If you need more features,
  * you can use the original PhpSpreadsheet library directly or implement your
- * own FormatHandlerInterface that uses this class as base.
+ * own SpreadsheetFormatHandlerInterface that uses this class as base.
  */
-abstract class AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInterface
+abstract class AbstractPhpSpreadsheetFormatHandler implements SpreadsheetFormatHandlerInterface
 {
     /**
      * Get the PhpSpreadsheet reader type for this format.
@@ -80,7 +80,7 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInter
     public function loadFromFile(string $filepath): SpreadsheetInterface
     {
         if (!file_exists($filepath)) {
-            throw new FileNotFoundException([
+            throw new SpreadsheetFileNotFoundException([
                 'File "{filepath}" not found.',
                 'filepath' => $filepath,
             ]);
@@ -97,7 +97,7 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInter
                 pathinfo($filepath, PATHINFO_FILENAME)
             );
         } catch (ReaderException $e) {
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Error reading spreadsheet: "{message}".',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -115,7 +115,7 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInter
             // Create temporary file with the data.
             $tempFile = tempnam(sys_get_temp_dir(), 'spreadsheet_');
             if ($tempFile === false) {
-                throw new LoadException([
+                throw new SpreadsheetLoadException([
                     'Could not create temporary file for loading from string.',
                 ]);
             }
@@ -141,7 +141,7 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInter
                 }
             }
         } catch (ReaderException $e) {
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Error reading spreadsheet from string: "{message}".',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -170,7 +170,7 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInter
                 && !mkdir($directory, 0755, true)
                 && !is_dir($directory)
             ) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Directory "{directory}" could not be created.',
                     'directory' => $directory,
                 ]);
@@ -189,7 +189,7 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInter
 
             return $filepath;
         } catch (WriterException $e) {
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Error writing spreadsheet: "{message}".',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -214,7 +214,7 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInter
             // Save to a temporary file and read back the content.
             $tempFile = tempnam(sys_get_temp_dir(), 'spreadsheet_');
             if ($tempFile === false) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Could not create temporary file for dumping to string.',
                 ]);
             }
@@ -224,7 +224,7 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInter
                 $content = file_get_contents($tempFile);
 
                 if ($content === false) {
-                    throw new DumpException([
+                    throw new SpreadsheetDumpException([
                         'Could not read temporary file after writing.',
                     ]);
                 }
@@ -237,7 +237,7 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInter
                 }
             }
         } catch (WriterException $e) {
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Error creating spreadsheet string: "{message}".',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);

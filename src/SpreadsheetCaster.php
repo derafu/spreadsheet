@@ -15,7 +15,7 @@ namespace Derafu\Spreadsheet;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
-use Derafu\Spreadsheet\Contract\CasterInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
 use Exception;
 use Stringable;
@@ -27,7 +27,7 @@ use Stringable;
  * type for writing and reading from a spreadsheet. If you need more methods,
  * you must implement your own caster and inject it in the classes that need it.
  */
-final class Caster implements CasterInterface
+final class SpreadsheetCaster implements SpreadsheetCasterInterface
 {
     /**
      * Date formats that can be automatically detected.

@@ -13,15 +13,15 @@ declare(strict_types=1);
 namespace Derafu\Spreadsheet\Format;
 
 use Derafu\Spreadsheet\Abstract\AbstractPhpSpreadsheetFormatHandler;
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
-use Derafu\Spreadsheet\Exception\LoadException;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
+use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 
 /**
  * PDF format handler
  *
  * Handles writing PDF files.
  */
-final class PdfHandler extends AbstractPhpSpreadsheetFormatHandler implements FormatHandlerInterface
+final class PdfHandler extends AbstractPhpSpreadsheetFormatHandler implements SpreadsheetFormatHandlerInterface
 {
     /**
      * Create a new PDF handler.
@@ -38,7 +38,7 @@ final class PdfHandler extends AbstractPhpSpreadsheetFormatHandler implements Fo
      */
     protected function getReaderType(): string
     {
-        throw new LoadException('PDF files are not supported for reading, yet.');
+        throw new SpreadsheetLoadException('PDF files are not supported for reading, yet.');
     }
 
     /**

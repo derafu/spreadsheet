@@ -12,20 +12,20 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet\Http;
 
-use Derafu\Spreadsheet\Caster;
-use Derafu\Spreadsheet\Contract\CasterInterface;
-use Derafu\Spreadsheet\Contract\FactoryInterface;
-use Derafu\Spreadsheet\Contract\Http\ResponseGeneratorInterface;
+use Derafu\Spreadsheet\Contract\Http\SpreadsheetHttpResponseGeneratorInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFactoryInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\DumpException;
-use Derafu\Spreadsheet\Factory;
+use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
+use Derafu\Spreadsheet\SpreadsheetCaster;
+use Derafu\Spreadsheet\SpreadsheetFactory;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Generates HTTP responses using Nyholm's PSR-7 implementation.
  */
-final class NyholmResponseGenerator implements ResponseGeneratorInterface
+final class NyholmSpreadsheetHttpResponseGenerator implements SpreadsheetHttpResponseGeneratorInterface
 {
     /**
      * Nyholm's PSR-17 factory.
@@ -35,24 +35,24 @@ final class NyholmResponseGenerator implements ResponseGeneratorInterface
     private Psr17Factory $psr17Factory;
 
     /**
-     * Create a new NyholmResponseGenerator.
+     * Create a new NyholmSpreadsheetHttpResponseGenerator.
      *
-     * @param FactoryInterface|null $factory Factory for creating format-specific handlers.
-     * @param CasterInterface|null $caster Caster for casting values to the correct type.
-     * @throws DumpException If Nyholm PSR-7 is not available.
+     * @param SpreadsheetFactoryInterface|null $factory Factory for creating format-specific handlers.
+     * @param SpreadsheetCasterInterface|null $caster Caster for casting values to the correct type.
+     * @throws SpreadsheetDumpException If Nyholm PSR-7 is not available.
      */
     public function __construct(
-        private ?FactoryInterface $factory = null,
-        private ?CasterInterface $caster = null
+        private ?SpreadsheetFactoryInterface $factory = null,
+        private ?SpreadsheetCasterInterface $caster = null
     ) {
         if (!class_exists(Psr17Factory::class)) {
-            throw new DumpException(
+            throw new SpreadsheetDumpException(
                 'Nyholm PSR-7 implementation is required. Install with "composer require nyholm/psr7".'
             );
         }
 
-        $this->factory = $factory ?? new Factory();
-        $this->caster = $caster ?? new Caster();
+        $this->factory = $factory ?? new SpreadsheetFactory();
+        $this->caster = $caster ?? new SpreadsheetCaster();
         $this->psr17Factory = new Psr17Factory();
     }
 
@@ -74,7 +74,7 @@ final class NyholmResponseGenerator implements ResponseGeneratorInterface
         // Create a temporary file.
         $tempFile = tempnam(sys_get_temp_dir(), 'derafu_');
         if ($tempFile === false) {
-            throw new DumpException('Could not create temporary file.');
+            throw new SpreadsheetDumpException('Could not create temporary file.');
         }
 
         try {

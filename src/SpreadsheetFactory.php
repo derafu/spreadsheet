@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet;
 
-use Derafu\Spreadsheet\Contract\FactoryInterface;
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFactoryInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\FormatNotSupportedException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFormatNotSupportedException;
 use Derafu\Spreadsheet\Format\CsvLeagueHandler;
 use Derafu\Spreadsheet\Format\HtmlHandler;
 use Derafu\Spreadsheet\Format\JsonHandler;
@@ -32,7 +32,7 @@ use Derafu\Spreadsheet\Format\YamlHandler;
  * This class is responsible for detecting file formats and creating the
  * appropriate handler classes.
  */
-final class Factory implements FactoryInterface
+final class SpreadsheetFactory implements SpreadsheetFactoryInterface
 {
     /**
      * Map of the default format extensions to handler classes.
@@ -42,7 +42,7 @@ final class Factory implements FactoryInterface
      * Can be overridden by passing an array of format extensions to the
      * constructor.
      *
-     * @var array<string, class-string<FormatHandlerInterface>>
+     * @var array<string, class-string<SpreadsheetFormatHandlerInterface>>
      */
     private array $formatHandlers = [
         'csv' => CsvLeagueHandler::class,
@@ -59,7 +59,7 @@ final class Factory implements FactoryInterface
     /**
      * Create a new Factory instance.
      *
-     * @param array<string, class-string<FormatHandlerInterface>> $formatHandlers
+     * @param array<string, class-string<SpreadsheetFormatHandlerInterface>> $formatHandlers
      */
     public function __construct(array $formatHandlers = [])
     {
@@ -82,11 +82,11 @@ final class Factory implements FactoryInterface
     public function createFormatHandler(
         string $filepath,
         ?string $formatOverride = null
-    ): FormatHandlerInterface {
+    ): SpreadsheetFormatHandlerInterface {
         $format = $formatOverride ?? $this->detectFormat($filepath);
 
         if (!isset($this->formatHandlers[$format])) {
-            throw new FormatNotSupportedException([
+            throw new SpreadsheetFormatNotSupportedException([
                 'Format "{format}" is not supported.',
                 'format' => $format,
             ]);
@@ -105,14 +105,14 @@ final class Factory implements FactoryInterface
         $extension = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
 
         if (empty($extension)) {
-            throw new FormatNotSupportedException([
+            throw new SpreadsheetFormatNotSupportedException([
                 'Could not detect extension for file "{filepath}".',
                 'filepath' => $filepath,
             ]);
         }
 
         if (!isset($this->formatHandlers[$extension])) {
-            throw new FormatNotSupportedException([
+            throw new SpreadsheetFormatNotSupportedException([
                 'Extension "{extension}" is not supported.',
                 'extension' => $extension,
             ]);

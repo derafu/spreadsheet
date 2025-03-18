@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet\Format;
 
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\DumpException;
-use Derafu\Spreadsheet\Exception\FileNotFoundException;
-use Derafu\Spreadsheet\Exception\LoadException;
+use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
+use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
 use Exception;
 
@@ -25,7 +25,7 @@ use Exception;
  *
  * Handles reading and writing spreadsheet data in JSON format.
  */
-final class JsonHandler implements FormatHandlerInterface
+final class JsonHandler implements SpreadsheetFormatHandlerInterface
 {
     /**
      * Create a new JSON handler.
@@ -51,7 +51,7 @@ final class JsonHandler implements FormatHandlerInterface
     public function loadFromFile(string $filepath): SpreadsheetInterface
     {
         if (!file_exists($filepath)) {
-            throw new FileNotFoundException([
+            throw new SpreadsheetFileNotFoundException([
                 'File "{filepath}" not found.',
                 'filepath' => $filepath,
             ]);
@@ -61,7 +61,7 @@ final class JsonHandler implements FormatHandlerInterface
             // Read file content.
             $content = file_get_contents($filepath);
             if ($content === false) {
-                throw new LoadException([
+                throw new SpreadsheetLoadException([
                     'Could not read file: "{filepath}".',
                     'filepath' => $filepath,
                 ]);
@@ -84,11 +84,11 @@ final class JsonHandler implements FormatHandlerInterface
 
             return $spreadsheet;
         } catch (Exception $e) {
-            if ($e instanceof LoadException || $e instanceof FileNotFoundException) {
+            if ($e instanceof SpreadsheetLoadException || $e instanceof SpreadsheetFileNotFoundException) {
                 throw $e;
             }
 
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Error reading JSON file: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -117,7 +117,7 @@ final class JsonHandler implements FormatHandlerInterface
 
             // If the JSON is invalid, throw an exception.
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new LoadException([
+                throw new SpreadsheetLoadException([
                     'Invalid JSON data. Error: {error}',
                     'error' => json_last_error_msg(),
                 ]);
@@ -190,11 +190,11 @@ final class JsonHandler implements FormatHandlerInterface
 
             return $spreadsheet;
         } catch (Exception $e) {
-            if ($e instanceof LoadException) {
+            if ($e instanceof SpreadsheetLoadException) {
                 throw $e;
             }
 
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Error processing JSON data: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -223,7 +223,7 @@ final class JsonHandler implements FormatHandlerInterface
                 && !mkdir($directory, 0755, true)
                 && !is_dir($directory)
             ) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Directory "{directory}" could not be created.',
                     'directory' => $directory,
                 ]);
@@ -236,7 +236,7 @@ final class JsonHandler implements FormatHandlerInterface
             $result = file_put_contents($filepath, $jsonContent);
 
             if ($result === false) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Could not write to file: "{filepath}".',
                     'filepath' => $filepath,
                 ]);
@@ -244,11 +244,11 @@ final class JsonHandler implements FormatHandlerInterface
 
             return $filepath;
         } catch (Exception $e) {
-            if ($e instanceof DumpException) {
+            if ($e instanceof SpreadsheetDumpException) {
                 throw $e;
             }
 
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Error writing JSON file: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -279,7 +279,7 @@ final class JsonHandler implements FormatHandlerInterface
                     );
 
                     if (json_last_error() !== JSON_ERROR_NONE) {
-                        throw new DumpException([
+                        throw new SpreadsheetDumpException([
                             'Failed to encode data as JSON: {error}',
                             'error' => json_last_error_msg(),
                         ]);
@@ -303,7 +303,7 @@ final class JsonHandler implements FormatHandlerInterface
             );
 
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Failed to encode data as JSON: {error}',
                     'error' => json_last_error_msg(),
                 ]);
@@ -311,11 +311,11 @@ final class JsonHandler implements FormatHandlerInterface
 
             return $jsonContent;
         } catch (Exception $e) {
-            if ($e instanceof DumpException) {
+            if ($e instanceof SpreadsheetDumpException) {
                 throw $e;
             }
 
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Error creating JSON string: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);

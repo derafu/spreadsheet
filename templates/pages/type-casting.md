@@ -85,12 +85,12 @@ $person = $sheet->getCell(0, 0);
 
 ## Custom Type Casting
 
-If you need different casting behavior, you can implement your own `CasterInterface`:
+If you need different casting behavior, you can implement your own `SpreadsheetCasterInterface`:
 
 ```php
-use Derafu\Spreadsheet\Contract\CasterInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface;
 
-class MyCaster implements CasterInterface
+class MyCaster implements SpreadsheetCasterInterface
 {
     // Your custom implementation.
 }
@@ -107,6 +107,6 @@ $loader = new Loader(new Factory(), new MyCaster());
 
 ## Performance Considerations
 
-Type casting is performed in-memory and typically adds minimal overhead. However, for extremely large spreadsheets with millions of cells, you might consider implementing a more selective casting strategy through a custom `CasterInterface` implementation.
+Type casting is performed in-memory and typically adds minimal overhead. However, for extremely large spreadsheets with millions of cells, you might consider implementing a more selective casting strategy through a custom `SpreadsheetCasterInterface` implementation.
 
 If you don't want to use the Caster, you can use the Factory with the Format Handlers directly. If you bypass the Loader and Dumper, no type casting will be done.

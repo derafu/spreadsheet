@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet\Format;
 
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\DumpException;
-use Derafu\Spreadsheet\Exception\FileNotFoundException;
-use Derafu\Spreadsheet\Exception\LoadException;
+use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
+use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
 use Exception;
 use Symfony\Component\Yaml\Exception\ParseException;
@@ -28,7 +28,7 @@ use Symfony\Component\Yaml\Yaml as SymfonyYaml;
  * Handles reading and writing spreadsheet data in YAML format using Symfony
  * YAML component.
  */
-final class YamlHandler implements FormatHandlerInterface
+final class YamlHandler implements SpreadsheetFormatHandlerInterface
 {
     /**
      * Create a new YAML handler.
@@ -52,7 +52,7 @@ final class YamlHandler implements FormatHandlerInterface
     public function loadFromFile(string $filepath): SpreadsheetInterface
     {
         if (!file_exists($filepath)) {
-            throw new FileNotFoundException([
+            throw new SpreadsheetFileNotFoundException([
                 'File "{filepath}" not found.',
                 'filepath' => $filepath,
             ]);
@@ -62,7 +62,7 @@ final class YamlHandler implements FormatHandlerInterface
             // Read file content.
             $content = file_get_contents($filepath);
             if ($content === false) {
-                throw new LoadException([
+                throw new SpreadsheetLoadException([
                     'Could not read file: "{filepath}".',
                     'filepath' => $filepath,
                 ]);
@@ -73,11 +73,11 @@ final class YamlHandler implements FormatHandlerInterface
                 pathinfo($filepath, PATHINFO_FILENAME)
             );
         } catch (Exception $e) {
-            if ($e instanceof LoadException || $e instanceof FileNotFoundException) {
+            if ($e instanceof SpreadsheetLoadException || $e instanceof SpreadsheetFileNotFoundException) {
                 throw $e;
             }
 
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Error reading YAML file: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -164,16 +164,16 @@ final class YamlHandler implements FormatHandlerInterface
 
             return $spreadsheet;
         } catch (ParseException $e) {
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Invalid YAML data. Error: {error}',
                 'error' => $e->getMessage(),
             ], $e->getCode(), $e);
         } catch (Exception $e) {
-            if ($e instanceof LoadException) {
+            if ($e instanceof SpreadsheetLoadException) {
                 throw $e;
             }
 
-            throw new LoadException([
+            throw new SpreadsheetLoadException([
                 'Error processing YAML data: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -202,7 +202,7 @@ final class YamlHandler implements FormatHandlerInterface
                 && !mkdir($directory, 0755, true)
                 && !is_dir($directory)
             ) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Directory "{directory}" could not be created.',
                     'directory' => $directory,
                 ]);
@@ -215,7 +215,7 @@ final class YamlHandler implements FormatHandlerInterface
             $result = file_put_contents($filepath, $yamlContent);
 
             if ($result === false) {
-                throw new DumpException([
+                throw new SpreadsheetDumpException([
                     'Could not write to file: "{filepath}".',
                     'filepath' => $filepath,
                 ]);
@@ -223,11 +223,11 @@ final class YamlHandler implements FormatHandlerInterface
 
             return $filepath;
         } catch (Exception $e) {
-            if ($e instanceof DumpException) {
+            if ($e instanceof SpreadsheetDumpException) {
                 throw $e;
             }
 
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Error writing YAML file: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
@@ -263,7 +263,7 @@ final class YamlHandler implements FormatHandlerInterface
             // Dump data as YAML.
             return SymfonyYaml::dump($data, 4, 2, $this->dumpFlags);
         } catch (Exception $e) {
-            throw new DumpException([
+            throw new SpreadsheetDumpException([
                 'Error creating YAML string: {message}',
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);

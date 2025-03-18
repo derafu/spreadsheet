@@ -12,22 +12,22 @@ declare(strict_types=1);
 
 namespace Derafu\TestsSpreadsheet\Format;
 
-use Derafu\Spreadsheet\Caster;
-use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
-use Derafu\Spreadsheet\Exception\LoadException;
+use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
+use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Format\JsonHandler;
 use Derafu\Spreadsheet\Sheet;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Spreadsheet\SpreadsheetCaster;
 use Derafu\TestsSpreadsheet\Abstract\AbstractArrayFormatHandler;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(JsonHandler::class)]
-#[CoversClass(Caster::class)]
+#[CoversClass(SpreadsheetCaster::class)]
 #[CoversClass(Spreadsheet::class)]
 #[CoversClass(Sheet::class)]
 final class JsonHandlerTest extends AbstractArrayFormatHandler
 {
-    protected function getFormatHandler(): FormatHandlerInterface
+    protected function getFormatHandler(): SpreadsheetFormatHandlerInterface
     {
         return new JsonHandler();
     }
@@ -59,7 +59,7 @@ final class JsonHandlerTest extends AbstractArrayFormatHandler
         $invalidJson = '{"broken": "json"';
 
         $json = $this->getFormatHandler();
-        $this->expectException(LoadException::class);
+        $this->expectException(SpreadsheetLoadException::class);
         $json->loadFromString($invalidJson);
     }
 

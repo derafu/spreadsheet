@@ -13,13 +13,13 @@ declare(strict_types=1);
 namespace Derafu\TestsSpreadsheet;
 
 use DateTimeImmutable;
-use Derafu\Spreadsheet\Caster;
 use Derafu\Spreadsheet\Sheet;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Spreadsheet\SpreadsheetCaster;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(Caster::class)]
+#[CoversClass(SpreadsheetCaster::class)]
 #[CoversClass(Spreadsheet::class)]
 #[CoversClass(Sheet::class)]
 final class CasterTest extends TestCase
@@ -48,7 +48,7 @@ final class CasterTest extends TestCase
         ]);
 
         // Cast for reading.
-        $caster = new Caster();
+        $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('test');
         $castedRow = $castedSheet->getRows()[0];
@@ -93,7 +93,7 @@ final class CasterTest extends TestCase
         ]);
 
         // Cast for reading.
-        $caster = new Caster();
+        $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('dates');
         $castedRow = $castedSheet->getRows()[0];
@@ -120,7 +120,7 @@ final class CasterTest extends TestCase
         ]);
 
         // Cast for reading.
-        $caster = new Caster();
+        $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('not-dates');
         $castedRow = $castedSheet->getRows()[0];
@@ -154,7 +154,7 @@ final class CasterTest extends TestCase
         ]);
 
         // Cast for writing.
-        $caster = new Caster();
+        $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castBeforeDump($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('test');
         $castedRow = $castedSheet->getRows()[0];
@@ -190,7 +190,7 @@ final class CasterTest extends TestCase
         $spreadsheet->addSheet($assocSheet);
 
         // Cast for reading.
-        $caster = new Caster();
+        $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
 
         // Verify sheet structure is preserved.
@@ -225,7 +225,7 @@ final class CasterTest extends TestCase
         ]);
 
         // Cast for reading.
-        $caster = new Caster();
+        $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('test');
         $castedRow = $castedSheet->getRows()[0];
@@ -258,7 +258,7 @@ final class CasterTest extends TestCase
         ]);
 
         // Cast for reading.
-        $caster = new Caster();
+        $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('test');
         $castedRow = $castedSheet->getRows()[0];

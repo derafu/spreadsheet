@@ -12,12 +12,9 @@ declare(strict_types=1);
 
 namespace Derafu\TestsSpreadsheet;
 
-use Derafu\Spreadsheet\Caster;
-use Derafu\Spreadsheet\Contract\DumperInterface;
-use Derafu\Spreadsheet\Contract\LoaderInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetDumperInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Dumper;
-use Derafu\Spreadsheet\Factory;
+use Derafu\Spreadsheet\Contract\SpreadsheetLoaderInterface;
 use Derafu\Spreadsheet\Format\CsvLeagueHandler;
 use Derafu\Spreadsheet\Format\JsonHandler;
 use Derafu\Spreadsheet\Format\OdsHandler;
@@ -25,19 +22,22 @@ use Derafu\Spreadsheet\Format\XlsHandler;
 use Derafu\Spreadsheet\Format\XlsxHandler;
 use Derafu\Spreadsheet\Format\XmlHandler;
 use Derafu\Spreadsheet\Format\YamlHandler;
-use Derafu\Spreadsheet\Loader;
 use Derafu\Spreadsheet\Sheet;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Spreadsheet\SpreadsheetCaster;
+use Derafu\Spreadsheet\SpreadsheetDumper;
+use Derafu\Spreadsheet\SpreadsheetFactory;
+use Derafu\Spreadsheet\SpreadsheetLoader;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Spreadsheet::class)]
 #[CoversClass(Sheet::class)]
-#[CoversClass(Caster::class)]
-#[CoversClass(Dumper::class)]
-#[CoversClass(Loader::class)]
-#[CoversClass(Factory::class)]
+#[CoversClass(SpreadsheetCaster::class)]
+#[CoversClass(SpreadsheetDumper::class)]
+#[CoversClass(SpreadsheetLoader::class)]
+#[CoversClass(SpreadsheetFactory::class)]
 #[CoversClass(CsvLeagueHandler::class)]
 #[CoversClass(XlsHandler::class)]
 #[CoversClass(XlsxHandler::class)]
@@ -47,17 +47,17 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(YamlHandler::class)]
 class AllSpreadsheetRoundTripTest extends TestCase
 {
-    private DumperInterface $dumper;
+    private SpreadsheetDumperInterface $dumper;
 
-    private LoaderInterface $loader;
+    private SpreadsheetLoaderInterface $loader;
 
     protected function setUp(): void
     {
-        $factory = new Factory();
-        $caster = new Caster();
+        $factory = new SpreadsheetFactory();
+        $caster = new SpreadsheetCaster();
 
-        $this->dumper = new Dumper($factory, $caster);
-        $this->loader = new Loader($factory, $caster);
+        $this->dumper = new SpreadsheetDumper($factory, $caster);
+        $this->loader = new SpreadsheetLoader($factory, $caster);
     }
 
     public static function provideAllFixtures(): array

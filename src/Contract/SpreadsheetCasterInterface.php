@@ -18,7 +18,7 @@ namespace Derafu\Spreadsheet\Contract;
  * This interface defines methods for casting values when reading from or
  * writing to spreadsheets, ensuring proper type conversions and data integrity.
  */
-interface CasterInterface
+interface SpreadsheetCasterInterface
 {
     /**
      * Cast values in a spreadsheet after loading operations.

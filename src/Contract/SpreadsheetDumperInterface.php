@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet\Contract;
 
-use Derafu\Spreadsheet\Exception\DumpException;
-use Derafu\Spreadsheet\Exception\FormatNotSupportedException;
+use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFormatNotSupportedException;
 
 /**
  * Interface for spreadsheet writing functionality.
@@ -21,7 +21,7 @@ use Derafu\Spreadsheet\Exception\FormatNotSupportedException;
  * This interface defines the standard methods that all spreadsheet writing
  * implementations must provide.
  */
-interface DumperInterface
+interface SpreadsheetDumperInterface
 {
     /**
      * Write data to a spreadsheet file.
@@ -38,9 +38,9 @@ interface DumperInterface
      * @param string|null $format Optional format (e.g., 'xlsx', 'ods').
      * @return string The path to the file that was written.
      *
-     * @throws FormatNotSupportedException If the requested format is not
+     * @throws SpreadsheetFormatNotSupportedException If the requested format is not
      * supported.
-     * @throws DumpException If there's an error writing the file.
+     * @throws SpreadsheetDumpException If there's an error writing the file.
      */
     public function dumpToFile(
         SpreadsheetInterface $spreadsheet,
@@ -59,9 +59,9 @@ interface DumperInterface
      * @param string|null $format Optional format (e.g., 'xlsx', 'ods').
      * @return string The string containing the data.
      *
-     * @throws FormatNotSupportedException If the requested format is not
+     * @throws SpreadsheetFormatNotSupportedException If the requested format is not
      * supported.
-     * @throws DumpException If there's an error creating the string.
+     * @throws SpreadsheetDumpException If there's an error creating the string.
      */
     public function dumpToString(
         SpreadsheetInterface $spreadsheet,

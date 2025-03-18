@@ -12,29 +12,29 @@ declare(strict_types=1);
 
 namespace Derafu\Spreadsheet;
 
-use Derafu\Spreadsheet\Contract\CasterInterface;
-use Derafu\Spreadsheet\Contract\FactoryInterface;
-use Derafu\Spreadsheet\Contract\LoaderInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface;
+use Derafu\Spreadsheet\Contract\SpreadsheetFactoryInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\FileNotFoundException;
+use Derafu\Spreadsheet\Contract\SpreadsheetLoaderInterface;
+use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
 
 /**
  * Main loader class for spreadsheet files.
  *
  * Handles loading spreadsheet files in various formats.
  */
-final class Loader implements LoaderInterface
+final class SpreadsheetLoader implements SpreadsheetLoaderInterface
 {
     /**
      * Create a new Loader instance.
      *
-     * @param FactoryInterface $factory Factory for creating format-specific handlers.
-     * @param CasterInterface $caster Caster for casting values to the correct type.
+     * @param SpreadsheetFactoryInterface $factory Factory for creating format-specific handlers.
+     * @param SpreadsheetCasterInterface $caster Caster for casting values to the correct type.
      * @param string $format Default format to use.
      */
     public function __construct(
-        private readonly FactoryInterface $factory = new Factory(),
-        private readonly CasterInterface $caster = new Caster(),
+        private readonly SpreadsheetFactoryInterface $factory = new SpreadsheetFactory(),
+        private readonly SpreadsheetCasterInterface $caster = new SpreadsheetCaster(),
         private readonly string $format = 'xlsx'
     ) {
     }
@@ -74,19 +74,19 @@ final class Loader implements LoaderInterface
      * Validate that a file exists and is readable.
      *
      * @param string $filepath Path to the file to validate.
-     * @throws FileNotFoundException If the file doesn't exist or isn't readable.
+     * @throws SpreadsheetFileNotFoundException If the file doesn't exist or isn't readable.
      */
     private function validateFile(string $filepath): void
     {
         if (!file_exists($filepath)) {
-            throw new FileNotFoundException([
+            throw new SpreadsheetFileNotFoundException([
                 'File not found: "{filepath}".',
                 'filepath' => $filepath,
             ]);
         }
 
         if (!is_readable($filepath)) {
-            throw new FileNotFoundException([
+            throw new SpreadsheetFileNotFoundException([
                 'File not readable: "{filepath}".',
                 'filepath' => $filepath,
             ]);

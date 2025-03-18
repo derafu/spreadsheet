@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace Derafu\Spreadsheet\Contract\Http;
 
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use Derafu\Spreadsheet\Exception\DumpException;
-use Derafu\Spreadsheet\Exception\FormatNotSupportedException;
+use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
+use Derafu\Spreadsheet\Exception\SpreadsheetFormatNotSupportedException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Interface for generating HTTP responses from spreadsheet data.
  */
-interface ResponseGeneratorInterface
+interface SpreadsheetHttpResponseGeneratorInterface
 {
     /**
      * Create a PSR-7 response with spreadsheet data for download.
@@ -31,9 +31,9 @@ interface ResponseGeneratorInterface
      * @param string|null $format Format to output (e.g., 'xlsx', 'ods', 'csv').
      * @return ResponseInterface Response with spreadsheet data.
      *
-     * @throws FormatNotSupportedException If the requested format is not
+     * @throws SpreadsheetFormatNotSupportedException If the requested format is not
      * supported.
-     * @throws DumpException If there's an error generating the output.
+     * @throws SpreadsheetDumpException If there's an error generating the output.
      */
     public function createResponse(
         SpreadsheetInterface $spreadsheet,

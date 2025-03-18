@@ -15,8 +15,8 @@ namespace Derafu\Spreadsheet\Exception;
 use Derafu\Translation\Exception\Core\TranslatableRuntimeException;
 
 /**
- * Exception thrown when a file cannot be read.
+ * Exception thrown when an unsupported file format is requested.
  */
-final class LoadException extends TranslatableRuntimeException
+final class SpreadsheetFormatNotSupportedException extends TranslatableRuntimeException
 {
 }

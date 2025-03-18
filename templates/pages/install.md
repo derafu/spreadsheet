@@ -70,7 +70,7 @@ For PSR-7 HTTP response integration:
 composer require nyholm/psr7
 ```
 
-If you don't want to use nyholm/psr7, you can use any PSR-7 compatible library implementing by your own `ResponseGeneratorInterface`.
+If you don't want to use nyholm/psr7, you can use any PSR-7 compatible library implementing by your own `SpreadsheetHttpResponseGeneratorInterface`.
 
 ## Complete Installation (All Formats)
 
@@ -95,19 +95,19 @@ Then define services in your `services.yaml`:
 
 ```yaml
 services:
-    Derafu\Spreadsheet\Contract\FactoryInterface:
+    Derafu\Spreadsheet\Contract\SpreadsheetFactoryInterface:
         class: Derafu\Spreadsheet\Factory
 
-    Derafu\Spreadsheet\Contract\CasterInterface:
+    Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface:
         class: Derafu\Spreadsheet\Caster
 
-    Derafu\Spreadsheet\Contract\LoaderInterface:
+    Derafu\Spreadsheet\Contract\SpreadsheetLoaderInterface:
         class: Derafu\Spreadsheet\Loader
         arguments:
             - '@Derafu\Spreadsheet\Factory'
             - '@Derafu\Spreadsheet\Caster'
 
-    Derafu\Spreadsheet\Contract\DumperInterface:
+    Derafu\Spreadsheet\Contract\SpreadsheetDumperInterface:
         class: Derafu\Spreadsheet\Dumper
         arguments:
             - '@Derafu\Spreadsheet\Factory'
