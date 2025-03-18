@@ -173,7 +173,7 @@ final class Spreadsheet implements SpreadsheetInterface
         $result = [];
 
         foreach ($this->sheets as $name => $sheet) {
-            $result[$name] = $sheet->getRows();
+            $result[$name] = $sheet->toArray();
         }
 
         return $result;
