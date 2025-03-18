@@ -105,8 +105,7 @@ interface SpreadsheetInterface extends IteratorAggregate, Countable
     /**
      * Convert the spreadsheet to an array structure.
      *
-     * @return array<string, array<int, array<int|string, mixed>>> Array
-     * representation.
+     * @return array Array representation.
      */
     public function toArray(): array;
 
