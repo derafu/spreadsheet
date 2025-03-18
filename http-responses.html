@@ -42,11 +42,11 @@
 <p>To use the HTTP response features, you need to install Nyholm’s PSR-7 implementation:</p>
 <pre><code class="line-numbers match-braces language-bash">composer require nyholm/psr7
 </code></pre>
-<p>If you don’t want to use nyholm/psr7, you can use any PSR-7 compatible library implementing by your own <code>ResponseGeneratorInterface</code>.</p>
+<p>If you don’t want to use nyholm/psr7, you can use any PSR-7 compatible library implementing by your own <code>SpreadsheetHttpResponseGeneratorInterface</code>.</p>
 <h3><a id="content-basic-usage" href="http-responses.html#content-basic-usage" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Basic Usage</h3>
 <pre><code class="line-numbers match-braces language-php">&lt;?php
 
-use Derafu\Spreadsheet\Http\NyholmResponseGenerator;
+use Derafu\Spreadsheet\Http\NyholmSpreadsheetHttpResponseGenerator;
 use Derafu\Spreadsheet\Spreadsheet;
 
 // Create or load a spreadsheet.
@@ -58,7 +58,7 @@ $spreadsheet-&gt;createSheet('Sheet1', [
 ]);
 
 // Create response generator.
-$responseGenerator = new NyholmResponseGenerator();
+$responseGenerator = new NyholmSpreadsheetHttpResponseGenerator();
 
 // Generate PSR-7 response with auto-detected format (xlsx).
 $response = $responseGenerator-&gt;createResponse(
@@ -77,9 +77,9 @@ $response = $responseGenerator-&gt;createResponse(
 );
 </code></pre>
 <h3><a id="content-psr-7-compatible-frameworks-slim-mezzio-etc" href="http-responses.html#content-psr-7-compatible-frameworks-slim-mezzio-etc" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>PSR-7 Compatible Frameworks (Slim, Mezzio, etc.)</h3>
-<p>With PSR-7 compatible frameworks, you can directly use the <code>NyholmResponseGenerator</code>:</p>
-<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Http\NyholmResponseGenerator;
-use Derafu\Spreadsheet\Loader;
+<p>With PSR-7 compatible frameworks, you can directly use the <code>NyholmSpreadsheetHttpResponseGenerator</code>:</p>
+<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Http\NyholmSpreadsheetHttpResponseGenerator;
+use Derafu\Spreadsheet\SpreadsheetLoader;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -95,7 +95,7 @@ class ExportAction
         // ...
 
         // Generate response
-        $responseGenerator = new NyholmResponseGenerator();
+        $responseGenerator = new NyholmSpreadsheetHttpResponseGenerator();
         return $responseGenerator-&gt;createResponse(
             $spreadsheet,
             'exported-data.xlsx'
@@ -104,16 +104,16 @@ class ExportAction
 }
 </code></pre>
 <h2><a id="content-custom-response-generation" href="http-responses.html#content-custom-response-generation" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Custom Response Generation</h2>
-<p>If you need to customize the response generation or use a different PSR-7 implementation, you can implement your own <code>ResponseGeneratorInterface</code>:</p>
+<p>If you need to customize the response generation or use a different PSR-7 implementation, you can implement your own <code>SpreadsheetHttpResponseGeneratorInterface</code>:</p>
 <pre><code class="line-numbers match-braces language-php">&lt;?php
 
 namespace App\Spreadsheet;
 
-use Derafu\Spreadsheet\Contract\Http\ResponseGeneratorInterface;
+use Derafu\Spreadsheet\Contract\Http\SpreadsheetHttpResponseGeneratorInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class CustomResponseGenerator implements ResponseGeneratorInterface
+class CustomResponseGenerator implements SpreadsheetHttpResponseGeneratorInterface
 {
     public function createResponse(
         SpreadsheetInterface $spreadsheet,

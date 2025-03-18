@@ -177,7 +177,7 @@ $yamlHandler = new YamlHandler(
 </code></pre>
 <h2><a id="content-custom-format-handlers" href="format-handlers.html#content-custom-format-handlers" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Custom Format Handlers</h2>
 <p>You can create your own format handlers by implementing the <code>FormatHandlerInterface</code>:</p>
-<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Contract\FormatHandlerInterface;
+<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Contract\SpreadsheetFormatHandlerInterface;
 
 class MyCustomHandler implements FormatHandlerInterface
 {

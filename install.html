@@ -79,7 +79,7 @@ composer require tecnickcom/tcpdf # For TcpdfWriter.
 <p>For PSR-7 HTTP response integration:</p>
 <pre><code class="line-numbers match-braces language-bash">composer require nyholm/psr7
 </code></pre>
-<p>If you don’t want to use nyholm/psr7, you can use any PSR-7 compatible library implementing by your own <code>ResponseGeneratorInterface</code>.</p>
+<p>If you don’t want to use nyholm/psr7, you can use any PSR-7 compatible library implementing by your own <code>SpreadsheetHttpResponseGeneratorInterface</code>.</p>
 <h2><a id="content-complete-installation-all-formats" href="install.html#content-complete-installation-all-formats" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Complete Installation (All Formats)</h2>
 <p>If you want to support all formats, with the default handlers, you can install all dependencies at once:</p>
 <pre><code class="line-numbers match-braces language-bash">composer require derafu/spreadsheet league/csv phpoffice/phpspreadsheet \
@@ -92,19 +92,19 @@ composer require tecnickcom/tcpdf # For TcpdfWriter.
 </code></pre>
 <p>Then define services in your <code>services.yaml</code>:</p>
 <pre><code class="line-numbers match-braces language-yaml">services:
-    Derafu\Spreadsheet\Contract\FactoryInterface:
+    Derafu\Spreadsheet\Contract\SpreadsheetFactoryInterface:
         class: Derafu\Spreadsheet\Factory
 
-    Derafu\Spreadsheet\Contract\CasterInterface:
+    Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface:
         class: Derafu\Spreadsheet\Caster
 
-    Derafu\Spreadsheet\Contract\LoaderInterface:
+    Derafu\Spreadsheet\Contract\SpreadsheetLoaderInterface:
         class: Derafu\Spreadsheet\Loader
         arguments:
             - '@Derafu\Spreadsheet\Factory'
             - '@Derafu\Spreadsheet\Caster'
 
-    Derafu\Spreadsheet\Contract\DumperInterface:
+    Derafu\Spreadsheet\Contract\SpreadsheetDumperInterface:
         class: Derafu\Spreadsheet\Dumper
         arguments:
             - '@Derafu\Spreadsheet\Factory'

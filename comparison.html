@@ -83,7 +83,7 @@
 <h2><a id="content-code-comparison-examples" href="comparison.html#content-code-comparison-examples" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Code Comparison Examples</h2>
 <h3><a id="content-basic-reading-example" href="comparison.html#content-basic-reading-example" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Basic Reading Example</h3>
 <p><strong>Derafu Spreadsheet:</strong></p>
-<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Loader;
+<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\SpreadsheetLoader;
 
 $loader = new Loader();
 $sheet = $loader-&gt;loadFromFile('data.xlsx')-&gt;getActiveSheet();
@@ -127,8 +127,8 @@ foreach ($reader-&gt;getRecords() as $record) {
 </code></pre>
 <h3><a id="content-format-conversion-example" href="comparison.html#content-format-conversion-example" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Format Conversion Example</h3>
 <p><strong>Derafu Spreadsheet:</strong></p>
-<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Loader;
-use Derafu\Spreadsheet\Dumper;
+<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\SpreadsheetLoader;
+use Derafu\Spreadsheet\SpreadsheetDumper;
 
 $loader = new Loader();
 $dumper = new Dumper();

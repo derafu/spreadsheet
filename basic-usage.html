@@ -35,7 +35,7 @@
 <p>You can load a spreadsheet from a file or from a string:</p>
 <pre><code class="line-numbers match-braces language-php">&lt;?php
 
-use Derafu\Spreadsheet\Loader;
+use Derafu\Spreadsheet\SpreadsheetLoader;
 
 // Create a loader.
 $loader = new Loader();
@@ -137,7 +137,7 @@ $indexedSheet = $sheet-&gt;toIndexed(); // Keys become first row.
 </code></pre>
 <h2><a id="content-saving-a-spreadsheet" href="basic-usage.html#content-saving-a-spreadsheet" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Saving a Spreadsheet</h2>
 <p>Once you’re done modifying the data, you can save it to a file or get it as a string:</p>
-<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Dumper;
+<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\SpreadsheetDumper;
 
 // Create a dumper.
 $dumper = new Dumper();

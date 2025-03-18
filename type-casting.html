@@ -170,10 +170,10 @@ $person = $sheet-&gt;getCell(0, 0);
 // Returns associative array: [&quot;name&quot; =&gt; &quot;John&quot;, &quot;age&quot; =&gt; 30]
 </code></pre>
 <h2><a id="content-custom-type-casting" href="type-casting.html#content-custom-type-casting" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Custom Type Casting</h2>
-<p>If you need different casting behavior, you can implement your own <code>CasterInterface</code>:</p>
-<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Contract\CasterInterface;
+<p>If you need different casting behavior, you can implement your own <code>SpreadsheetCasterInterface</code>:</p>
+<pre><code class="line-numbers match-braces language-php">use Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface;
 
-class MyCaster implements CasterInterface
+class MyCaster implements SpreadsheetCasterInterface
 {
     // Your custom implementation.
 }
@@ -188,7 +188,7 @@ $loader = new Loader(new Factory(), new MyCaster());
 <li>The type casting is performed on every cell in every sheet, ensuring consistent typing.</li>
 </ol>
 <h2><a id="content-performance-considerations" href="type-casting.html#content-performance-considerations" class="text-decoration-none small text-muted" aria-hidden="true" title="Permalink"><i class="fa-solid fa-link"></i> </a>Performance Considerations</h2>
-<p>Type casting is performed in-memory and typically adds minimal overhead. However, for extremely large spreadsheets with millions of cells, you might consider implementing a more selective casting strategy through a custom <code>CasterInterface</code> implementation.</p>
+<p>Type casting is performed in-memory and typically adds minimal overhead. However, for extremely large spreadsheets with millions of cells, you might consider implementing a more selective casting strategy through a custom <code>SpreadsheetCasterInterface</code> implementation.</p>
 <p>If you don’t want to use the Caster, you can use the Factory with the Format Handlers directly. If you bypass the Loader and Dumper, no type casting will be done.</p>
 </div>
 </div>
