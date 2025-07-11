@@ -455,7 +455,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $this->assertCount(3, $lines);
 
         // Check for headers (order might vary).
-        $headers = str_getcsv($lines[0]);
+        $headers = str_getcsv($lines[0], escape: "\\");
         $this->assertCount(3, $headers);
         $this->assertContains('name', $headers);
         $this->assertContains('age', $headers);
