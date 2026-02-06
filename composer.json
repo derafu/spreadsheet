@@ -31,14 +31,14 @@
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "friendsofphp/php-cs-fixer": "^3.63",
+        "friendsofphp/php-cs-fixer": "^3.93",
         "phpstan/phpstan": "^1.12",
-        "phpunit/phpunit": "^11.4",
+        "phpunit/phpunit": "^11.5",
         "psr/http-message": "^2.0",
         "nyholm/psr7": "^1.8",
-        "league/csv": "^9.22",
-        "symfony/yaml": "^7.2",
-        "phpoffice/phpspreadsheet": "^4.1"
+        "league/csv": "^9.28",
+        "symfony/yaml": "^7.4",
+        "phpoffice/phpspreadsheet": "^5.4"
     },
     "scripts": {
         "docs": "php tools/phpdocumentor run --config=phpdoc.xml",

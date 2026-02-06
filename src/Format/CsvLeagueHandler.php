@@ -105,7 +105,7 @@ final class CsvLeagueHandler implements SpreadsheetFormatHandlerInterface
     ): SpreadsheetInterface {
         try {
             // Create an in-memory CSV reader.
-            $csv = Reader::createFromString($data);
+            $csv = Reader::fromString($data);
             $csv->setDelimiter($this->delimiter);
             $csv->setEnclosure($this->enclosure);
             $csv->setEscape($this->escape);
@@ -202,7 +202,7 @@ final class CsvLeagueHandler implements SpreadsheetFormatHandlerInterface
     ): string {
         try {
             // Create an in-memory CSV writer.
-            $csv = Writer::createFromString('');
+            $csv = Writer::fromString('');
             $csv->setDelimiter($this->delimiter);
             $csv->setEnclosure($this->enclosure);
             $csv->setEscape($this->escape);
