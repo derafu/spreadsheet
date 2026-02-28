@@ -218,9 +218,9 @@ final class SpreadsheetCaster implements SpreadsheetCasterInterface
                 }
 
                 // Ensure timezone is set to UTC for consistency.
-                $date->setTimezone(new DateTimeZone('UTC'));
+                $utcDate = $date->setTimezone(new DateTimeZone('UTC'));
 
-                return $date;
+                return $utcDate;
             }
         }
 
