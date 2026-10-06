@@ -15,8 +15,8 @@ namespace Derafu\Spreadsheet;
 use ArrayIterator;
 use Derafu\Spreadsheet\Contract\SheetInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
-use InvalidArgumentException;
-use RuntimeException;
+use Derafu\Translation\Exception\Core\TranslatableRuntimeException as RuntimeException;
+use Derafu\Translation\Exception\Logic\TranslatableInvalidArgumentException as InvalidArgumentException;
 
 /**
  * Represents a complete spreadsheet document with multiple sheets.
@@ -124,10 +124,10 @@ final class Spreadsheet implements SpreadsheetInterface
     public function setActiveSheet(string $name): static
     {
         if (!$this->hasSheet($name)) {
-            throw new InvalidArgumentException(sprintf(
-                'Sheet "%s" does not exist.',
-                $name
-            ));
+            throw new InvalidArgumentException([
+                'Sheet "{name}" does not exist.',
+                'name' => $name,
+            ]);
         }
 
         $this->activeSheetName = $name;

@@ -78,6 +78,54 @@ final class CasterTest extends TestCase
         $this->assertSame('value', $castedRow[9]['key']);
     }
 
+    /**
+     * A date without timezone has no timezone to convert from: it is read as it
+     * is written, whatever the default timezone of PHP is. Otherwise loading
+     * and dumping a file would move its dates by the offset of the server.
+     */
+    public function testcastAfterLoadReadsDatesWithoutTimezoneAsWritten(): void
+    {
+        $timezone = date_default_timezone_get();
+        date_default_timezone_set('America/Santiago');
+
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->createSheet('dates', [
+            [
+                '2025-03-12',
+                '2025-03-12 23:59:59',
+                '2025-03-12T23:59:59',
+                '12/03/2025 23:59:59',
+                '2025-03-12T23:59:59+03:00',
+                // None of the known formats: it is read by the fallback.
+                '2025-03-12 23:59',
+                'Wed, 12 Mar 2025 23:59:59 +0300',
+            ],
+        ]);
+
+        try {
+            $row = (new SpreadsheetCaster())
+                ->castAfterLoad($spreadsheet)
+                ->getSheet('dates')
+                ->getRows()[0]
+            ;
+        } finally {
+            date_default_timezone_set($timezone);
+        }
+
+        // A date without time is the start of that day, not the current time.
+        $this->assertSame('2025-03-12 00:00:00', $row[0]->format('Y-m-d H:i:s'));
+        $this->assertSame('2025-03-12 23:59:59', $row[1]->format('Y-m-d H:i:s'));
+        $this->assertSame('2025-03-12 23:59:59', $row[2]->format('Y-m-d H:i:s'));
+        $this->assertSame('2025-03-12 23:59:59', $row[3]->format('Y-m-d H:i:s'));
+        // With an explicit offset, the instant is respected and shown in UTC.
+        $this->assertSame('2025-03-12 20:59:59', $row[4]->format('Y-m-d H:i:s'));
+        $this->assertSame('2025-03-12 23:59:00', $row[5]->format('Y-m-d H:i:s'));
+        $this->assertSame('2025-03-12 20:59:59', $row[6]->format('Y-m-d H:i:s'));
+        foreach ($row as $date) {
+            $this->assertSame('UTC', $date->getTimezone()->getName());
+        }
+    }
+
     public function testcastAfterLoadDetectsDates(): void
     {
         // Create a spreadsheet with various date formats.

@@ -112,8 +112,7 @@ final class YamlHandler implements SpreadsheetFormatHandlerInterface
 
             // Case 1: Flat array of objects (e.g., [{key:value}, {key:value}]).
             if (
-                is_array($parsedData)
-                && array_keys($parsedData) === range(0, count($parsedData) - 1)
+                array_keys($parsedData) === range(0, count($parsedData) - 1)
                 && !empty($parsedData)
                 && is_array($parsedData[0])
                 && !$this->isIndexedArray($parsedData[0])
@@ -125,8 +124,7 @@ final class YamlHandler implements SpreadsheetFormatHandlerInterface
             // Case 2: Sequential array of arrays (e.g.,
             // [[value, value], [value, value]]).
             if (
-                is_array($parsedData)
-                && array_keys($parsedData) === range(0, count($parsedData) - 1)
+                array_keys($parsedData) === range(0, count($parsedData) - 1)
                 && !empty($parsedData)
                 && is_array($parsedData[0])
                 && $this->isIndexedArray($parsedData[0])

@@ -103,10 +103,6 @@ final class XmlHandlerTest extends TestCase
     public function testLoadFromFile(string $fixtureName): void
     {
         $filepath = $this->fixturesDir . '/' . $fixtureName . '.xml';
-        if (!file_exists($filepath)) {
-            $this->markTestSkipped("Fixture file {$filepath} does not exist.");
-        }
-
         $xml = new XmlHandler();
         $spreadsheet = $xml->loadFromFile($filepath);
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
@@ -256,7 +252,7 @@ final class XmlHandlerTest extends TestCase
         $xmlString = $xml->dumpToString($spreadsheet);
 
         // Should be valid XML.
-        $this->assertIsObject(new SimpleXMLElement($xmlString));
+        new SimpleXMLElement($xmlString); // Throws if the XML is not valid.
 
         // Read back and verify.
         $loadedSpreadsheet = $xml->loadFromString($xmlString);
@@ -522,25 +518,15 @@ final class XmlHandlerTest extends TestCase
         $sheetNames = $spreadsheet->getSheetNames();
         $this->assertNotEmpty($sheetNames);
 
-        // Edge cases might include various special situations.
-        // Check for presence of sheets with special content.
-        foreach ($sheetNames as $sheetName) {
-            $sheet = $spreadsheet->getSheet($sheetName);
-            $rows = $sheet->getRows();
-
-            // Empty sheets are valid.
-            if (empty($rows)) {
-                continue;
-            }
-
-            // For non-empty sheets, check first row.
-            $firstRow = $rows[0];
-
-            // Special characters might be present in keys or values.
-            foreach ($firstRow as $key => $value) {
-                // Just verify we can access the values without errors.
-                $this->assertNotNull($key);
-            }
-        }
+        // Special characters survive: quotes, accents, emojis and CDATA.
+        $rows = $spreadsheet->getSheet('special_characters')->getRows();
+        $this->assertSame('Product with "quotes"', $rows[0]['name']);
+        $this->assertSame('Café Français', $rows[3]['name']);
+        $this->assertSame('Product with emojis 🚀', $rows[6]['name']);
+        $this->assertSame(
+            'Features: <strong>Bold text</strong> and <em>emphasis</em>',
+            $rows[7]['description']
+        );
+        $this->assertSame('Tech & Electronics', $rows[7]['category']);
     }
 }

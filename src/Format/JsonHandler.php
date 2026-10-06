@@ -138,8 +138,7 @@ final class JsonHandler implements SpreadsheetFormatHandlerInterface
             // Case 1: Flat array of objects (most common case, e.g.,
             // [{key:value}, {key:value}])
             if (
-                is_array($decodedData)
-                && array_keys($decodedData) === range(0, count($decodedData) - 1)
+                array_keys($decodedData) === range(0, count($decodedData) - 1)
                 && !empty($decodedData)
                 && is_array($decodedData[0])
                 && !$this->isIndexedArray($decodedData[0])
@@ -151,8 +150,7 @@ final class JsonHandler implements SpreadsheetFormatHandlerInterface
             // Case 2: Sequential array of arrays (e.g.,
             // [[value, value], [value, value]])
             if (
-                is_array($decodedData)
-                && array_keys($decodedData) === range(0, count($decodedData) - 1)
+                array_keys($decodedData) === range(0, count($decodedData) - 1)
                 && !empty($decodedData)
                 && is_array($decodedData[0])
                 && $this->isIndexedArray($decodedData[0])

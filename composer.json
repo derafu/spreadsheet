@@ -4,7 +4,16 @@
     "type": "library",
     "homepage": "https://www.derafu.dev/docs/data/spreadsheet",
     "license": "MIT",
-    "keywords": ["spreadsheet", "excel", "csv", "ods", "xlsx", "xls", "xml", "json"],
+    "keywords": [
+        "spreadsheet",
+        "excel",
+        "csv",
+        "ods",
+        "xlsx",
+        "xls",
+        "xml",
+        "json"
+    ],
     "authors": [
         {
             "name": "Esteban De La Fuente Rubio / Derafu",
@@ -31,14 +40,18 @@
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "friendsofphp/php-cs-fixer": "^3.94",
-        "phpstan/phpstan": "^1.12",
-        "phpunit/phpunit": "^11.5",
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "phpstan/phpstan": "^2.2",
+        "phpunit/phpunit": "^13.4",
         "psr/http-message": "^2.0",
         "nyholm/psr7": "^1.8",
         "league/csv": "^9.28",
-        "symfony/yaml": "^8.0",
-        "phpoffice/phpspreadsheet": "^5.4"
+        "symfony/yaml": "^8.1",
+        "phpoffice/phpspreadsheet": "^5.10",
+        "nikic/php-parser": "^5.9"
+    },
+    "suggest": {
+        "nikic/php-parser": "Required by the tests of the messages of the package (Derafu\\Translation\\Lint reads the code)."
     },
     "scripts": {
         "docs": "php tools/phpdocumentor run --config=phpdoc.xml",

@@ -127,7 +127,7 @@ class CsvPhpSpreadsheetHandler extends AbstractPhpSpreadsheetFormatHandler
                 continue;
             }
 
-            $sheetName = $overrideSheetName ?? $this->sheetName ?? $sheetName;
+            $sheetName = $overrideSheetName ?? $this->sheetName;
 
             $rows = $phpSheet->toArray();
             $spreadsheet->createSheet($sheetName, $rows);

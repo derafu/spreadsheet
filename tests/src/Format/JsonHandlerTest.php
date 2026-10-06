@@ -80,7 +80,6 @@ final class JsonHandlerTest extends AbstractArrayFormatHandler
 
         // If using a JsonField component that parses JSON strings.
         $decodedMetadata = $rows[0]['metadata'];
-        $this->assertIsArray($decodedMetadata);
         $this->assertArrayHasKey('key', $decodedMetadata);
         $this->assertArrayHasKey('nested', $decodedMetadata);
     }

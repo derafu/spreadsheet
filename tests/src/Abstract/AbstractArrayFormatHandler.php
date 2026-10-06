@@ -91,10 +91,6 @@ abstract class AbstractArrayFormatHandler extends TestCase
         $filepath = $this->getFixtureDir() . '/' . $this->getFileExtension()
             . '-' . $fixtureName . '.' . $this->getFileExtension()
         ;
-        if (!file_exists($filepath)) {
-            $this->markTestSkipped("Fixture file {$filepath} does not exist.");
-        }
-
         $handler = $this->getFormatHandler();
         $spreadsheet = $handler->loadFromFile($filepath);
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
@@ -306,7 +302,6 @@ abstract class AbstractArrayFormatHandler extends TestCase
 
             // All sheets should have header rows.
             $this->assertNotEmpty($rows);
-            $this->assertIsArray($rows[0]);
         }
     }
 
@@ -321,7 +316,6 @@ abstract class AbstractArrayFormatHandler extends TestCase
 
             // All rows should be associative arrays.
             $this->assertNotEmpty($rows);
-            $this->assertIsArray($rows[0]);
 
             // Get first array key to verify it's a string (associative).
             $keys = array_keys($rows[0]);

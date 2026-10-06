@@ -77,6 +77,16 @@ class AllSpreadsheetRoundTripTest extends TestCase
         return $fixtures;
     }
 
+    protected function tearDown(): void
+    {
+        // Reading an XLS makes PhpSpreadsheet create the global variable
+        // `_OLE_INSTANCES`, which PHPUnit reports as a change to the global
+        // state. Same cleanup that `XlsHandlerTest` does.
+        unset($GLOBALS['_OLE_INSTANCES']);
+
+        parent::tearDown();
+    }
+
     #[DataProvider('provideAllFixtures')]
     public function testRoundTrip(string $filepath, string $format): void
     {

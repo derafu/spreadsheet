@@ -200,9 +200,15 @@ final class SpreadsheetCaster implements SpreadsheetCasterInterface
             return null;
         }
 
-        // Try each date format.
+        // A date without timezone is read as written (as UTC), not in the
+        // default timezone of PHP, so loading and dumping a file does not move
+        // its dates by the offset of the server.
+        $utc = new DateTimeZone('UTC');
+
+        // Try each date format. The `!` sets the fields that the format does
+        // not have to the start of the epoch, instead of to the current time.
         foreach ($this->dateFormats as $format) {
-            $date = DateTimeImmutable::createFromFormat($format, $value);
+            $date = DateTimeImmutable::createFromFormat('!' . $format, $value, $utc);
 
             // Check if the date is valid and the entire string was used.
             if ($date !== false) {
@@ -218,22 +224,14 @@ final class SpreadsheetCaster implements SpreadsheetCasterInterface
                 }
 
                 // Ensure timezone is set to UTC for consistency.
-                $utcDate = $date->setTimezone(new DateTimeZone('UTC'));
-
-                return $utcDate;
+                return $date->setTimezone($utc);
             }
         }
 
-        // Try standard date parsing as fallback.
+        // Try standard date parsing as fallback. It handles many common
+        // formats, and throws if the string is not a date.
         try {
-            // strtotime() handles many common formats.
-            $timestamp = strtotime($value);
-            if ($timestamp !== false) {
-                return new DateTimeImmutable(
-                    '@' . $timestamp,
-                    new DateTimeZone('UTC')
-                );
-            }
+            return (new DateTimeImmutable($value, $utc))->setTimezone($utc);
         } catch (Exception) {
             // Ignore exceptions from date parsing attempts.
         }
