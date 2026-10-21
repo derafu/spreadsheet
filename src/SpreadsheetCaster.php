@@ -17,6 +17,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
+use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
 use Exception;
 use Stringable;
 
@@ -54,8 +55,10 @@ final class SpreadsheetCaster implements SpreadsheetCasterInterface
     ): SpreadsheetInterface {
         $newSpreadsheet = clone $spreadsheet;
 
-        foreach ($newSpreadsheet->getSheets() as $sheet) {
-            $sheet->map(fn (mixed $value) => $this->castValueForReading($value));
+        foreach ($spreadsheet->getSheets() as $sheet) {
+            $newSheet = clone $sheet;
+            $newSheet->map(fn (mixed $value) => $this->castValueForReading($value));
+            $newSpreadsheet->addSheet($newSheet);
         }
 
         return $newSpreadsheet;
@@ -69,8 +72,10 @@ final class SpreadsheetCaster implements SpreadsheetCasterInterface
     ): SpreadsheetInterface {
         $newSpreadsheet = clone $spreadsheet;
 
-        foreach ($newSpreadsheet->getSheets() as $sheet) {
-            $sheet->map(fn (mixed $value) => $this->castValueForWriting($value));
+        foreach ($spreadsheet->getSheets() as $sheet) {
+            $newSheet = clone $sheet;
+            $newSheet->map(fn (mixed $value) => $this->castValueForWriting($value));
+            $newSpreadsheet->addSheet($newSheet);
         }
 
         return $newSpreadsheet;
@@ -174,7 +179,15 @@ final class SpreadsheetCaster implements SpreadsheetCasterInterface
 
         // Other objects and arrays need serialization.
         if (is_array($value) || is_object($value)) {
-            return json_encode($value);
+            $encoded = json_encode($value);
+            if ($encoded === false) {
+                throw new SpreadsheetDumpException([
+                    'Failed to encode a cell value as JSON: {error}',
+                    'error' => json_last_error_msg(),
+                ]);
+            }
+
+            return $encoded;
         }
 
         // Numeric values should be preserved.
@@ -182,8 +195,15 @@ final class SpreadsheetCaster implements SpreadsheetCasterInterface
             return $value;
         }
 
-        // Default to string.
-        return (string)$value;
+        // Strings do not need conversion.
+        if (is_string($value)) {
+            return $value;
+        }
+
+        throw new SpreadsheetDumpException([
+            'Unsupported cell type for writing: {type}.',
+            'type' => get_debug_type($value),
+        ]);
     }
 
     /**
@@ -243,7 +263,7 @@ final class SpreadsheetCaster implements SpreadsheetCasterInterface
      * Try to parse a string as JSON.
      *
      * @param string $value String value to parse.
-     * @return array|string The parsed JSON array or the original string if
+     * @return array<array-key, mixed>|string The parsed JSON array or the original string if
      * parsing fails.
      */
     private function tryParseJson(string $value): array|string
@@ -257,7 +277,7 @@ final class SpreadsheetCaster implements SpreadsheetCasterInterface
         $decoded = json_decode($value, true);
 
         // If decoded successfully and no errors, return the decoded value.
-        if (json_last_error() === JSON_ERROR_NONE && $decoded !== null) {
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
             return $decoded;
         }
 

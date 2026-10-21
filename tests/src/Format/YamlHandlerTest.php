@@ -90,6 +90,7 @@ final class YamlHandlerTest extends AbstractArrayFormatHandler
         $loadedSpreadsheet = $this->caster->castAfterLoad($loadedSpreadsheet);
 
         $sheet = $loadedSpreadsheet->getSheet('test');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame("This is a\nmultiline\nstring", $rows[0]['content']);

@@ -53,6 +53,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
     {
         // Clean up any files in temp directory.
         $files = glob($this->tempDir . '/*');
+        self::assertIsArray($files);
         foreach ($files as $file) {
             if (is_file($file)) {
                 unlink($file);
@@ -130,6 +131,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
 
         // Get the sheet.
         $sheet = $spreadsheet->getSheet('csv-flat-array-indexed-products');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         // Check header row.
@@ -161,6 +163,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
 
         // Get the sheet.
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-associative-products');
+        $this->assertNotNull($sheet);
 
         // Convert to associative for easier testing.
         $assocSheet = $sheet->toAssociative();
@@ -195,6 +198,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
 
         // Get the sheet.
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-indexed-products');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         // Check header row.
@@ -221,6 +225,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
             $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
             $sheet = $spreadsheet->getSheet('csv-types-casting-strings');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
@@ -244,6 +249,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
             $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
             $sheet = $spreadsheet->getSheet('csv-types-casting-numbers');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
@@ -265,6 +271,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
             $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
             $sheet = $spreadsheet->getSheet('csv-types-casting-booleans');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
@@ -272,10 +279,9 @@ abstract class AbstractCsvFormatHandler extends TestCase
             foreach ($rows as $row) {
                 if ($row['type'] === 'true' || $row['type'] === 'string_true') {
                     // After casting, "true" should become boolean true
-                    $castedRow = $this->caster->castAfterLoad($spreadsheet)
-                        ->getSheet('csv-types-casting-booleans')
-                        ->toAssociative()
-                        ->getRows();
+                    $castedSheet = $this->caster->castAfterLoad($spreadsheet)->getSheet('csv-types-casting-booleans');
+                    $this->assertNotNull($castedSheet);
+                    $castedRow = $castedSheet->toAssociative()->getRows();
 
                     $matchingRow = array_filter($castedRow, fn ($r) => $r['type'] === $row['type']);
 
@@ -296,6 +302,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
             $spreadsheet = $csv->loadFromFile($filepath);
 
             $sheet = $spreadsheet->getSheet('csv-edge-cases-empty-sheet');
+            $this->assertNotNull($sheet);
             $this->assertSame([[null]], $sheet->getRows());
         }
 
@@ -306,6 +313,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
             $spreadsheet = $csv->loadFromFile($filepath);
 
             $sheet = $spreadsheet->getSheet('csv-edge-cases-empty-sheet-with-structure');
+            $this->assertNotNull($sheet);
             $rows = $sheet->getRows();
 
             // Should have header row only.
@@ -320,18 +328,23 @@ abstract class AbstractCsvFormatHandler extends TestCase
             $spreadsheet = $csv->loadFromFile($filepath);
 
             $sheet = $spreadsheet->getSheet('csv-edge-cases-special-characters');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
             // Check for special characters handling.
             foreach ($rows as $row) {
                 if ($row['id'] == 1) {
+                    $this->assertIsString($row['name']);
                     $this->assertStringContainsString('quotes', $row['name']); // Contains quotes.
                 } elseif ($row['id'] == 4) {
+                    $this->assertIsString($row['name']);
                     $this->assertStringContainsString('Français', $row['name']); // Contains accented characters.
                 } elseif ($row['id'] == 5) {
+                    $this->assertIsString($row['name']);
                     $this->assertStringContainsString('продукт', $row['name']); // Contains non-Latin characters.
                 } elseif ($row['id'] == 7) {
+                    $this->assertIsString($row['name']);
                     $this->assertStringContainsString('🚀', $row['name']); // Contains emoji.
                 }
             }
@@ -348,6 +361,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
 
         // Check sheet.
         $sheet = $spreadsheet->getSheet('Sheet'); // Default name when loading from string.
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         // Check structure and values.
@@ -380,6 +394,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
 
         // Read back the content.
         $content = file_get_contents($filepath);
+        $this->assertIsString($content);
         $this->assertStringContainsString('name,age,active', $content);
         $this->assertStringContainsString('John,25,true', $content);
         $this->assertStringContainsString('Jane,30,false', $content);
@@ -488,6 +503,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
 
         // Get the sheet.
         $loadedSheet = $loadedSpreadsheet->getSheet('data');
+        $this->assertNotNull($loadedSheet);
         $rows = $loadedSheet->getRows();
 
         // Check types are preserved.
@@ -512,6 +528,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-mixed-customers');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['id', 'name', 'email', 'registered_date', 'orders_count', 'vip'], $rows[0]);
@@ -528,6 +545,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-mixed-orders');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -545,6 +563,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-mixed-products');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -553,6 +572,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $this->assertArrayHasKey('price', $rows[0]);
         $this->assertArrayHasKey('active', $rows[0]);
         $this->assertArrayHasKey('metadata', $rows[0]);
+        $this->assertIsArray($rows[0]['metadata']);
         $this->assertArrayHasKey('stock', $rows[0]['metadata']);
     }
 
@@ -565,6 +585,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-mixed-settings');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -582,6 +603,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-associative-customers');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -598,6 +620,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-associative-orders');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -614,6 +637,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-associative-settings');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -631,6 +655,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-indexed-customers');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['id', 'name', 'email', 'registered_date', 'orders_count', 'vip'], $rows[0]);
@@ -645,6 +670,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-indexed-order-items');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['order_id', 'product_id', 'quantity', 'price', 'subtotal'], $rows[0]);
@@ -659,6 +685,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-multiple-sheets-indexed-orders');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['id', 'customer_id', 'date', 'total', 'status'], $rows[0]);
@@ -673,6 +700,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-types-casting-dates');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -692,6 +720,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-types-casting-null-values');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -711,6 +740,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-types-casting-complex-types');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -730,6 +760,7 @@ abstract class AbstractCsvFormatHandler extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('csv-edge-cases-datetime-advanced');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 

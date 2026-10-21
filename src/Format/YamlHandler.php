@@ -112,24 +112,24 @@ final class YamlHandler implements SpreadsheetFormatHandlerInterface
 
             // Case 1: Flat array of objects (e.g., [{key:value}, {key:value}]).
             if (
-                array_keys($parsedData) === range(0, count($parsedData) - 1)
+                array_is_list($parsedData)
                 && !empty($parsedData)
                 && is_array($parsedData[0])
                 && !$this->isIndexedArray($parsedData[0])
             ) {
-                $spreadsheet->createSheet($sheetName, $parsedData, true);
+                $spreadsheet->createSheet($sheetName, $this->validatedRows($parsedData, $sheetName), true);
                 return $spreadsheet;
             }
 
             // Case 2: Sequential array of arrays (e.g.,
             // [[value, value], [value, value]]).
             if (
-                array_keys($parsedData) === range(0, count($parsedData) - 1)
+                array_is_list($parsedData)
                 && !empty($parsedData)
                 && is_array($parsedData[0])
                 && $this->isIndexedArray($parsedData[0])
             ) {
-                $spreadsheet->createSheet($sheetName, $parsedData, false);
+                $spreadsheet->createSheet($sheetName, $this->validatedRows($parsedData, $sheetName), false);
                 return $spreadsheet;
             }
 
@@ -155,7 +155,7 @@ final class YamlHandler implements SpreadsheetFormatHandlerInterface
                 // Add the sheet to the spreadsheet.
                 $spreadsheet->createSheet(
                     (string)$sheetName,
-                    $rows,
+                    $this->validatedRows($rows, (string)$sheetName),
                     $isAssociative
                 );
             }
@@ -269,9 +269,35 @@ final class YamlHandler implements SpreadsheetFormatHandlerInterface
     }
 
     /**
+     * Validates row values without changing their keys or cell contents.
+     *
+     * @template TKey of array-key
+     * @param array<TKey, mixed> $rows
+     * @param string $sheetName
+     * @return array<TKey, array<int|string, mixed>>
+     */
+    private function validatedRows(array $rows, string $sheetName): array
+    {
+        $validated = [];
+        foreach ($rows as $index => $row) {
+            if (!is_array($row)) {
+                throw new SpreadsheetLoadException([
+                    'Row "{index}" in sheet "{sheet}" must be an array; {type} given.',
+                    'index' => $index,
+                    'sheet' => $sheetName,
+                    'type' => get_debug_type($row),
+                ]);
+            }
+            $validated[$index] = $row;
+        }
+
+        return $validated;
+    }
+
+    /**
      * Determine if an array is indexed (sequential numeric keys) vs associative.
      *
-     * @param array $array The array to check.
+     * @param array<array-key, mixed> $array The array to check.
      * @return bool True if the array has sequential numeric keys (0, 1, 2...).
      */
     private function isIndexedArray(array $array): bool

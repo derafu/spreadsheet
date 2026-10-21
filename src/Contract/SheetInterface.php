@@ -18,6 +18,8 @@ use IteratorAggregate;
 
 /**
  * Interface for a spreadsheet sheet.
+ *
+ * @extends IteratorAggregate<int, array<int|string, mixed>>
  */
 interface SheetInterface extends IteratorAggregate, Countable
 {
@@ -109,7 +111,7 @@ interface SheetInterface extends IteratorAggregate, Countable
     /**
      * Get column names if the data is associative.
      *
-     * @return array<int, string> Array of column names.
+     * @return array<int, int|string> Array of column names.
      */
     public function getColumnNames(): array;
 

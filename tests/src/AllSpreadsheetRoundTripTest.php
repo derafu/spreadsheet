@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace Derafu\TestsSpreadsheet;
 
+use DateTimeInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetDumperInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
 use Derafu\Spreadsheet\Contract\SpreadsheetLoaderInterface;
 use Derafu\Spreadsheet\Format\CsvLeagueHandler;
+use Derafu\Spreadsheet\Format\HtmlHandler;
 use Derafu\Spreadsheet\Format\JsonHandler;
 use Derafu\Spreadsheet\Format\OdsHandler;
 use Derafu\Spreadsheet\Format\XlsHandler;
@@ -39,6 +41,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(SpreadsheetLoader::class)]
 #[CoversClass(SpreadsheetFactory::class)]
 #[CoversClass(CsvLeagueHandler::class)]
+#[CoversClass(HtmlHandler::class)]
 #[CoversClass(XlsHandler::class)]
 #[CoversClass(XlsxHandler::class)]
 #[CoversClass(OdsHandler::class)]
@@ -60,10 +63,12 @@ class AllSpreadsheetRoundTripTest extends TestCase
         $this->loader = new SpreadsheetLoader($factory, $caster);
     }
 
+    /** @return array<string, array{filepath: string, format: string}> */
     public static function provideAllFixtures(): array
     {
         $fixturesDir = __DIR__ . '/../fixtures';
         $fixturesFiles = glob($fixturesDir . '/*/*');
+        self::assertIsArray($fixturesFiles);
 
         $fixtures = [];
 
@@ -91,6 +96,7 @@ class AllSpreadsheetRoundTripTest extends TestCase
     public function testRoundTrip(string $filepath, string $format): void
     {
         $originalData = file_get_contents($filepath);
+        $this->assertIsString($originalData);
         $spreadsheet = $this->loader->loadFromString($originalData, $format);
         $this->assertInstanceOf(SpreadsheetInterface::class, $spreadsheet);
 
@@ -99,6 +105,30 @@ class AllSpreadsheetRoundTripTest extends TestCase
         $this->assertInstanceOf(SpreadsheetInterface::class, $roundTripSpreadsheet);
 
         $this->assertSame($spreadsheet->getSheetNames(), $roundTripSpreadsheet->getSheetNames());
-        $this->assertSame($spreadsheet->toArray(), $roundTripSpreadsheet->toArray());
+        $this->assertSameValues($spreadsheet->toArray(), $roundTripSpreadsheet->toArray());
+    }
+
+    private function assertSameValues(mixed $expected, mixed $actual): void
+    {
+        if ($expected instanceof DateTimeInterface) {
+            $this->assertInstanceOf(DateTimeInterface::class, $actual);
+            $this->assertSame($expected::class, $actual::class);
+            $this->assertSame($expected->format('Y-m-d H:i:s.u'), $actual->format('Y-m-d H:i:s.u'));
+            $this->assertSame($expected->getTimezone()->getName(), $actual->getTimezone()->getName());
+
+            return;
+        }
+
+        if (is_array($expected)) {
+            $this->assertIsArray($actual);
+            $this->assertSame(array_keys($expected), array_keys($actual));
+            foreach ($expected as $key => $value) {
+                $this->assertSameValues($value, $actual[$key]);
+            }
+
+            return;
+        }
+
+        $this->assertSame($expected, $actual);
     }
 }

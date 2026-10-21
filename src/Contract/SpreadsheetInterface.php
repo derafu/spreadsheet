@@ -21,6 +21,8 @@ use IteratorAggregate;
  * Interface for spreadsheet objects.
  *
  * Represents a complete spreadsheet document with multiple sheets.
+ *
+ * @extends IteratorAggregate<string, SheetInterface>
  */
 interface SpreadsheetInterface extends IteratorAggregate, Countable
 {
@@ -105,7 +107,7 @@ interface SpreadsheetInterface extends IteratorAggregate, Countable
     /**
      * Convert the spreadsheet to an array structure.
      *
-     * @return array Array representation.
+     * @return array<string, array{name: string, rows: array<int, array<int|string, mixed>>, isAssociative: bool}> Array representation.
      */
     public function toArray(): array;
 

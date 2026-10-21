@@ -21,6 +21,7 @@ use Derafu\Spreadsheet\Spreadsheet;
 use Exception;
 use League\Csv\Reader;
 use League\Csv\Writer;
+use Stringable;
 
 /**
  * CSV format handler using League CSV.
@@ -221,14 +222,15 @@ final class CsvLeagueHandler implements SpreadsheetFormatHandlerInterface
 
             // If sheet is in associative format, we need to handle headers.
             if ($sheet->isAssociative()) {
-                // Get the header row.
-                $headerRow = $sheet->getHeaderRow();
+                // Get the column names in their existing order.
+                $headerRow = $sheet->getColumnNames();
 
                 // Insert headers as the first row.
                 $csv->insertOne($headerRow);
 
                 // Now insert each data row, maintaining column order.
-                foreach ($sheet->getDataRows() as $row) {
+                foreach ($sheet->getDataRows() as $rowIndex => $row) {
+                    $row = $this->validatedRow($row, $sheet->getName(), $rowIndex);
                     $orderedRow = [];
                     foreach ($headerRow as $header) {
                         $orderedRow[] = $row[$header] ?? null;
@@ -236,8 +238,10 @@ final class CsvLeagueHandler implements SpreadsheetFormatHandlerInterface
                     $csv->insertOne($orderedRow);
                 }
             } else {
-                // For indexed format, just insert all rows.
-                $csv->insertAll($sheet->getRows());
+                // Validate indexed rows without applying the caster's conversions.
+                foreach ($sheet->getRows() as $rowIndex => $row) {
+                    $csv->insertOne($this->validatedRow($row, $sheet->getName(), $rowIndex));
+                }
             }
 
             return $csv->toString();
@@ -247,6 +251,33 @@ final class CsvLeagueHandler implements SpreadsheetFormatHandlerInterface
                 'message' => $e->getMessage(),
             ], $e->getCode(), $e);
         }
+    }
+
+    /**
+     * Validates the values that the CSV writer can serialize directly.
+     *
+     * @param array<array-key, mixed> $row
+     * @param string $sheetName
+     * @param int $rowIndex
+     * @return array<array-key, int|float|string|bool|null|Stringable>
+     */
+    private function validatedRow(array $row, string $sheetName, int $rowIndex): array
+    {
+        $validated = [];
+        foreach ($row as $column => $value) {
+            if (!is_scalar($value) && $value !== null && !$value instanceof Stringable) {
+                throw new SpreadsheetDumpException([
+                    'Cell at row "{row}", column "{column}" in sheet "{sheet}" cannot be written as CSV; {type} given.',
+                    'row' => $rowIndex,
+                    'column' => $column,
+                    'sheet' => $sheetName,
+                    'type' => get_debug_type($value),
+                ]);
+            }
+            $validated[$column] = $value;
+        }
+
+        return $validated;
     }
 
     /**

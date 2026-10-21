@@ -41,14 +41,15 @@
     "require-dev": {
         "ext-xdebug": "*",
         "friendsofphp/php-cs-fixer": "^3.95",
-        "phpstan/phpstan": "^2.2",
+        "phpstan/phpstan": "^2.3",
         "phpunit/phpunit": "^13.4",
         "psr/http-message": "^2.0",
         "nyholm/psr7": "^1.8",
         "league/csv": "^9.28",
         "symfony/yaml": "^8.1",
         "phpoffice/phpspreadsheet": "^5.10",
-        "nikic/php-parser": "^5.9"
+        "nikic/php-parser": "^5.9",
+        "mpdf/mpdf": "^8.3"
     },
     "suggest": {
         "nikic/php-parser": "Required by the tests of the messages of the package (Derafu\\Translation\\Lint reads the code)."

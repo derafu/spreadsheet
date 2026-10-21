@@ -257,14 +257,9 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements SpreadsheetFormatH
     ): SpreadsheetInterface {
         $spreadsheet = new Spreadsheet();
 
-        foreach ($phpSpreadsheet->getSheetNames() as $sheetName) {
-            $phpSheet = $phpSpreadsheet->getSheetByName($sheetName);
-            if ($phpSheet === null) {
-                continue;
-            }
-
+        foreach ($phpSpreadsheet->getAllSheets() as $phpSheet) {
             $rows = $phpSheet->toArray();
-            $spreadsheet->createSheet($sheetName, $rows);
+            $spreadsheet->createSheet($phpSheet->getTitle(), $rows);
         }
 
         return $spreadsheet;
@@ -293,6 +288,15 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements SpreadsheetFormatH
 
             foreach ($sheet->getRows() as $rowIndex => $row) {
                 foreach ($row as $colIndex => $value) {
+                    if (!is_int($colIndex) || $colIndex < 0) {
+                        throw new SpreadsheetDumpException([
+                            'Column index "{column}" at row "{row}" in sheet "{sheet}" must be a non-negative integer.',
+                            'column' => $colIndex,
+                            'row' => $rowIndex,
+                            'sheet' => $sheetName,
+                        ]);
+                    }
+
                     $coordinate =
                         Coordinate::stringFromColumnIndex($colIndex + 1)
                             . ($rowIndex + 1)

@@ -121,12 +121,7 @@ class CsvPhpSpreadsheetHandler extends AbstractPhpSpreadsheetFormatHandler
     ): SpreadsheetInterface {
         $spreadsheet = new Spreadsheet();
 
-        foreach ($phpSpreadsheet->getSheetNames() as $sheetName) {
-            $phpSheet = $phpSpreadsheet->getSheetByName($sheetName);
-            if ($phpSheet === null) {
-                continue;
-            }
-
+        foreach ($phpSpreadsheet->getAllSheets() as $phpSheet) {
             $sheetName = $overrideSheetName ?? $this->sheetName;
 
             $rows = $phpSheet->toArray();

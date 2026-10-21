@@ -18,6 +18,7 @@ use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
 use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
 use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Translation\Exception\Logic\TranslatableInvalidArgumentException as InvalidArgumentException;
 use Exception;
 
 /**
@@ -27,6 +28,9 @@ use Exception;
  */
 final class JsonHandler implements SpreadsheetFormatHandlerInterface
 {
+    /** @var int<1, 2147483647> */
+    private readonly int $depth;
+
     /**
      * Create a new JSON handler.
      *
@@ -38,9 +42,17 @@ final class JsonHandler implements SpreadsheetFormatHandlerInterface
     public function __construct(
         private readonly int $encodeOptions = JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE,
         private readonly int $decodeOptions = JSON_OBJECT_AS_ARRAY,
-        private readonly int $depth = 512,
+        int $depth = 512,
         private readonly string $sheetName = 'Sheet',
     ) {
+        if ($depth < 1 || $depth > 2147483647) {
+            throw new InvalidArgumentException([
+                'The JSON depth must be between 1 and 2147483647; {depth} given.',
+                'depth' => $depth,
+            ]);
+        }
+
+        $this->depth = $depth;
     }
 
     /**
@@ -79,7 +91,7 @@ final class JsonHandler implements SpreadsheetFormatHandlerInterface
                 $sheetName = pathinfo($filepath, PATHINFO_FILENAME);
                 $spreadsheet = new Spreadsheet();
                 $data = json_decode($content, true, $this->depth, $this->decodeOptions);
-                $spreadsheet->createSheet($sheetName, [$data]);
+                $spreadsheet->createSheet($sheetName, $this->validatedRows([$data], $sheetName));
             }
 
             return $spreadsheet;
@@ -138,24 +150,24 @@ final class JsonHandler implements SpreadsheetFormatHandlerInterface
             // Case 1: Flat array of objects (most common case, e.g.,
             // [{key:value}, {key:value}])
             if (
-                array_keys($decodedData) === range(0, count($decodedData) - 1)
+                array_is_list($decodedData)
                 && !empty($decodedData)
                 && is_array($decodedData[0])
                 && !$this->isIndexedArray($decodedData[0])
             ) {
-                $spreadsheet->createSheet($sheetName, $decodedData, true);
+                $spreadsheet->createSheet($sheetName, $this->validatedRows($decodedData, $sheetName), true);
                 return $spreadsheet;
             }
 
             // Case 2: Sequential array of arrays (e.g.,
             // [[value, value], [value, value]])
             if (
-                array_keys($decodedData) === range(0, count($decodedData) - 1)
+                array_is_list($decodedData)
                 && !empty($decodedData)
                 && is_array($decodedData[0])
                 && $this->isIndexedArray($decodedData[0])
             ) {
-                $spreadsheet->createSheet($sheetName, $decodedData, false);
+                $spreadsheet->createSheet($sheetName, $this->validatedRows($decodedData, $sheetName), false);
                 return $spreadsheet;
             }
 
@@ -181,7 +193,7 @@ final class JsonHandler implements SpreadsheetFormatHandlerInterface
                 // Add the sheet to the spreadsheet.
                 $spreadsheet->createSheet(
                     (string)$sheetName,
-                    $rows,
+                    $this->validatedRows($rows, (string)$sheetName),
                     $isAssociative
                 );
             }
@@ -276,7 +288,7 @@ final class JsonHandler implements SpreadsheetFormatHandlerInterface
                         $this->depth
                     );
 
-                    if (json_last_error() !== JSON_ERROR_NONE) {
+                    if ($jsonContent === false || json_last_error() !== JSON_ERROR_NONE) {
                         throw new SpreadsheetDumpException([
                             'Failed to encode data as JSON: {error}',
                             'error' => json_last_error_msg(),
@@ -300,7 +312,7 @@ final class JsonHandler implements SpreadsheetFormatHandlerInterface
                 $this->depth
             );
 
-            if (json_last_error() !== JSON_ERROR_NONE) {
+            if ($jsonContent === false || json_last_error() !== JSON_ERROR_NONE) {
                 throw new SpreadsheetDumpException([
                     'Failed to encode data as JSON: {error}',
                     'error' => json_last_error_msg(),
@@ -321,9 +333,35 @@ final class JsonHandler implements SpreadsheetFormatHandlerInterface
     }
 
     /**
+     * Validates row values without changing their keys or cell contents.
+     *
+     * @template TKey of array-key
+     * @param array<TKey, mixed> $rows
+     * @param string $sheetName
+     * @return array<TKey, array<int|string, mixed>>
+     */
+    private function validatedRows(array $rows, string $sheetName): array
+    {
+        $validated = [];
+        foreach ($rows as $index => $row) {
+            if (!is_array($row)) {
+                throw new SpreadsheetLoadException([
+                    'Row "{index}" in sheet "{sheet}" must be an array; {type} given.',
+                    'index' => $index,
+                    'sheet' => $sheetName,
+                    'type' => get_debug_type($row),
+                ]);
+            }
+            $validated[$index] = $row;
+        }
+
+        return $validated;
+    }
+
+    /**
      * Determine if an array is indexed (sequential numeric keys) vs associative.
      *
-     * @param array $array The array to check.
+     * @param array<array-key, mixed> $array The array to check.
      * @return bool True if the array has sequential numeric keys (0, 1, 2...).
      */
     private function isIndexedArray(array $array): bool

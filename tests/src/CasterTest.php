@@ -51,6 +51,7 @@ final class CasterTest extends TestCase
         $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('test');
+        $this->assertNotNull($castedSheet);
         $castedRow = $castedSheet->getRows()[0];
 
         // Verify types are correctly cast for reading.
@@ -103,25 +104,34 @@ final class CasterTest extends TestCase
         ]);
 
         try {
-            $row = (new SpreadsheetCaster())
+            $sheet = (new SpreadsheetCaster())
                 ->castAfterLoad($spreadsheet)
                 ->getSheet('dates')
-                ->getRows()[0]
             ;
+            $this->assertNotNull($sheet);
+            $row = $sheet->getRows()[0];
         } finally {
             date_default_timezone_set($timezone);
         }
 
         // A date without time is the start of that day, not the current time.
+        $this->assertInstanceOf(DateTimeImmutable::class, $row[0]);
         $this->assertSame('2025-03-12 00:00:00', $row[0]->format('Y-m-d H:i:s'));
+        $this->assertInstanceOf(DateTimeImmutable::class, $row[1]);
         $this->assertSame('2025-03-12 23:59:59', $row[1]->format('Y-m-d H:i:s'));
+        $this->assertInstanceOf(DateTimeImmutable::class, $row[2]);
         $this->assertSame('2025-03-12 23:59:59', $row[2]->format('Y-m-d H:i:s'));
+        $this->assertInstanceOf(DateTimeImmutable::class, $row[3]);
         $this->assertSame('2025-03-12 23:59:59', $row[3]->format('Y-m-d H:i:s'));
         // With an explicit offset, the instant is respected and shown in UTC.
+        $this->assertInstanceOf(DateTimeImmutable::class, $row[4]);
         $this->assertSame('2025-03-12 20:59:59', $row[4]->format('Y-m-d H:i:s'));
+        $this->assertInstanceOf(DateTimeImmutable::class, $row[5]);
         $this->assertSame('2025-03-12 23:59:00', $row[5]->format('Y-m-d H:i:s'));
+        $this->assertInstanceOf(DateTimeImmutable::class, $row[6]);
         $this->assertSame('2025-03-12 20:59:59', $row[6]->format('Y-m-d H:i:s'));
         foreach ($row as $date) {
+            $this->assertInstanceOf(DateTimeImmutable::class, $date);
             $this->assertSame('UTC', $date->getTimezone()->getName());
         }
     }
@@ -144,6 +154,7 @@ final class CasterTest extends TestCase
         $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('dates');
+        $this->assertNotNull($castedSheet);
         $castedRow = $castedSheet->getRows()[0];
 
         // Verify dates are correctly detected.
@@ -171,6 +182,7 @@ final class CasterTest extends TestCase
         $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('not-dates');
+        $this->assertNotNull($castedSheet);
         $castedRow = $castedSheet->getRows()[0];
 
         // Verify non-dates remain as strings.
@@ -205,6 +217,7 @@ final class CasterTest extends TestCase
         $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castBeforeDump($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('test');
+        $this->assertNotNull($castedSheet);
         $castedRow = $castedSheet->getRows()[0];
 
         // Verify types are correctly cast for writing.
@@ -248,10 +261,12 @@ final class CasterTest extends TestCase
 
         // Verify indexed sheet remains indexed.
         $indexedSheet = $castedSpreadsheet->getSheet('indexed');
+        $this->assertNotNull($indexedSheet);
         $this->assertFalse($indexedSheet->isAssociative());
 
         // Verify associative sheet remains associative.
         $assocSheet = $castedSpreadsheet->getSheet('associative');
+        $this->assertNotNull($assocSheet);
         $this->assertTrue($assocSheet->isAssociative());
     }
 
@@ -276,6 +291,7 @@ final class CasterTest extends TestCase
         $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('test');
+        $this->assertNotNull($castedSheet);
         $castedRow = $castedSheet->getRows()[0];
 
         // JSON strings should be parsed to arrays/objects
@@ -309,6 +325,7 @@ final class CasterTest extends TestCase
         $caster = new SpreadsheetCaster();
         $castedSpreadsheet = $caster->castAfterLoad($spreadsheet);
         $castedSheet = $castedSpreadsheet->getSheet('test');
+        $this->assertNotNull($castedSheet);
         $castedRow = $castedSheet->getRows()[0];
 
         // Invalid JSON strings should remain as strings.

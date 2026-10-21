@@ -73,6 +73,7 @@ final class JsonHandlerTest extends AbstractArrayFormatHandler
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('sheet1');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         // Verify that the JSON string in metadata gets parsed after casting.

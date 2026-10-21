@@ -55,6 +55,7 @@ final class XmlHandlerTest extends TestCase
     {
         // Clean up any files in temp directory.
         $files = glob($this->tempDir . '/*');
+        self::assertIsArray($files);
         foreach ($files as $file) {
             if (is_file($file)) {
                 unlink($file);
@@ -166,6 +167,7 @@ final class XmlHandlerTest extends TestCase
         // Check sheet.
         $this->assertTrue($spreadsheet->hasSheet('test'));
         $sheet = $spreadsheet->getSheet('test');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         // Check structure and values.
@@ -196,7 +198,10 @@ final class XmlHandlerTest extends TestCase
         $this->assertFileExists($filepath);
 
         // Check XML is well-formed.
-        $this->assertIsObject(new SimpleXMLElement(file_get_contents($filepath)));
+        $content = file_get_contents($filepath);
+        $this->assertIsString($content);
+        $document = new SimpleXMLElement($content);
+        $this->assertSame('spreadsheet', $document->getName());
 
         // Read back and verify.
         $loadedSpreadsheet = $xml->loadFromFile($filepath);
@@ -204,6 +209,7 @@ final class XmlHandlerTest extends TestCase
 
         $this->assertTrue($loadedSpreadsheet->hasSheet('test'));
         $sheet = $loadedSpreadsheet->getSheet('test');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertGreaterThanOrEqual(2, count($rows));
@@ -259,6 +265,7 @@ final class XmlHandlerTest extends TestCase
         $loadedSpreadsheet = $this->caster->castAfterLoad($loadedSpreadsheet);
 
         $sheet = $loadedSpreadsheet->getSheet('test');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['col1', 'col2', 'col3'], $rows[0]);
@@ -285,6 +292,7 @@ final class XmlHandlerTest extends TestCase
         $loadedSpreadsheet = $this->caster->castAfterLoad($loadedSpreadsheet);
 
         $sheet = $loadedSpreadsheet->getSheet('test');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame('John', $rows[0]['name']);
@@ -312,6 +320,7 @@ final class XmlHandlerTest extends TestCase
 
         // Get the sheet.
         $loadedSheet = $loadedSpreadsheet->getSheet('data');
+        $this->assertNotNull($loadedSheet);
         $rows = $loadedSheet->getRows();
 
         // Check types are preserved.
@@ -323,6 +332,7 @@ final class XmlHandlerTest extends TestCase
 
         $this->assertNull($rows[1]['string']); // empty string.
         $this->assertSame(0, $rows[1]['integer']); // zero integer.
+        $this->assertIsNumeric($rows[1]['float']);
         $this->assertSame(0.0, $rows[1]['float'] + 0.0); // zero float.
         $this->assertFalse($rows[1]['boolean']); // false.
         $this->assertNull($rows[1]['null']); // null.
@@ -352,6 +362,7 @@ final class XmlHandlerTest extends TestCase
         $spreadsheet = $this->caster->castAfterLoad($spreadsheet);
 
         $sheet = $spreadsheet->getSheet('types');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertIsString($rows[0]['string']); // string.
@@ -378,9 +389,12 @@ final class XmlHandlerTest extends TestCase
         $spreadsheet = $xml->loadFromString($xmlData);
 
         $sheet = $spreadsheet->getSheet('cdata');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
+        $this->assertIsString($rows[0]['html']);
         $this->assertStringContainsString('<strong>', $rows[0]['html']);
+        $this->assertIsString($rows[0]['script']);
         $this->assertStringContainsString('function test()', $rows[0]['script']);
 
         // Round trip test.
@@ -396,6 +410,7 @@ final class XmlHandlerTest extends TestCase
         $this->assertNotEmpty($sheetNames);
 
         $sheet = $spreadsheet->getSheet($sheetNames[0]);
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertNotEmpty($rows);
@@ -416,6 +431,7 @@ final class XmlHandlerTest extends TestCase
         $this->assertNotEmpty($sheetNames);
 
         $sheet = $spreadsheet->getSheet($sheetNames[0]);
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertNotEmpty($rows);
@@ -437,6 +453,7 @@ final class XmlHandlerTest extends TestCase
 
         foreach ($sheetNames as $sheetName) {
             $sheet = $spreadsheet->getSheet($sheetName);
+            $this->assertNotNull($sheet);
             if ($sheet->isAssociative()) {
                 $foundAssociative = true;
             } else {
@@ -455,6 +472,7 @@ final class XmlHandlerTest extends TestCase
 
         foreach ($sheetNames as $sheetName) {
             $sheet = $spreadsheet->getSheet($sheetName);
+            $this->assertNotNull($sheet);
             $this->assertFalse($sheet->isAssociative(), "All sheets should be indexed");
 
             $rows = $sheet->getRows();
@@ -469,6 +487,7 @@ final class XmlHandlerTest extends TestCase
 
         foreach ($sheetNames as $sheetName) {
             $sheet = $spreadsheet->getSheet($sheetName);
+            $this->assertNotNull($sheet);
             $this->assertTrue($sheet->isAssociative(), "All sheets should be associative");
 
             $rows = $sheet->getRows();
@@ -482,6 +501,7 @@ final class XmlHandlerTest extends TestCase
         $this->assertNotEmpty($sheetNames);
 
         $sheet = $spreadsheet->getSheet($sheetNames[0]);
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
         $this->assertNotEmpty($rows);
 
@@ -519,7 +539,9 @@ final class XmlHandlerTest extends TestCase
         $this->assertNotEmpty($sheetNames);
 
         // Special characters survive: quotes, accents, emojis and CDATA.
-        $rows = $spreadsheet->getSheet('special_characters')->getRows();
+        $sheet = $spreadsheet->getSheet('special_characters');
+        $this->assertNotNull($sheet);
+        $rows = $sheet->getRows();
         $this->assertSame('Product with "quotes"', $rows[0]['name']);
         $this->assertSame('Café Français', $rows[3]['name']);
         $this->assertSame('Product with emojis 🚀', $rows[6]['name']);

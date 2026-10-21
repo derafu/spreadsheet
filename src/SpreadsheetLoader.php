@@ -67,7 +67,9 @@ final class SpreadsheetLoader implements SpreadsheetLoaderInterface
             $format ?? $this->format
         );
 
-        return $handler->loadFromString($data);
+        $spreadsheet = $handler->loadFromString($data);
+
+        return $this->caster->castAfterLoad($spreadsheet);
     }
 
     /**

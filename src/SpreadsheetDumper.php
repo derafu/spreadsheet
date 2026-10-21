@@ -48,21 +48,23 @@ final class SpreadsheetDumper implements SpreadsheetDumperInterface
         ?string $format = null
     ): string {
         $handler = $this->factory->createFormatHandler(
-            $filepath,
+            $filepath ?? 'dummy.' . ($format ?? $this->format),
             $format ?? $this->format
         );
 
-        // Ensure the target directory exists.
-        $directory = dirname($filepath);
-        if (
-            !is_dir($directory)
-            && !mkdir($directory, 0755, true)
-            && !is_dir($directory)
-        ) {
-            throw new SpreadsheetDumpException([
-                'Directory "{directory}" could not be created.',
-                'directory' => $directory,
-            ]);
+        // Prepare an explicit directory; handlers generate omitted paths.
+        if ($filepath !== null) {
+            $directory = dirname($filepath);
+            if (
+                !is_dir($directory)
+                && !mkdir($directory, 0755, true)
+                && !is_dir($directory)
+            ) {
+                throw new SpreadsheetDumpException([
+                    'Directory "{directory}" could not be created.',
+                    'directory' => $directory,
+                ]);
+            }
         }
 
         $writeSpreadsheet = $this->caster->castBeforeDump($spreadsheet);
@@ -82,6 +84,8 @@ final class SpreadsheetDumper implements SpreadsheetDumperInterface
             $format ?? $this->format
         );
 
-        return $handler->dumpToString($spreadsheet);
+        $writeSpreadsheet = $this->caster->castBeforeDump($spreadsheet);
+
+        return $handler->dumpToString($writeSpreadsheet);
     }
 }

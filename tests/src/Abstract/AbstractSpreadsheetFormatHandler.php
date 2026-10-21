@@ -57,6 +57,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
     {
         // Clean up any files in temp directory.
         $files = glob($this->tempDir . '/*');
+        self::assertIsArray($files);
         foreach ($files as $file) {
             if (is_file($file)) {
                 unlink($file);
@@ -134,6 +135,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Get the products sheet
         $sheet = $spreadsheet->getSheet('products');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         // Check header row.
@@ -165,6 +167,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Test the products sheet.
         $sheet = $spreadsheet->getSheet('products');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -187,6 +190,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Test the customers sheet.
         $sheet = $spreadsheet->getSheet('customers');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -195,6 +199,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Test the orders sheet.
         $sheet = $spreadsheet->getSheet('orders');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -203,6 +208,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Test the settings sheet.
         $sheet = $spreadsheet->getSheet('settings');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -222,6 +228,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Test the products sheet.
         $sheet = $spreadsheet->getSheet('products');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         // Check header row.
@@ -237,18 +244,21 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Test the customers sheet.
         $sheet = $spreadsheet->getSheet('customers');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['id', 'name', 'email', 'registered_date', 'orders_count', 'vip'], $rows[0]);
 
         // Test the order_items sheet.
         $sheet = $spreadsheet->getSheet('order_items');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['order_id', 'product_id', 'quantity', 'price', 'subtotal'], $rows[0]);
 
         // Test the orders sheet.
         $sheet = $spreadsheet->getSheet('orders');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['id', 'customer_id', 'date', 'total', 'status'], $rows[0]);
@@ -265,6 +275,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Test the products sheet.
         $sheet = $spreadsheet->getSheet('products');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -273,10 +284,12 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         $this->assertArrayHasKey('price', $rows[0]);
         $this->assertArrayHasKey('active', $rows[0]);
         $this->assertArrayHasKey('metadata', $rows[0]);
+        $this->assertIsArray($rows[0]['metadata']);
         $this->assertArrayHasKey('stock', $rows[0]['metadata']);
 
         // Test the customers sheet.
         $sheet = $spreadsheet->getSheet('customers');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['id', 'name', 'email', 'registered_date', 'orders_count', 'vip'], $rows[0]);
@@ -285,6 +298,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Test the orders sheet.
         $sheet = $spreadsheet->getSheet('orders');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -294,6 +308,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Test the settings sheet.
         $sheet = $spreadsheet->getSheet('settings');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -314,6 +329,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         // Test string casting.
         if ($spreadsheet->hasSheet('strings')) {
             $sheet = $spreadsheet->getSheet('strings');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
@@ -332,6 +348,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         // Test numbers casting.
         if ($spreadsheet->hasSheet('numbers')) {
             $sheet = $spreadsheet->getSheet('numbers');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
@@ -348,6 +365,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         // Test booleans casting.
         if ($spreadsheet->hasSheet('booleans')) {
             $sheet = $spreadsheet->getSheet('booleans');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
@@ -355,10 +373,9 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
             foreach ($rows as $row) {
                 if ($row['type'] === 'true' || $row['type'] === 'string_true') {
                     // After casting, "true" should become boolean true.
-                    $castedRow = $this->caster->castAfterLoad($spreadsheet)
-                        ->getSheet('booleans')
-                        ->toAssociative()
-                        ->getRows();
+                    $castedSheet = $this->caster->castAfterLoad($spreadsheet)->getSheet('booleans');
+                    $this->assertNotNull($castedSheet);
+                    $castedRow = $castedSheet->toAssociative()->getRows();
 
                     $matchingRow = array_filter($castedRow, fn ($r) => $r['type'] === $row['type']);
 
@@ -372,6 +389,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         // Test dates casting.
         if ($spreadsheet->hasSheet('dates')) {
             $sheet = $spreadsheet->getSheet('dates');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
@@ -385,6 +403,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         // Test null values casting.
         if ($spreadsheet->hasSheet('null-values')) {
             $sheet = $spreadsheet->getSheet('null-values');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
@@ -398,6 +417,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         // Test complex types casting.
         if ($spreadsheet->hasSheet('complex-types')) {
             $sheet = $spreadsheet->getSheet('complex-types');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
@@ -421,12 +441,14 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         // Test empty sheet.
         if ($spreadsheet->hasSheet('empty-sheet')) {
             $sheet = $spreadsheet->getSheet('empty-sheet');
+            $this->assertNotNull($sheet);
             $this->assertSame([[null]], $sheet->getRows());
         }
 
         // Test sheet with structure but no data.
         if ($spreadsheet->hasSheet('empty-sheet-with-structure')) {
             $sheet = $spreadsheet->getSheet('empty-sheet-with-structure');
+            $this->assertNotNull($sheet);
             $rows = $sheet->getRows();
 
             // Should have header row only.
@@ -437,18 +459,23 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         // Test special characters.
         if ($spreadsheet->hasSheet('special-characters')) {
             $sheet = $spreadsheet->getSheet('special-characters');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
             // Check for special characters handling.
             foreach ($rows as $row) {
                 if ($row['id'] == 1) {
+                    $this->assertIsString($row['name']);
                     $this->assertStringContainsString('quotes', $row['name']); // Contains quotes.
                 } elseif ($row['id'] == 4) {
+                    $this->assertIsString($row['name']);
                     $this->assertStringContainsString('Français', $row['name']); // Contains accented characters.
                 } elseif ($row['id'] == 5) {
+                    $this->assertIsString($row['name']);
                     $this->assertStringContainsString('продукт', $row['name']); // Contains non-Latin characters.
                 } elseif ($row['id'] == 7) {
+                    $this->assertIsString($row['name']);
                     $this->assertStringContainsString('🚀', $row['name']); // Contains emoji.
                 }
             }
@@ -457,6 +484,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         // Test datetime advanced.
         if ($spreadsheet->hasSheet('datetime-advanced')) {
             $sheet = $spreadsheet->getSheet('datetime-advanced');
+            $this->assertNotNull($sheet);
             $assocSheet = $sheet->toAssociative();
             $rows = $assocSheet->getRows();
 
@@ -486,6 +514,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Check sheet.
         $sheet = $loadedSpreadsheet->getSheet('Sheet');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         // Check structure and values.
@@ -523,6 +552,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         $loadedSpreadsheet = $this->caster->castAfterLoad($loadedSpreadsheet);
 
         $sheet = $loadedSpreadsheet->getSheet('test');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['name', 'age', 'active'], $rows[0]);
@@ -579,6 +609,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         $loadedSpreadsheet = $this->caster->castAfterLoad($loadedSpreadsheet);
 
         $sheet = $loadedSpreadsheet->getSheet('test');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertSame(['col1', 'col2', 'col3'], $rows[0]);
@@ -610,6 +641,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
         $loadedSpreadsheet = $this->caster->castAfterLoad($loadedSpreadsheet);
 
         $sheet = $loadedSpreadsheet->getSheet('test');
+        $this->assertNotNull($sheet);
         $assocSheet = $sheet->toAssociative();
         $rows = $assocSheet->getRows();
 
@@ -650,6 +682,7 @@ abstract class AbstractSpreadsheetFormatHandler extends TestCase
 
         // Get the sheet.
         $loadedSheet = $loadedSpreadsheet->getSheet('data');
+        $this->assertNotNull($loadedSheet);
         $rows = $loadedSheet->getRows();
 
         // Check types are preserved.

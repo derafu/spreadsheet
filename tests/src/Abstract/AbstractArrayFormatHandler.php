@@ -53,6 +53,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
     {
         // Clean up any files in temp directory.
         $files = glob($this->tempDir . '/*');
+        self::assertIsArray($files);
         foreach ($files as $file) {
             if (is_file($file)) {
                 unlink($file);
@@ -128,6 +129,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
         // Check sheet.
         $this->assertTrue($spreadsheet->hasSheet('sheet1'));
         $sheet = $spreadsheet->getSheet('sheet1');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         // Check structure and values.
@@ -161,6 +163,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
 
         $this->assertTrue($loadedSpreadsheet->hasSheet('test'));
         $sheet = $loadedSpreadsheet->getSheet('test');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertGreaterThanOrEqual(2, count($rows));
@@ -190,6 +193,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
 
         $this->assertTrue($loadedSpreadsheet->hasSheet('test'));
         $sheet = $loadedSpreadsheet->getSheet('test');
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertGreaterThanOrEqual(2, count($rows));
@@ -217,6 +221,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
 
         // Get the sheet.
         $loadedSheet = $loadedSpreadsheet->getSheet('data');
+        $this->assertNotNull($loadedSheet);
         $rows = $loadedSheet->getRows();
 
         // Check types are preserved.
@@ -228,6 +233,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
 
         $this->assertNull($rows[1]['string']); // empty string.
         $this->assertSame(0, $rows[1]['integer']); // zero integer.
+        $this->assertIsNumeric($rows[1]['float']);
         $this->assertSame(0.0, $rows[1]['float'] + 0.0); // zero float.
         $this->assertFalse($rows[1]['boolean']); // false.
         $this->assertNull($rows[1]['null']); // null.
@@ -241,6 +247,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
         $this->assertNotEmpty($sheetNames);
 
         $sheet = $spreadsheet->getSheet($sheetNames[0]);
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertNotEmpty($rows);
@@ -259,6 +266,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
         $this->assertNotEmpty($sheetNames);
 
         $sheet = $spreadsheet->getSheet($sheetNames[0]);
+        $this->assertNotNull($sheet);
         $rows = $sheet->getRows();
 
         $this->assertNotEmpty($rows);
@@ -275,6 +283,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
         // Check for products sheet (associative).
         $this->assertTrue($spreadsheet->hasSheet('products'));
         $productsSheet = $spreadsheet->getSheet('products');
+        $this->assertNotNull($productsSheet);
         $productsRows = $productsSheet->getRows();
 
         $this->assertNotEmpty($productsRows);
@@ -284,6 +293,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
         // Check for customers sheet (indexed).
         $this->assertTrue($spreadsheet->hasSheet('customers'));
         $customersSheet = $spreadsheet->getSheet('customers');
+        $this->assertNotNull($customersSheet);
         $customersRows = $customersSheet->getRows();
 
         $this->assertNotEmpty($customersRows);
@@ -298,6 +308,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
 
         foreach ($sheetNames as $sheetName) {
             $sheet = $spreadsheet->getSheet($sheetName);
+            $this->assertNotNull($sheet);
             $rows = $sheet->getRows();
 
             // All sheets should have header rows.
@@ -312,6 +323,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
 
         foreach ($sheetNames as $sheetName) {
             $sheet = $spreadsheet->getSheet($sheetName);
+            $this->assertNotNull($sheet);
             $rows = $sheet->getRows();
 
             // All rows should be associative arrays.
@@ -331,6 +343,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
         // Check for various type sheets.
         if ($spreadsheet->hasSheet('strings')) {
             $stringsSheet = $spreadsheet->getSheet('strings');
+            $this->assertNotNull($stringsSheet);
             $stringsRows = $stringsSheet->getRows();
             $this->assertNotEmpty($stringsRows);
             $this->assertArrayHasKey('type', $stringsRows[0]);
@@ -339,6 +352,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
 
         if ($spreadsheet->hasSheet('numbers')) {
             $numbersSheet = $spreadsheet->getSheet('numbers');
+            $this->assertNotNull($numbersSheet);
             $numbersRows = $numbersSheet->getRows();
             $this->assertNotEmpty($numbersRows);
             $this->assertArrayHasKey('type', $numbersRows[0]);
@@ -348,6 +362,7 @@ abstract class AbstractArrayFormatHandler extends TestCase
 
         if ($spreadsheet->hasSheet('booleans')) {
             $booleansSheet = $spreadsheet->getSheet('booleans');
+            $this->assertNotNull($booleansSheet);
             $booleansRows = $booleansSheet->getRows();
             $this->assertNotEmpty($booleansRows);
             $this->assertArrayHasKey('type', $booleansRows[0]);
@@ -364,17 +379,20 @@ abstract class AbstractArrayFormatHandler extends TestCase
         // Check for empty sheet.
         if ($spreadsheet->hasSheet('empty_sheet')) {
             $emptySheet = $spreadsheet->getSheet('empty_sheet');
+            $this->assertNotNull($emptySheet);
             $this->assertCount(0, $emptySheet->getRows());
         }
 
         // Check for special characters.
         if ($spreadsheet->hasSheet('special_characters')) {
             $specialCharsSheet = $spreadsheet->getSheet('special_characters');
+            $this->assertNotNull($specialCharsSheet);
             $specialCharsRows = $specialCharsSheet->getRows();
             $this->assertNotEmpty($specialCharsRows);
 
             foreach ($specialCharsRows as $row) {
                 if (isset($row['id']) && $row['id'] == 1) {
+                    $this->assertIsString($row['name']);
                     $this->assertStringContainsString('quotes', $row['name']); // Contains quotes.
                 }
             }

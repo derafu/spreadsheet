@@ -11,6 +11,12 @@ declare(strict_types=1);
  */
 
 return [
+    'The JSON depth must be between 1 and 2147483647; {depth} given.' =>
+        'La profundidad JSON debe estar entre 1 y 2147483647; se recibió {depth}.',
+    'Row "{index}" in sheet "{sheet}" must be an array; {type} given.' =>
+        'La fila "{index}" de la hoja "{sheet}" debe ser un arreglo; se recibió {type}.',
+    'Failed to serialize the XML document.' =>
+        'No se pudo serializar el documento XML.',
     // Files.
     'File "{filepath}" not found.' =>
         'No se encontró el archivo "{filepath}".',
@@ -24,8 +30,6 @@ return [
         'No se pudo escribir en el archivo: "{filepath}".',
     'Directory "{directory}" could not be created.' =>
         'No se pudo crear el directorio "{directory}".',
-    'Could not create temporary file.' =>
-        'No se pudo crear el archivo temporal.',
     'Could not create temporary file for loading from string.' =>
         'No se pudo crear el archivo temporal para cargar desde un string.',
     'Could not create temporary file for dumping to string.' =>
@@ -62,8 +66,6 @@ return [
         'Error al procesar los datos CSV: {message}',
     'Error processing JSON data: {message}' =>
         'Error al procesar los datos JSON: {message}',
-    'Error processing XML data: {message}' =>
-        'Error al procesar los datos XML: {message}',
     'Error processing YAML data: {message}' =>
         'Error al procesar los datos YAML: {message}',
     'Invalid JSON data. Error: {error}' =>
@@ -74,6 +76,18 @@ return [
         'Datos YAML inválidos. Error: {error}',
 
     // Writing.
+    'Column index "{column}" at row "{row}" in sheet "{sheet}" must be a non-negative integer.' =>
+        'El índice de columna "{column}" en la fila "{row}" de la hoja "{sheet}" debe ser un entero no negativo.',
+    'Could not prepare XML element name for property "{property}".' =>
+        'No se pudo preparar el nombre del elemento XML para la propiedad "{property}".',
+    'Failed to encode a cell value as JSON: {error}' =>
+        'No se pudo codificar el valor de una celda como JSON: {error}',
+    'Unsupported cell type for writing: {type}.' =>
+        'Tipo de celda no soportado para escritura: {type}.',
+    'Unsupported cell type for XML: {type}.' =>
+        'Tipo de celda no soportado para XML: {type}.',
+    'Cell at row "{row}", column "{column}" in sheet "{sheet}" cannot be written as CSV; {type} given.' =>
+        'La celda en la fila "{row}", columna "{column}" de la hoja "{sheet}" no se puede escribir como CSV; se recibió {type}.',
     'Error writing CSV file: {message}' =>
         'Error al escribir el archivo CSV: {message}',
     'Error writing JSON file: {message}' =>
@@ -98,6 +112,8 @@ return [
         'No se pudieron codificar los datos como JSON: {error}',
 
     // Spreadsheet.
+    'Column header at index "{index}" in sheet "{sheet}" must be int|string; {type} given.' =>
+        'El encabezado de columna con índice "{index}" de la hoja "{sheet}" debe ser int|string; se recibió {type}.',
     'Sheet "{name}" does not exist.' =>
         'La hoja "{name}" no existe.',
     'No active sheet has been set.' =>

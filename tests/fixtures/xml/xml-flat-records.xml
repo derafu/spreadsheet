@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog>
+  <product><name>Ñandú &amp; Desktop</name><price type="integer">12</price><metadata type="object"><item key="stock" type="integer">3</item><item key="active" type="boolean">true</item></metadata></product>
+  <product><name>Second</name><note>Additional column</note></product>
+</catalog>

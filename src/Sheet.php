@@ -14,6 +14,7 @@ namespace Derafu\Spreadsheet;
 
 use ArrayIterator;
 use Derafu\Spreadsheet\Contract\SheetInterface;
+use Derafu\Translation\Exception\Logic\TranslatableInvalidArgumentException as InvalidArgumentException;
 
 /**
  * Represents a spreadsheet sheet with its data.
@@ -97,8 +98,7 @@ final class Sheet implements SheetInterface
      */
     public function addRow(array $row): static
     {
-        $index = count($this->rows);
-        $this->setRow($index, $row);
+        $this->rows[] = $row;
 
         return $this;
     }
@@ -298,7 +298,18 @@ final class Sheet implements SheetInterface
         }
 
         // Get headers from first row.
-        $headers = $this->rows[0];
+        $headers = [];
+        foreach ($this->rows[0] as $index => $header) {
+            if (!is_int($header) && !is_string($header)) {
+                throw new InvalidArgumentException([
+                    'Column header at index "{index}" in sheet "{sheet}" must be int|string; {type} given.',
+                    'index' => $index,
+                    'sheet' => $this->name,
+                    'type' => get_debug_type($header),
+                ]);
+            }
+            $headers[$index] = $header;
+        }
         $associativeRows = [];
 
         // Start from index 1 (skip headers).
@@ -388,7 +399,7 @@ final class Sheet implements SheetInterface
             $newRow = [];
 
             foreach ($columns as $columnIndex) {
-                if (isset($row[$columnIndex])) {
+                if (array_key_exists($columnIndex, $row)) {
                     $newRow[$columnIndex] = $row[$columnIndex];
                 }
             }
