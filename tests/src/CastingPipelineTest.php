@@ -53,6 +53,24 @@ use Stringable;
 #[UsesClass(OdsHandler::class)]
 final class CastingPipelineTest extends TestCase
 {
+    public function testRowReadersExposeTheTypesProducedByTheExistingLoader(): void
+    {
+        $spreadsheet = (new SpreadsheetLoader())->loadFromString(
+            '[{"quantity":"12","amount":"19.90","active":"false","date":"2026-01-15"}]',
+            'json'
+        );
+        $sheet = $spreadsheet->getActiveSheet();
+        $row = $sheet->getRow(0);
+        $reader = $sheet->getRowReader(0);
+        $this->assertNotNull($reader);
+
+        $this->assertSame(12, $reader->requireInt('quantity'));
+        $this->assertSame(19.9, $reader->requireFloat('amount'));
+        $this->assertFalse($reader->requireBool('active'));
+        $this->assertSame('2026-01-15', $reader->requireDateTime('date')->format('Y-m-d'));
+        $this->assertSame($row, $sheet->getRow(0));
+    }
+
     public function testHttpJsonResponseContainsTheExportedDataAndDownloadHeaders(): void
     {
         $source = new Spreadsheet();

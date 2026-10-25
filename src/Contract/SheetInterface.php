@@ -14,6 +14,7 @@ namespace Derafu\Spreadsheet\Contract;
 
 use ArrayIterator;
 use Countable;
+use Derafu\Array\ArrayReader;
 use IteratorAggregate;
 
 /**
@@ -60,6 +61,16 @@ interface SheetInterface extends IteratorAggregate, Countable
      * @return array<int|string, mixed>|null The row or null if it doesn't exist.
      */
     public function getRow(int $index): ?array;
+
+    /**
+     * Get a typed reader over a snapshot of an existing row.
+     *
+     * Column keys and stored values are preserved without casting.
+     *
+     * @param int $index Row index (0-based), as used by getRow().
+     * @return ArrayReader|null A reader, or null if the row does not exist.
+     */
+    public function getRowReader(int $index): ?ArrayReader;
 
     /**
      * Set a specific row.

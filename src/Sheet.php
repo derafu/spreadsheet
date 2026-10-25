@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Derafu\Spreadsheet;
 
 use ArrayIterator;
+use Derafu\Array\ArrayReader;
 use Derafu\Spreadsheet\Contract\SheetInterface;
 use Derafu\Translation\Exception\Logic\TranslatableInvalidArgumentException as InvalidArgumentException;
 
@@ -81,6 +82,16 @@ final class Sheet implements SheetInterface
     public function getRow(int $index): ?array
     {
         return $this->rows[$index] ?? null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRowReader(int $index): ?ArrayReader
+    {
+        $row = $this->getRow($index);
+
+        return $row === null ? null : ArrayReader::fromArray($row);
     }
 
     /**

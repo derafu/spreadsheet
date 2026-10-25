@@ -36,6 +36,7 @@
     },
     "require": {
         "php": "^8.5",
+        "derafu/array": "dev-main",
         "derafu/translation": "dev-main"
     },
     "require-dev": {
