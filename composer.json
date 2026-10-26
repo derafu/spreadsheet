@@ -50,7 +50,9 @@
         "symfony/yaml": "^8.1",
         "phpoffice/phpspreadsheet": "^5.10",
         "nikic/php-parser": "^5.9",
-        "mpdf/mpdf": "^8.3"
+        "mpdf/mpdf": "^8.3",
+        "symfony/dependency-injection": "^8.1",
+        "symfony/config": "^8.1"
     },
     "suggest": {
         "nikic/php-parser": "Required by the tests of the messages of the package (Derafu\\Translation\\Lint reads the code)."
