@@ -1,0 +1,6 @@
+imports:
+    - { resource: services.yaml }
+
+parameters:
+    derafu.spreadsheet.loader.format: json
+    derafu.spreadsheet.dumper.format: json

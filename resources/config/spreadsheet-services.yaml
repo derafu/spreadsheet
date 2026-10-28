@@ -4,12 +4,42 @@
 #   imports:
 #       - { resource: '../vendor/derafu/spreadsheet/resources/config/spreadsheet-services.yaml' }
 
+# Shared factory and caster are used by both loading and dumping. A non-empty
+# format_handlers map replaces the complete built-in catalogue; [] keeps it.
+# Import spreadsheet-http-nyholm-services.yaml to enable the optional HTTP adapter.
+parameters:
+    derafu.spreadsheet.format_handlers: []
+    derafu.spreadsheet.loader.format: xlsx
+    derafu.spreadsheet.dumper.format: xlsx
+
 services:
 
     _defaults:
         autowire: true
         autoconfigure: true
         public: false
+
+    Derafu\Spreadsheet\Contract\SpreadsheetFactoryInterface:
+        class: Derafu\Spreadsheet\SpreadsheetFactory
+        arguments:
+            $formatHandlers: '%derafu.spreadsheet.format_handlers%'
+
+    Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface:
+        class: Derafu\Spreadsheet\SpreadsheetCaster
+
+    Derafu\Spreadsheet\Contract\SpreadsheetLoaderInterface:
+        class: Derafu\Spreadsheet\SpreadsheetLoader
+        arguments:
+            $factory: '@Derafu\Spreadsheet\Contract\SpreadsheetFactoryInterface'
+            $caster: '@Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface'
+            $format: '%derafu.spreadsheet.loader.format%'
+
+    Derafu\Spreadsheet\Contract\SpreadsheetDumperInterface:
+        class: Derafu\Spreadsheet\SpreadsheetDumper
+        arguments:
+            $factory: '@Derafu\Spreadsheet\Contract\SpreadsheetFactoryInterface'
+            $caster: '@Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface'
+            $format: '%derafu.spreadsheet.dumper.format%'
 
     # Feeds resources/translations into the consuming app's Translator (the
     # app must pass $resourceProviders: !tagged_iterator

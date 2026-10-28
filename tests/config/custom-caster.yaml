@@ -1,0 +1,9 @@
+imports:
+    - { resource: json-defaults.yaml }
+
+services:
+    Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface $custom:
+        class: Derafu\TestsSpreadsheet\Fixture\PrefixingCaster
+        decorates: Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface
+        arguments:
+            $inner: '@.inner'

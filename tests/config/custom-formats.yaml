@@ -1,0 +1,8 @@
+imports:
+    - { resource: services.yaml }
+
+parameters:
+    derafu.spreadsheet.format_handlers:
+        records: Derafu\Spreadsheet\Format\JsonHandler
+    derafu.spreadsheet.loader.format: records
+    derafu.spreadsheet.dumper.format: records

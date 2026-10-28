@@ -1,0 +1,11 @@
+# Includes the core composition and adds the Nyholm-specific HTTP adapter.
+# Requires nyholm/psr7; it does not replace the application's PSR-17 services.
+imports:
+    - { resource: spreadsheet-services.yaml }
+
+services:
+    Derafu\Spreadsheet\Contract\Http\SpreadsheetHttpResponseGeneratorInterface:
+        class: Derafu\Spreadsheet\Http\NyholmSpreadsheetHttpResponseGenerator
+        arguments:
+            $factory: '@Derafu\Spreadsheet\Contract\SpreadsheetFactoryInterface'
+            $caster: '@Derafu\Spreadsheet\Contract\SpreadsheetCasterInterface'

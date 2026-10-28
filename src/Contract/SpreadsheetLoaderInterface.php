@@ -45,7 +45,8 @@ interface SpreadsheetLoaderInterface
      * Create a spreadsheet from a string.
      *
      * @param string $data The string to create the spreadsheet from.
-     * @param string $format The format of the spreadsheet data.
+     * @param string|null $format The format of the spreadsheet data. When null
+     * or omitted, the loader uses its configured default format.
      * @return SpreadsheetInterface A spreadsheet object containing the data.
      *
      * @throws SpreadsheetFormatNotSupportedException If the requested format is not
@@ -54,6 +55,6 @@ interface SpreadsheetLoaderInterface
      */
     public function loadFromString(
         string $data,
-        string $format
+        ?string $format = null
     ): SpreadsheetInterface;
 }
