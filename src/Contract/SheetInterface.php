@@ -197,7 +197,7 @@ interface SheetInterface extends IteratorAggregate, Countable
     /**
      * Convert the sheet to an array.
      *
-     * @return array{name: string, rows: array<int, array<int|string, mixed>>, isAssociative: bool}
+     * @return array{name: string, rows: array<int, array<int|string, mixed>>, is_associative: bool}
      */
     public function toArray(): array;
 

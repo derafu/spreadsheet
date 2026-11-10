@@ -282,7 +282,7 @@ final class Sheet implements SheetInterface
         return [
             'name' => $this->name,
             'rows' => $this->rows,
-            'isAssociative' => $this->isAssociative,
+            'is_associative' => $this->isAssociative,
         ];
     }
 

@@ -67,6 +67,33 @@ final class SpreadsheetOperationsTest extends TestCase
         }
     }
 
+    public function testToArrayPreservesSheetNamesAndRowsWithSnakeCaseMetadata(): void
+    {
+        $spreadsheet = new Spreadsheet();
+        $indexedRows = [['Product Code'], ['0012']];
+        $associativeRows = [['Product Code' => '0012']];
+        $indexed = $spreadsheet->createSheet('Indexed Products', $indexedRows);
+        $associative = $spreadsheet->createSheet('Associative Products', $associativeRows, true);
+
+        $expectedIndexed = [
+            'name' => 'Indexed Products',
+            'rows' => $indexedRows,
+            'is_associative' => false,
+        ];
+        $expectedAssociative = [
+            'name' => 'Associative Products',
+            'rows' => $associativeRows,
+            'is_associative' => true,
+        ];
+
+        $this->assertSame($expectedIndexed, $indexed->toArray());
+        $this->assertSame($expectedAssociative, $associative->toArray());
+        $this->assertSame([
+            'Indexed Products' => $expectedIndexed,
+            'Associative Products' => $expectedAssociative,
+        ], $spreadsheet->toArray());
+    }
+
     public function testMissingActiveSheetIsATranslatableError(): void
     {
         $translator = TranslatorFactory::create('es', resourceProviders: [new SpreadsheetTranslationResourceProvider()]);
