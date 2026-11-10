@@ -14,7 +14,10 @@ namespace Derafu\Spreadsheet\Format;
 
 use Derafu\Spreadsheet\Abstract\AbstractPhpSpreadsheetFormatHandler;
 use Derafu\Spreadsheet\Contract\SpreadsheetInterface;
+use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Value\Exception\TypeMismatchException;
+use Derafu\Value\ValueType;
 use PhpOffice\PhpSpreadsheet\Reader\Csv as CsvReader;
 use PhpOffice\PhpSpreadsheet\Reader\IReader;
 use PhpOffice\PhpSpreadsheet\Spreadsheet as PhpSpreadsheet;
@@ -124,7 +127,18 @@ class CsvPhpSpreadsheetHandler extends AbstractPhpSpreadsheetFormatHandler
         foreach ($phpSpreadsheet->getAllSheets() as $phpSheet) {
             $sheetName = $overrideSheetName ?? $this->sheetName;
 
-            $rows = $phpSheet->toArray();
+            try {
+                $rows = ValueType::indexedOf(ValueType::array())->parse(
+                    $phpSheet->toArray(),
+                    source: $phpSheet->getTitle()
+                );
+            } catch (TypeMismatchException $exception) {
+                throw new SpreadsheetLoadException([
+                    'Invalid rows in sheet "{sheet}": {error}',
+                    'sheet' => $phpSheet->getTitle(),
+                    'error' => $exception,
+                ], previous: $exception);
+            }
             $spreadsheet->createSheet($sheetName, $rows);
 
             // Only one sheet is supported in CSV. This is for make it explicit,

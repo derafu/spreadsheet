@@ -11,6 +11,13 @@ declare(strict_types=1);
  */
 
 return [
+    'Invalid rows in sheet "{sheet}": {error}' =>
+        'Filas inválidas en la hoja "{sheet}": {error}',
+    'Invalid row indexes in sheet "{sheet}": {error}' =>
+        'Índices de fila inválidos en la hoja "{sheet}": {error}',
+    'Invalid XML spreadsheet structure: {error}' =>
+        'Estructura XML de planilla inválida: {error}',
+
     'The JSON depth must be between 1 and 2147483647; {depth} given.' =>
         'La profundidad JSON debe estar entre 1 y 2147483647; se recibió {depth}.',
     'Row "{index}" in sheet "{sheet}" must be an array; {type} given.' =>

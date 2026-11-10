@@ -18,6 +18,8 @@ use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
 use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
 use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Value\Exception\TypeMismatchException;
+use Derafu\Value\ValueType;
 use DOMDocument;
 use DOMElement;
 use DOMException;
@@ -117,144 +119,157 @@ final class XmlHandler implements SpreadsheetFormatHandlerInterface
             libxml_use_internal_errors($useInternalErrors);
         }
 
-        // Create spreadsheet.
-        $spreadsheet = new Spreadsheet();
+        try {
+            // Create spreadsheet.
+            $spreadsheet = new Spreadsheet();
+            $nodeType = ValueType::instanceOf(SimpleXMLElement::class);
 
-        // Process sheets.
+            // Process sheets.
 
-        // Check for standard structure with sheet elements.
-        $foundStandardStructure = false;
+            // Check for standard structure with sheet elements.
+            $foundStandardStructure = false;
 
-        // Check if the root element is our expected root element name.
-        if ($xml->getName() === $this->rootElementName) {
-            // Process sheets in standard format.
-            foreach ($xml->{$this->sheetElementName} as $xmlSheet) {
-                $sheetName = (string)$xmlSheet['name'];
-                if (empty($sheetName)) {
-                    // Use index if name attribute is missing.
-                    $sheetName = $sheetName . (count($spreadsheet->getSheets()) + 1);
-                }
+            // Check if the root element is our expected root element name.
+            if ($xml->getName() === $this->rootElementName) {
+                // Process sheets in standard format.
+                $xmlSheets = $nodeType->parse($xml->{$this->sheetElementName}, $this->sheetElementName, 'XML spreadsheet');
+                foreach ($xmlSheets as $xmlSheet) {
+                    $sheetName = (string)$xmlSheet['name'];
+                    if (empty($sheetName)) {
+                        // Use index if name attribute is missing.
+                        $sheetName = $sheetName . (count($spreadsheet->getSheets()) + 1);
+                    }
 
-                $rows = [];
-                $isAssociative = false;
+                    $rows = [];
+                    $isAssociative = false;
 
-                // Check if using row element with column children
-                // (associative structure).
-                if (count($xmlSheet->{$this->rowElementName}) > 0) {
-                    $firstRow = $xmlSheet->{$this->rowElementName}[0];
+                    // Check if using row element with column children
+                    // (associative structure).
+                    $xmlRows = $nodeType->parse($xmlSheet->{$this->rowElementName}, $sheetName . '.' . $this->rowElementName, 'XML spreadsheet');
+                    if (count($xmlRows) > 0) {
+                        $firstRow = $nodeType->parse($xmlRows[0], $sheetName . '.0', 'XML spreadsheet');
 
-                    // Check if this is an indexed structure (using <col>
-                    // elements).
-                    if (count($firstRow->col) > 0) {
-                        // This is an indexed structure using <col> elements.
-                        foreach ($xmlSheet->{$this->rowElementName} as $xmlRow) {
-                            $row = [];
-                            foreach ($xmlRow->col as $xmlCol) {
-                                $row[] = $this->processXmlValue($xmlCol);
+                        // Check if this is an indexed structure (using <col>
+                        // elements).
+                        $firstColumns = $nodeType->parse($firstRow->col, $sheetName . '.0.col', 'XML spreadsheet');
+                        if (count($firstColumns) > 0) {
+                            // This is an indexed structure using <col> elements.
+                            foreach ($xmlRows as $xmlRow) {
+                                $row = [];
+                                $xmlColumns = $nodeType->parse($xmlRow->col, $sheetName . '.col', 'XML spreadsheet');
+                                foreach ($xmlColumns as $xmlCol) {
+                                    $row[] = $this->processXmlValue($xmlCol);
+                                }
+                                $rows[] = $row;
                             }
-                            $rows[] = $row;
-                        }
-                    } else {
-                        // This is an associative structure with named
-                        // elements.
-                        $isAssociative = true;
+                        } else {
+                            // This is an associative structure with named
+                            // elements.
+                            $isAssociative = true;
 
-                        // Collect all unique column names to ensure
-                        // consistent structure.
-                        $allColumns = [];
-                        foreach ($xmlSheet->{$this->rowElementName} as $xmlRow) {
-                            foreach ($xmlRow->children() as $column) {
-                                $columnName = (string)$column->getName();
-                                if (!in_array($columnName, $allColumns)) {
-                                    $allColumns[] = $columnName;
+                            // Collect all unique column names to ensure
+                            // consistent structure.
+                            $allColumns = [];
+                            foreach ($xmlRows as $xmlRow) {
+                                foreach ($xmlRow->children() as $column) {
+                                    $columnName = (string)$column->getName();
+                                    if (!in_array($columnName, $allColumns)) {
+                                        $allColumns[] = $columnName;
+                                    }
                                 }
                             }
-                        }
 
-                        // Process each row.
-                        foreach ($xmlSheet->{$this->rowElementName} as $xmlRow) {
-                            $row = [];
+                            // Process each row.
+                            foreach ($xmlRows as $xmlRow) {
+                                $row = [];
 
-                            // Add columns to row.
-                            foreach ($allColumns as $columnName) {
-                                $row[$columnName] = isset($xmlRow->{$columnName}) ?
-                                    $this->processXmlValue($xmlRow->{$columnName}) : null;
+                                // Add columns to row.
+                                foreach ($allColumns as $columnName) {
+                                    $row[$columnName] = isset($xmlRow->{$columnName}) ?
+                                        $this->processXmlValue($nodeType->parse($xmlRow->{$columnName}, $columnName, 'XML spreadsheet')) : null;
+                                }
+
+                                $rows[] = $row;
                             }
+                        }
 
-                            $rows[] = $row;
+                        // Add the sheet to the spreadsheet.
+                        $spreadsheet->createSheet($sheetName, $rows, $isAssociative);
+                        $foundStandardStructure = true;
+                    }
+                }
+            }
+
+            // If no sheets were found with standard structure, try to interpret
+            // as flat structure.
+            if (!$foundStandardStructure) {
+                // Try to find repeating elements that might represent rows.
+                $rootName = $xml->getName();
+                $rootChildren = $xml->children();
+
+                // Check if there are multiple elements with the same name
+                // (potential rows).
+                $childrenCount = [];
+                foreach ($rootChildren as $child) {
+                    $childName = $child->getName();
+                    if (!isset($childrenCount[$childName])) {
+                        $childrenCount[$childName] = 0;
+                    }
+                    $childrenCount[$childName]++;
+                }
+
+                // Find the element name that appears most frequently
+                // (likely rows).
+                arsort($childrenCount);
+                $rowElementName = key($childrenCount);
+
+                if ($rowElementName && $childrenCount[$rowElementName] > 0) {
+                    $rows = [];
+                    $isAssociative = true;
+
+                    // Collect all unique column names from all row elements.
+                    $xmlRows = $nodeType->parse($xml->{$rowElementName}, $rowElementName, 'XML spreadsheet');
+                    $allColumns = [];
+                    foreach ($xmlRows as $xmlRow) {
+                        foreach ($xmlRow->children() as $column) {
+                            $columnName = (string)$column->getName();
+                            if (!in_array($columnName, $allColumns)) {
+                                $allColumns[] = $columnName;
+                            }
                         }
                     }
 
-                    // Add the sheet to the spreadsheet.
+                    // Process each row.
+                    foreach ($xmlRows as $xmlRow) {
+                        $row = [];
+
+                        // Add columns to row.
+                        foreach ($allColumns as $columnName) {
+                            $row[$columnName] = isset($xmlRow->{$columnName}) ?
+                                $this->processXmlValue($nodeType->parse($xmlRow->{$columnName}, $columnName, 'XML spreadsheet')) : null;
+                        }
+
+                        $rows[] = $row;
+                    }
+
+                    // Use root name or row element name for sheet name.
+                    $sheetName = $rootName;
+                    if ($rootName === $rowElementName) {
+                        $sheetName = $rootName . '_sheet';
+                    }
+
+                    // Add the sheet to the spreadsheet
                     $spreadsheet->createSheet($sheetName, $rows, $isAssociative);
-                    $foundStandardStructure = true;
                 }
             }
+
+            return $spreadsheet;
+        } catch (TypeMismatchException $exception) {
+            throw new SpreadsheetLoadException([
+                'Invalid XML spreadsheet structure: {error}',
+                'error' => $exception,
+            ], previous: $exception);
         }
-
-        // If no sheets were found with standard structure, try to interpret
-        // as flat structure.
-        if (!$foundStandardStructure) {
-            // Try to find repeating elements that might represent rows.
-            $rootName = $xml->getName();
-            $rootChildren = $xml->children();
-
-            // Check if there are multiple elements with the same name
-            // (potential rows).
-            $childrenCount = [];
-            foreach ($rootChildren as $child) {
-                $childName = $child->getName();
-                if (!isset($childrenCount[$childName])) {
-                    $childrenCount[$childName] = 0;
-                }
-                $childrenCount[$childName]++;
-            }
-
-            // Find the element name that appears most frequently
-            // (likely rows).
-            arsort($childrenCount);
-            $rowElementName = key($childrenCount);
-
-            if ($rowElementName && $childrenCount[$rowElementName] > 0) {
-                $rows = [];
-                $isAssociative = true;
-
-                // Collect all unique column names from all row elements.
-                $allColumns = [];
-                foreach ($xml->{$rowElementName} as $xmlRow) {
-                    foreach ($xmlRow->children() as $column) {
-                        $columnName = (string)$column->getName();
-                        if (!in_array($columnName, $allColumns)) {
-                            $allColumns[] = $columnName;
-                        }
-                    }
-                }
-
-                // Process each row.
-                foreach ($xml->{$rowElementName} as $xmlRow) {
-                    $row = [];
-
-                    // Add columns to row.
-                    foreach ($allColumns as $columnName) {
-                        $row[$columnName] = isset($xmlRow->{$columnName}) ?
-                            $this->processXmlValue($xmlRow->{$columnName}) : null;
-                    }
-
-                    $rows[] = $row;
-                }
-
-                // Use root name or row element name for sheet name.
-                $sheetName = $rootName;
-                if ($rootName === $rowElementName) {
-                    $sheetName = $rootName . '_sheet';
-                }
-
-                // Add the sheet to the spreadsheet
-                $spreadsheet->createSheet($sheetName, $rows, $isAssociative);
-            }
-        }
-
-        return $spreadsheet;
     }
 
     /**

@@ -23,6 +23,8 @@ use Derafu\Spreadsheet\SpreadsheetCaster;
 use Derafu\Spreadsheet\Translation\SpreadsheetTranslationResourceProvider;
 use Derafu\Translation\Exception\Logic\TranslatableInvalidArgumentException as InvalidArgumentException;
 use Derafu\Translation\TranslatorFactory;
+use Derafu\Value\Exception\TypeMismatchException;
+use Derafu\Value\Translation\ValueTranslationResourceProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -122,6 +124,33 @@ final class ArrayValidationTest extends TestCase
 
         $this->assertNotNull($sheet);
         $this->assertSame($rows, $sheet->getRows());
+    }
+
+    #[DataProvider('formats')]
+    public function testStringRowIndexesIdentifyTheSheetAndAreTranslated(string $format): void
+    {
+        $rows = [0 => ['First'], 'extra' => ['Last']];
+        $data = json_encode(['Records' => $rows], JSON_THROW_ON_ERROR);
+
+        try {
+            $this->handler($format)->loadFromString($data);
+            $this->fail('A string row index must be rejected.');
+        } catch (SpreadsheetLoadException $exception) {
+            $this->assertInstanceOf(TypeMismatchException::class, $exception->getPrevious());
+            $this->assertSame(
+                'Invalid row indexes in sheet "Records": The value at "extra" of Records must be of type int key, string given.',
+                $exception->getMessage()
+            );
+            $translator = TranslatorFactory::create('es', resourceProviders: [
+                new SpreadsheetTranslationResourceProvider(),
+                new ValueTranslationResourceProvider(),
+            ]);
+            $this->assertSame(
+                'Índices de fila inválidos en la hoja "Records": El valor en "extra" de Records debe ser de tipo int key, se entregó string.',
+                $exception->trans($translator)
+            );
+            $this->assertSame([0, 'extra'], array_keys($rows));
+        }
     }
 
     /** @return iterable<string, array{int}> */

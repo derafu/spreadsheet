@@ -19,6 +19,8 @@ use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
 use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
 use Derafu\Translation\Exception\Logic\TranslatableInvalidArgumentException as InvalidArgumentException;
+use Derafu\Value\Exception\TypeMismatchException;
+use Derafu\Value\ValueType;
 use Exception;
 
 /**
@@ -335,13 +337,22 @@ final class JsonHandler implements SpreadsheetFormatHandlerInterface
     /**
      * Validates row values without changing their keys or cell contents.
      *
-     * @template TKey of array-key
-     * @param array<TKey, mixed> $rows
+     * @param array<array-key, mixed> $rows
      * @param string $sheetName
-     * @return array<TKey, array<int|string, mixed>>
+     * @return array<int, array<int|string, mixed>>
      */
     private function validatedRows(array $rows, string $sheetName): array
     {
+        try {
+            $rows = ValueType::indexed()->parse($rows, source: $sheetName);
+        } catch (TypeMismatchException $exception) {
+            throw new SpreadsheetLoadException([
+                'Invalid row indexes in sheet "{sheet}": {error}',
+                'sheet' => $sheetName,
+                'error' => $exception,
+            ], previous: $exception);
+        }
+
         $validated = [];
         foreach ($rows as $index => $row) {
             if (!is_array($row)) {

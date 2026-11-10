@@ -18,6 +18,8 @@ use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
 use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
 use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Value\Exception\TypeMismatchException;
+use Derafu\Value\ValueType;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception as ReaderException;
@@ -258,7 +260,18 @@ abstract class AbstractPhpSpreadsheetFormatHandler implements SpreadsheetFormatH
         $spreadsheet = new Spreadsheet();
 
         foreach ($phpSpreadsheet->getAllSheets() as $phpSheet) {
-            $rows = $phpSheet->toArray();
+            try {
+                $rows = ValueType::indexedOf(ValueType::array())->parse(
+                    $phpSheet->toArray(),
+                    source: $phpSheet->getTitle()
+                );
+            } catch (TypeMismatchException $exception) {
+                throw new SpreadsheetLoadException([
+                    'Invalid rows in sheet "{sheet}": {error}',
+                    'sheet' => $phpSheet->getTitle(),
+                    'error' => $exception,
+                ], previous: $exception);
+            }
             $spreadsheet->createSheet($phpSheet->getTitle(), $rows);
         }
 

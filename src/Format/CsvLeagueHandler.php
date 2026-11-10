@@ -18,6 +18,7 @@ use Derafu\Spreadsheet\Exception\SpreadsheetDumpException;
 use Derafu\Spreadsheet\Exception\SpreadsheetFileNotFoundException;
 use Derafu\Spreadsheet\Exception\SpreadsheetLoadException;
 use Derafu\Spreadsheet\Spreadsheet;
+use Derafu\Value\ValueType;
 use Exception;
 use League\Csv\Reader;
 use League\Csv\Writer;
@@ -112,7 +113,10 @@ final class CsvLeagueHandler implements SpreadsheetFormatHandlerInterface
             $csv->setEscape($this->escape);
 
             // Get records as array.
-            $records = iterator_to_array($csv->getRecords());
+            $records = ValueType::indexedOf(ValueType::array())->parse(
+                iterator_to_array($csv->getRecords()),
+                source: $sheetName ?? $this->sheetName
+            );
 
             // If no records, create one empty row.
             if (empty($records)) {
